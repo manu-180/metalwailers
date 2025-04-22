@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/appbar.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class CatalogoScreen extends StatelessWidget {
+  const CatalogoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
       body: Column(
     children: [
       const CustomAppbar(),
-      Expanded(child: Center(child: Text("Contenido inicial"))),
+      Expanded(child: Center(child: Text("Catalogo"))),
     ],
     ));
   }

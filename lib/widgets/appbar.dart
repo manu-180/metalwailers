@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomAppbar extends StatefulWidget {
@@ -13,13 +14,12 @@ class CustomAppbar extends StatefulWidget {
 
 class _CustomAppbarState extends State<CustomAppbar> {
   bool _isMenuOpen = false;
-  String _currentRoute = '/home';
 
   final List<Map<String, String>> _menuItems = [
-    {'label': 'Inicio', 'route': '/home'},
-    {'label': 'Sobre nosotros', 'route': '/about'},
-    {'label': 'tips MW', 'route': '/tips'},
-    {'label': 'Contacto', 'route': '/contact'},
+    {'label': 'Inicio', 'route': '/'},
+    {'label': 'Sobre nosotros', 'route': '/sobre-nosotros'},
+    {'label': 'Servicios', 'route': '/servicios'},
+    {'label': 'Contacto', 'route': '/contacto'},
     {'label': 'catalogo', 'route': '/catalogo'},
   ];
 
@@ -28,6 +28,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
     final size = MediaQuery.of(context).size;
     final isWide = size.width > 800;
     final Color metallicGrey = Colors.grey.shade300;
+    final String currentRoute = GoRouterState.of(context).uri.toString();
+
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -41,22 +43,17 @@ class _CustomAppbarState extends State<CustomAppbar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Logo + flecha en modo chico
+              // Logo + flecha
               Row(
                 children: [
-                Container(
-  color: Colors.black,
-  child: Align(
-    alignment: Alignment.centerLeft, // o donde vos quieras
-    child: SvgPicture.asset(
-      'assets/logo/logo_metalwailer.svg',
-      height: size.height * 0.18, // ajustalo a lo que querés
-      fit: BoxFit.contain,        // importante para evitar que "estire"
-      alignment: Alignment.center,
-    ),
-  ),
-),
-
+                  GestureDetector(
+                    child: SvgPicture.asset(
+                      'assets/logo/loguito.svg',
+                      height: size.height * 0.12,
+                      fit: BoxFit.contain,
+                    ),
+                    onTap: () => context.push('/'),
+                  ),
                   if (!isWide)
                     GestureDetector(
                       onTap: () => setState(() => _isMenuOpen = !_isMenuOpen),
@@ -75,58 +72,59 @@ class _CustomAppbarState extends State<CustomAppbar> {
                       children: [
                         ..._menuItems.map(
                           (item) => Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.007),
+                            padding: EdgeInsets.symmetric(horizontal: size.width * 0.007),
                             child: _NavTextButton(
                               label: item['label']!,
                               route: item['route']!,
-                              isActive: _currentRoute == item['route'],
+                              isActive: currentRoute == item['route'],
                               onTap: () {
-                                setState(
-                                    () => _currentRoute = item['route']!);
+                                context.push(item['route']!);
                               },
                             ),
                           ),
                         ),
                         SizedBox(width: size.width * 0.015),
-                      IconButton(
-  onPressed: () async {
-    final whatsappUrl = Uri.parse("https://wa.me/5491141941235");
-    if (await canLaunchUrl(whatsappUrl)) {
-      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    } else {
-      print("ERRORRR :APPBAR ");
-    }
-  },
-  icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.grey),
-),
-SizedBox(width: size.width * 0.015),
-IconButton(
-  onPressed: () async {
-    final instagramUrl = Uri.parse("https://www.instagram.com/fogonerosmw/");
-    if (await canLaunchUrl(instagramUrl)) {
-      await launchUrl(instagramUrl, mode: LaunchMode.externalApplication);
-    } else {
-      print("ERRORRR :APPBAR ");
-    }
-  },
-  icon: const FaIcon(FontAwesomeIcons.instagram, color: Colors.grey),
-),
-
+                        IconButton(
+                          onPressed: () async {
+                            final uri = Uri.parse("https://wa.me/5491141941235");
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                          icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.grey),
+                        ),
+                        SizedBox(width: size.width * 0.005),
+                        IconButton(
+                          onPressed: () async {
+                            final uri = Uri.parse("https://www.instagram.com/fogonerosmw/");
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                          icon: const FaIcon(FontAwesomeIcons.instagram, color: Colors.grey),
+                        ),
                       ],
                     )
                   : Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: const FaIcon(FontAwesomeIcons.whatsapp,
-                              color: Colors.grey),
+                          onPressed: () async {
+                            final uri = Uri.parse("https://wa.me/5491141941235");
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                          icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.grey),
                         ),
                         SizedBox(width: size.width * 0.005),
                         IconButton(
-                          onPressed: () {},
-                          icon: const FaIcon(FontAwesomeIcons.instagram,
-                              color: Colors.grey),
+                          onPressed: () async {
+                            final uri = Uri.parse("https://www.instagram.com/fogonerosmw/");
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                          icon: const FaIcon(FontAwesomeIcons.instagram, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -134,7 +132,7 @@ IconButton(
           ),
         ),
 
-        // Menú desplegable en modo chico
+        // Menú desplegable
         if (!isWide && _isMenuOpen)
           FadeInDown(
             child: Container(
@@ -150,10 +148,8 @@ IconButton(
                           style: TextStyle(color: metallicGrey),
                         ),
                         onTap: () {
-                          setState(() {
-                            _currentRoute = item['route']!;
-                            _isMenuOpen = false;
-                          });
+                          context.push(item['route']!);
+                          setState(() => _isMenuOpen = false);
                         },
                       ),
                     )
@@ -202,8 +198,7 @@ class _NavTextButtonState extends State<_NavTextButton> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color:
-                    widget.isActive || _isHovering ? baseColor : Colors.transparent,
+                color: widget.isActive || _isHovering ? baseColor : Colors.transparent,
                 width: 2,
               ),
             ),
@@ -212,7 +207,7 @@ class _NavTextButtonState extends State<_NavTextButton> {
             duration: const Duration(milliseconds: 150),
             style: TextStyle(
               color: _isHovering ? hoverColor : baseColor,
-              fontSize: MediaQuery.of(context).size.width * 0.017,
+              fontSize: MediaQuery.of(context).size.width * 0.014,
             ),
             child: Text(widget.label),
           ),
