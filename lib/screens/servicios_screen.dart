@@ -41,7 +41,7 @@ class ServiciosScreen extends StatelessWidget {
 const SizedBox(height: 8),
 const Text(
   "Acompañamos a nuestros clientes desde la etapa inicial del proyecto, ofreciendo asesoramiento técnico en diseño y desarrollo de piezas y estructuras metálicas.",
-  textAlign: TextAlign.justify,
+  textAlign: TextAlign.start,
 ),
 
 
@@ -190,7 +190,7 @@ class _HoverTextCardState extends State<_HoverTextCard> {
           ),
           child: Text(
             widget.text,
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.start,
           ),
         ),
       ),

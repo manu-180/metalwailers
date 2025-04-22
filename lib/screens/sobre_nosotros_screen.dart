@@ -34,7 +34,7 @@ class SobreNosotrosScreen extends StatelessWidget {
                   Text(
                     'En Metalwilers somos especialistas en el diseño, desarrollo y fabricación de piezas y estructuras metálicas a medida. Contamos con más de 30 años de trayectoria en la industria, brindando soluciones integrales para diversos sectores. Nuestro compromiso con la calidad y la innovación nos ha convertido en un aliado estratégico para empresas que buscan excelencia técnica y cumplimiento en cada proyecto. Disponemos de un equipo altamente calificado y tecnología de vanguardia que nos permite garantizar productos confiables, precisos y adaptados a las necesidades de cada cliente.',
                     style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.start,
                   ),
                   const SizedBox(height: 32),
                   Text(
@@ -48,7 +48,7 @@ class SobreNosotrosScreen extends StatelessWidget {
                   Text(
                     'Brindar soluciones metalúrgicas innovadoras, eficientes y personalizadas, enfocadas en la calidad, la precisión y la satisfacción de nuestros clientes.',
                     style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.start,
                   ),
                   const SizedBox(height: 32),
                   Text(
@@ -96,7 +96,7 @@ const SizedBox(height: 12),
 Text(
   'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
   style: Theme.of(context).textTheme.bodyLarge,
-  textAlign: TextAlign.justify,
+  textAlign: TextAlign.start,
 ),
 
 // Sección: Sectores
@@ -112,7 +112,7 @@ const SizedBox(height: 12),
 Text(
   'Trabajamos con diversos sectores industriales, entre ellos:',
   style: Theme.of(context).textTheme.bodyLarge,
-  textAlign: TextAlign.justify,
+  textAlign: TextAlign.start,
 ),
 const SizedBox(height: 24),
 Column(
@@ -219,7 +219,7 @@ class _ReasonCardState extends State<_ReasonCard> {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: textColor,
                         ),
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.start,
                   ),
                 ],
               ),
