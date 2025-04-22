@@ -1,16 +1,36 @@
-# metalwailers
+# taller_ceramica
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Para cambiar el nombre de la app :
+""
+dart run change_app_package_name:main com.manuelnavarro.tallerdeceramica
+""
+seleccionar el icono :
+""
+dart run flutter_launcher_icons 
+""
 
-A few resources to get you started if this is your first Flutter project:
+andriod AAB :
+""
+flutter build appbundle
+""
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+user:
+    final usuarioActivo = Supabase.instance.client.auth.currentUser;
+    final taller = await ObtenerTaller().retornarTaller(usuarioActivo!.id);
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+despliegue en web:
+Remove-Item -Recurse -Force docs
+flutter build web
+mkdir docs    
+cp -r build/web/* docs/
+git add .
+git commit -m "actualizando pagina webbb" 
+git push
+
+git add .
+git commit -m "actualizando build Check" 
+git push origin main
