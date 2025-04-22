@@ -96,7 +96,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         SizedBox(width: size.width * 0.005),
                         IconButton(
                           onPressed: () async {
-                            final uri = Uri.parse("https://www.instagram.com/fogonerosmw/");
+                            final uri = Uri.parse("https://www.instagram.com/metalwailers/");
                             if (await canLaunchUrl(uri)) {
                               await launchUrl(uri, mode: LaunchMode.externalApplication);
                             }
@@ -119,7 +119,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         SizedBox(width: size.width * 0.005),
                         IconButton(
                           onPressed: () async {
-                            final uri = Uri.parse("https://www.instagram.com/fogonerosmw/");
+                            final uri = Uri.parse("https://www.instagram.com/metalwailers/");
                             if (await canLaunchUrl(uri)) {
                               await launchUrl(uri, mode: LaunchMode.externalApplication);
                             }

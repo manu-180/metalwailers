@@ -63,7 +63,7 @@ class _ContactanosState extends State<Contactanos> {
       ],
       [
         'Email',
-        'fogonerosmwoficial@gmail.com',
+        'contactanos@metalwailers.com',
         FontAwesomeIcons.envelope
       ],
       [
@@ -106,7 +106,7 @@ class _ContactanosState extends State<Contactanos> {
         const SizedBox(height: 8),
         const Text(
   "¿Tenés una idea o necesitás una solución concreta? Te ayudamos a llevarla a cabo ",
-  textAlign: TextAlign.start,
+  textAlign: TextAlign.justify,
   style: TextStyle(fontSize: 13),
 ),
         const SizedBox(height: 24),

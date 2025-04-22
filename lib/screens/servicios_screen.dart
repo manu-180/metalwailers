@@ -41,7 +41,7 @@ class ServiciosScreen extends StatelessWidget {
 const SizedBox(height: 8),
 const Text(
   "Acompañamos a nuestros clientes desde la etapa inicial del proyecto, ofreciendo asesoramiento técnico en diseño y desarrollo de piezas y estructuras metálicas.",
-  textAlign: TextAlign.start,
+  textAlign: TextAlign.justify,
 ),
 
 
@@ -53,7 +53,7 @@ const Text(
                   const SizedBox(height: 8),
 const Text(
   "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de ultima generación: ",
-  textAlign: TextAlign.start,
+  textAlign: TextAlign.justify,
 ),
                   const SizedBox(height: 20),
                   Wrap(
@@ -64,7 +64,7 @@ const Text(
                   const SizedBox(height: 20),
                   const Text(
   "Estos servicios nos permiten abordar tanto proyectos únicos como producciones en serie, con altos estándares de calidad y eficiencia. ",
-  textAlign: TextAlign.start,
+  textAlign: TextAlign.justify,
 ),
                 ],
               ),
@@ -200,7 +200,7 @@ class _HoverTextCardState extends State<_HoverTextCard> {
           ),
           child: Text(
             widget.text,
-            textAlign: TextAlign.start,
+            textAlign: TextAlign.justify,
           ),
         ),
       ),
