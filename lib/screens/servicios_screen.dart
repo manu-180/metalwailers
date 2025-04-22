@@ -50,12 +50,22 @@ const Text(
                     "Producción Metalúrgica",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
+const Text(
+  "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de ultima generación: ",
+  textAlign: TextAlign.start,
+),
+                  const SizedBox(height: 20),
                   Wrap(
                     spacing: 20,
                     runSpacing: 20,
                     children: _serviceCards(),
-                  )
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+  "Estos servicios nos permiten abordar tanto proyectos únicos como producciones en serie, con altos estándares de calidad y eficiencia. ",
+  textAlign: TextAlign.start,
+),
                 ],
               ),
             ),

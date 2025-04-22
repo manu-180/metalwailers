@@ -100,9 +100,15 @@ class _ContactanosState extends State<Contactanos> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Enviános un mensaje',
+          'Hablemos de tu Proyecto',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
+        const SizedBox(height: 8),
+        const Text(
+  "¿Tenés una idea o necesitás una solución concreta? Te ayudamos a llevarla a cabo ",
+  textAlign: TextAlign.start,
+  style: TextStyle(fontSize: 13),
+),
         const SizedBox(height: 24),
         Form(
           key: _formKey,
