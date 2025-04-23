@@ -8,12 +8,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const CustomAppbar(),
-          Expanded(child: Center(child: Text("Contenido inicial"))),
-          Footer(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const CustomAppbar(),
+            Center(child: Text("Contenido inicial")),
+            // Footer(),
+          ],
+        ),
       ),
     );
   }
