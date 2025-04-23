@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
       title: 'MetalWailers',
-      theme: AppTheme().getColor()
-      );
- 
+      theme: AppTheme().getColor(),
+    );
   }
 }
-

@@ -20,7 +20,6 @@ class _CustomAppbarState extends State<CustomAppbar> {
     {'label': 'Sobre nosotros', 'route': '/sobre-nosotros'},
     {'label': 'Servicios', 'route': '/servicios'},
     {'label': 'Contacto', 'route': '/contacto'},
-    {'label': 'catalogo', 'route': '/catalogo'},
   ];
 
   @override
@@ -29,7 +28,6 @@ class _CustomAppbarState extends State<CustomAppbar> {
     final isWide = size.width > 800;
     final Color metallicGrey = Colors.grey.shade300;
     final String currentRoute = GoRouterState.of(context).uri.toString();
-
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -60,7 +58,14 @@ class _CustomAppbarState extends State<CustomAppbar> {
                       child: AnimatedRotation(
                         duration: const Duration(milliseconds: 300),
                         turns: _isMenuOpen ? 0.5 : 0,
-                        child: const Icon(Icons.expand_more, color: Colors.grey),
+                        child: SizedBox(
+                          height: size.height * 0.09,
+                          width: size.height * 0.09,  
+                          child: const Icon(
+                            Icons.expand_more,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                 ],
@@ -69,65 +74,95 @@ class _CustomAppbarState extends State<CustomAppbar> {
               // Menú horizontal o iconos
               isWide
                   ? Row(
-                      children: [
-                        ..._menuItems.map(
-                          (item) => Padding(
-                            padding: EdgeInsets.symmetric(horizontal: size.width * 0.007),
-                            child: _NavTextButton(
-                              label: item['label']!,
-                              route: item['route']!,
-                              isActive: currentRoute == item['route'],
-                              onTap: () {
-                                context.push(item['route']!);
-                              },
-                            ),
+                    children: [
+                      ..._menuItems.map(
+                        (item) => Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.007,
+                          ),
+                          child: _NavTextButton(
+                            label: item['label']!,
+                            route: item['route']!,
+                            isActive: currentRoute == item['route'],
+                            onTap: () {
+                              context.push(item['route']!);
+                            },
                           ),
                         ),
-                        SizedBox(width: size.width * 0.015),
-                        IconButton(
-                          onPressed: () async {
-                            final uri = Uri.parse("https://wa.me/5491141941235");
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            }
-                          },
-                          icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.grey),
+                      ),
+                      SizedBox(width: size.width * 0.015),
+                      IconButton(
+                        onPressed: () async {
+                          final uri = Uri.parse("https://wa.me/5491141941235");
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.whatsapp,
+                          color: Colors.grey,
                         ),
-                        SizedBox(width: size.width * 0.005),
-                        IconButton(
-                          onPressed: () async {
-                            final uri = Uri.parse("https://www.instagram.com/metalwailers/");
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            }
-                          },
-                          icon: const FaIcon(FontAwesomeIcons.instagram, color: Colors.grey),
+                      ),
+                      SizedBox(width: size.width * 0.005),
+                      IconButton(
+                        onPressed: () async {
+                          final uri = Uri.parse(
+                            "https://www.instagram.com/metalwailers/",
+                          );
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.instagram,
+                          color: Colors.grey,
                         ),
-                      ],
-                    )
+                      ),
+                    ],
+                  )
                   : Row(
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            final uri = Uri.parse("https://wa.me/5491141941235");
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            }
-                          },
-                          icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.grey),
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          final uri = Uri.parse("https://wa.me/5491141941235");
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.whatsapp,
+                          color: Colors.grey,
                         ),
-                        SizedBox(width: size.width * 0.005),
-                        IconButton(
-                          onPressed: () async {
-                            final uri = Uri.parse("https://www.instagram.com/metalwailers/");
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            }
-                          },
-                          icon: const FaIcon(FontAwesomeIcons.instagram, color: Colors.grey),
+                      ),
+                      SizedBox(width: size.width * 0.005),
+                      IconButton(
+                        onPressed: () async {
+                          final uri = Uri.parse(
+                            "https://www.instagram.com/metalwailers/",
+                          );
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.instagram,
+                          color: Colors.grey,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
             ],
           ),
         ),
@@ -140,20 +175,21 @@ class _CustomAppbarState extends State<CustomAppbar> {
               width: double.infinity,
               padding: EdgeInsets.only(bottom: size.height * 0.03),
               child: Column(
-                children: _menuItems
-                    .map(
-                      (item) => ListTile(
-                        title: Text(
-                          item['label']!,
-                          style: TextStyle(color: metallicGrey),
-                        ),
-                        onTap: () {
-                          context.push(item['route']!);
-                          setState(() => _isMenuOpen = false);
-                        },
-                      ),
-                    )
-                    .toList(),
+                children:
+                    _menuItems
+                        .map(
+                          (item) => ListTile(
+                            title: Text(
+                              item['label']!,
+                              style: TextStyle(color: metallicGrey),
+                            ),
+                            onTap: () {
+                              context.push(item['route']!);
+                              setState(() => _isMenuOpen = false);
+                            },
+                          ),
+                        )
+                        .toList(),
               ),
             ),
           ),
@@ -198,7 +234,10 @@ class _NavTextButtonState extends State<_NavTextButton> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: widget.isActive || _isHovering ? baseColor : Colors.transparent,
+                color:
+                    widget.isActive || _isHovering
+                        ? baseColor
+                        : Colors.transparent,
                 width: 2,
               ),
             ),

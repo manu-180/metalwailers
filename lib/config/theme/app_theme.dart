@@ -17,11 +17,13 @@ class AppTheme {
   AppTheme({this.selectedColor = 0, this.isDarkMode = false});
 
   ThemeData getColor() => ThemeData(
-      brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      colorSchemeSeed: listColors[selectedColor],
-      appBarTheme: const AppBarTheme(centerTitle: false));
+    brightness: isDarkMode ? Brightness.dark : Brightness.light,
+    colorSchemeSeed: listColors[selectedColor],
+    appBarTheme: const AppBarTheme(centerTitle: false),
+  );
 
   AppTheme copyWidht({bool? isDarkMode, int? selectedColor}) => AppTheme(
-      isDarkMode: isDarkMode ?? this.isDarkMode,
-      selectedColor: selectedColor ?? this.selectedColor);
+    isDarkMode: isDarkMode ?? this.isDarkMode,
+    selectedColor: selectedColor ?? this.selectedColor,
+  );
 }

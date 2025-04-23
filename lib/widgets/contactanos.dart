@@ -29,68 +29,58 @@ class _ContactanosState extends State<Contactanos> {
     final size = MediaQuery.of(context).size;
     final isWide = size.width > 800;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: isWide ? size.width * 0.1 : size.width * 0.05,
-        vertical: 32,
-      ),
-      child: isWide
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _leftColumn()),
-                const SizedBox(width: 40),
-                Expanded(child: _rightColumn()),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _leftColumn(),
-                const SizedBox(height: 32),
-                _rightColumn(),
-              ],
-            ),
-    );
+    return isWide
+        ? Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _leftColumn()),
+            const SizedBox(width: 40),
+            Expanded(child: _rightColumn()),
+          ],
+        )
+        : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _leftColumn(),
+            const SizedBox(height: 32),
+            _rightColumn(),
+          ],
+        );
   }
 
   Widget _leftColumn() {
     final items = [
-      [
-        'Teléfonos',
-        '11 62913437\n11 59628757',
-        FontAwesomeIcons.phone
-      ],
-      [
-        'Email',
-        'contactanos@metalwailers.com',
-        FontAwesomeIcons.envelope
-      ],
+      ['Teléfonos', '11 62913437\n11 59628757', FontAwesomeIcons.phone],
+      ['Email', 'contactanos@metalwailers.com', FontAwesomeIcons.envelope],
       [
         'Dirección',
         'GORRITI 1399, EL TALAR, TIGRE, PROV. BS.AS.',
-        FontAwesomeIcons.locationDot
+        FontAwesomeIcons.locationDot,
       ],
       [
         'Horario',
         'Lunes — Viernes 11 am – 19 pm\nSábado — 10 am – 16 pm\nDomingo — Cerrado',
-        FontAwesomeIcons.clock
+        FontAwesomeIcons.clock,
       ],
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 50),
         const Text(
           'Contáctanos',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 24),
-        ...items.map((item) => _InfoCard(
-              title: item[0] as String,
-              subtitle: item[1] as String,
-              icon: item[2] as IconData,
-            )),
+        ...items.map(
+          (item) => _InfoCard(
+            title: item[0] as String,
+            subtitle: item[1] as String,
+            icon: item[2] as IconData,
+          ),
+        ),
+        const SizedBox(height: 50),
       ],
     );
   }
@@ -99,84 +89,91 @@ class _ContactanosState extends State<Contactanos> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 50),
         const Text(
           'Hablemos de tu Proyecto',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         const Text(
-  "¿Tenés una idea o necesitás una solución concreta? Te ayudamos a llevarla a cabo ",
-  textAlign: TextAlign.justify,
-  style: TextStyle(fontSize: 13),
-),
+          "¿Tenés una idea o necesitás una solución concreta? Te ayudamos a llevarla a cabo ",
+          textAlign: TextAlign.justify,
+          style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 69, 69, 69)),
+        ),
         const SizedBox(height: 24),
         Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
-  controller: _nameController,
-  decoration: InputDecoration(
-    labelText: 'Nombre',
-labelStyle: TextStyle(color: Colors.black),
-    border: OutlineInputBorder(),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade400),
-    ),
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-    ),
-  ),
-  validator: (value) => value == null || value.isEmpty
-      ? 'Este campo es requerido'
-      : null,
-),
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Nombre',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Este campo es requerido'
+                            : null,
+              ),
 
               const SizedBox(height: 16),
               TextFormField(
-  controller: _emailController,
-  decoration: InputDecoration(
-    labelText: 'Email',
-labelStyle: TextStyle(color: Colors.black),
-    border: OutlineInputBorder(),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade400),
-    ),
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-    ),
-  ),
-  keyboardType: TextInputType.emailAddress,
-  validator: (value) {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (value == null || value.isEmpty) {
-      return 'Este campo es requerido';
-    } else if (!emailRegex.hasMatch(value)) {
-      return 'Formato de email inválido';
-    }
-    return null;
-  },
-),
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  final emailRegex = RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  );
+                  if (value == null || value.isEmpty) {
+                    return 'Este campo es requerido';
+                  } else if (!emailRegex.hasMatch(value)) {
+                    return 'Formato de email inválido';
+                  }
+                  return null;
+                },
+              ),
 
               const SizedBox(height: 16),
-             TextFormField(
-  controller: _messageController,
-  decoration: InputDecoration(
-    labelText: 'Mensaje',
-labelStyle: TextStyle(color: Colors.black),
-    border: OutlineInputBorder(),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade400),
-    ),
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-    ),
-  ),
-  maxLines: 5,
-  validator: (value) => value == null || value.isEmpty
-      ? 'Este campo es requerido'
-      : null,
-),
+              TextFormField(
+                controller: _messageController,
+                decoration: InputDecoration(
+                  labelText: 'Mensaje',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
+                maxLines: 5,
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Este campo es requerido'
+                            : null,
+              ),
 
               const SizedBox(height: 24),
               MouseRegion(
@@ -190,38 +187,50 @@ labelStyle: TextStyle(color: Colors.black),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: () {
-      if (_formKey.currentState!.validate()) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Mensaje enviado correctamente')),
-        );
-      }
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.grey.shade400,
-      foregroundColor: Colors.black,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    ).copyWith(
-      overlayColor: MaterialStateProperty.resolveWith((states) =>
-          states.contains(MaterialState.hovered) ? Colors.black : null),
-      foregroundColor: MaterialStateProperty.resolveWith((states) =>
-          states.contains(MaterialState.hovered) ? Colors.white : Colors.black),
-    ),
-    child: const Text(
-      'Enviar',
-      style: TextStyle(fontWeight: FontWeight.bold),
-    ),
-  ),
-),
-
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Mensaje enviado correctamente'),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade400,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ).copyWith(
+                        overlayColor: MaterialStateProperty.resolveWith(
+                          (states) =>
+                              states.contains(MaterialState.hovered)
+                                  ? Colors.black
+                                  : null,
+                        ),
+                        foregroundColor: MaterialStateProperty.resolveWith(
+                          (states) =>
+                              states.contains(MaterialState.hovered)
+                                  ? Colors.white
+                                  : Colors.black,
+                        ),
+                      ),
+                      child: const Text(
+                        'Enviar',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
-        )
+        ),
+        const SizedBox(height: 50),
       ],
     );
   }
@@ -260,15 +269,16 @@ class _InfoCardState extends State<_InfoCard> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
-          boxShadow: _isHover
-              ? [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: const Offset(0, 6),
-                  )
-                ]
-              : [],
+          boxShadow:
+              _isHover
+                  ? [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: const Offset(0, 6),
+                    ),
+                  ]
+                  : [],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,18 +289,22 @@ class _InfoCardState extends State<_InfoCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: textColor,
-                      )),
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: textColor,
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  Text(widget.subtitle,
-                      style: TextStyle(fontSize: 14, color: textColor)),
+                  Text(
+                    widget.subtitle,
+                    style: TextStyle(fontSize: 14, color: textColor),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
