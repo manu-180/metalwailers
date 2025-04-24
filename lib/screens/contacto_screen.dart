@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/appbar.dart';
 import 'package:metalwailers/widgets/contactanos.dart';
 import 'package:metalwailers/widgets/footer.dart';
+import 'package:metalwailers/widgets/prueba.dart';
 
 class ContactoScreen extends StatelessWidget {
   const ContactoScreen({super.key});
@@ -9,7 +10,7 @@ class ContactoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final isWide = size.width > 800;
+    final isWide = size.width > 1000;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -23,6 +24,7 @@ class ContactoScreen extends StatelessWidget {
           ), Footer()],
         ),
       ),
+      floatingActionButton: const TestMailButton(),
     );
   }
 }

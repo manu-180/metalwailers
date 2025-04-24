@@ -43,8 +43,9 @@ Future<void> sendEmails({
   required String rubro,
   required String comentarios,
 }) async {
-  const fromEmail = 'soporte@assistify.lat';
-  const adminEmail = 'manunv97@gmail.com';
+  final functionUrl = Uri.parse('https://assistify-token-generator-1014.twil.io/send-email');
+
+  final headers = {'Content-Type': 'application/json'};
 
   final subjectAdmin = 'Nueva consulta de $nombre';
   final contentAdmin = '''
@@ -66,65 +67,35 @@ Saludos cordiales,
 El equipo de Metalwailers
 ''';
 
-  final url = Uri.parse('https://api.sendgrid.com/v3/mail/send');
+  // 1. Enviar a administrador
+  final adminResponse = await http.post(
+    functionUrl,
+    headers: headers,
+    body: jsonEncode({
+      'to': 'manunv97@gmail.com',
+      'subject': subjectAdmin,
+      'text': contentAdmin,
+    }),
+  );
 
-  final headers = {
-    'Authorization': "Bearer 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",
-    'Content-Type': 'application/json',
-  };
+  // 2. Enviar a usuario
+  final userResponse = await http.post(
+    functionUrl,
+    headers: headers,
+    body: jsonEncode({
+      'to': email,
+      'subject': subjectUser,
+      'text': contentUser,
+    }),
+  );
 
-  final adminEmailBody = {
-    'personalizations': [
-      {
-        'to': [
-          {'email': adminEmail}
-        ],
-        'subject': subjectAdmin,
-      }
-    ],
-    'from': {'email': fromEmail},
-    'content': [
-      {'type': 'text/plain', 'value': contentAdmin}
-    ],
-  };
-
-  final userEmailBody = {
-    'personalizations': [
-      {
-        'to': [
-          {'email': email}
-        ],
-        'subject': subjectUser,
-      }
-    ],
-    'from': {'email': fromEmail},
-    'content': [
-      {'type': 'text/plain', 'value': contentUser}
-    ],
-  };
-
-  try {
-    final adminResponse = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(adminEmailBody),
-    );
-
-    final userResponse = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(userEmailBody),
-    );
-
-    if (adminResponse.statusCode == 202 && userResponse.statusCode == 202) {
-      print('Correos enviados exitosamente');
-    } else {
-      print('Error al enviar correos: ${adminResponse.body}, ${userResponse.body}');
-    }
-  } catch (e) {
-    print('Excepción al enviar correos: $e');
+  if (adminResponse.statusCode == 200 && userResponse.statusCode == 200) {
+    print('✅ Correos enviados correctamente');
+  } else {
+    print('❌ Error al enviar: ${adminResponse.body} / ${userResponse.body}');
   }
 }
+
 
 
   @override
@@ -241,7 +212,15 @@ El equipo de Metalwailers
   controller: _phoneController,
   decoration: InputDecoration(
     labelText: 'Teléfono de contacto',
-    border: OutlineInputBorder(),
+    labelStyle: const TextStyle(color: Colors.black), // cuando no está flotando
+    floatingLabelStyle: const TextStyle(color: Colors.black), // 👈 cuando flota
+    border: const OutlineInputBorder(),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    ),
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black),
+    ),
   ),
   keyboardType: TextInputType.phone,
   validator: (value) {
@@ -255,18 +234,22 @@ El equipo de Metalwailers
   },
 ),
 
+
+
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: '¿Qué servicio estás buscando?',
-                  border: const OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400),
-                  ),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
+  decoration: InputDecoration(
+    labelText: '¿Qué servicio estás buscando?',
+    labelStyle: const TextStyle(color: Colors.black),
+    floatingLabelStyle: const TextStyle(color: Colors.black),
+    border: const OutlineInputBorder(),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    ),
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black),
+    ),
+  ),
                 value: selectedServicio,
                 onChanged: (value) => setState(() => selectedServicio = value),
                 validator: (value) =>
@@ -279,9 +262,10 @@ El equipo de Metalwailers
                 }).toList(),
               ),
               const SizedBox(height: 16),
-              _inputField(label: 'Rubro o industria de tu proyecto'),
+              _inputField(label: 'Rubro o industria de tu proyecto', controller: _rubroController),
               const SizedBox(height: 16),
               _inputField(
+                controller: _comentariosController,
                 label: 'Comentarios / Consulta específica',
                 maxLines: 5,
               ),
@@ -312,6 +296,7 @@ El equipo de Metalwailers
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         backgroundColor: Colors.black,
+        duration: Duration(seconds: 6), 
         content: Text(
           'Gracias por contactarte con Metalwailers. Te responderemos a la brevedad',
           style: TextStyle(color: Colors.white),
