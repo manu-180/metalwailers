@@ -69,7 +69,7 @@ El equipo de Metalwailers
   final url = Uri.parse('https://api.sendgrid.com/v3/mail/send');
 
   final headers = {
-    'Authorization': dotenv.env['SENDGRID_API_KEY'] ?? "",
+    'Authorization': "Bearer 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",
     'Content-Type': 'application/json',
   };
 
