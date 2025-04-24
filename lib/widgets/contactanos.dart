@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,8 +43,7 @@ Future<void> sendEmails({
   required String rubro,
   required String comentarios,
 }) async {
-  const sendGridApiKey = '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';
-  const fromEmail = 'contactanos@metalwailers.com';
+  const fromEmail = 'soporte@assistify.lat';
   const adminEmail = 'manunv97@gmail.com';
 
   final subjectAdmin = 'Nueva consulta de $nombre';
@@ -69,7 +69,7 @@ El equipo de Metalwailers
   final url = Uri.parse('https://api.sendgrid.com/v3/mail/send');
 
   final headers = {
-    'Authorization': 'Bearer $sendGridApiKey',
+    'Authorization': dotenv.env['SENDGRID_API_KEY'] ?? "",
     'Content-Type': 'application/json',
   };
 
