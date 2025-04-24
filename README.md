@@ -24,7 +24,7 @@ user:
 
 despliegue en web:
 Remove-Item -Recurse -Force docs
-flutter build web
+flutter build web --dart-define="SENDGRID_API_KEY=Bearer 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"
 mkdir docs    
 cp -r build/web/* docs/
 git add .
