@@ -42,7 +42,7 @@ Future<void> sendEmails({
   required String rubro,
   required String comentarios,
 }) async {
-  
+  const sendGridApiKey = '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';
   const fromEmail = 'contactanos@metalwailers.com';
   const adminEmail = 'manunv97@gmail.com';
 
@@ -69,7 +69,7 @@ El equipo de Metalwailers
   final url = Uri.parse('https://api.sendgrid.com/v3/mail/send');
 
   final headers = {
-    'Authorization': 'Bearer ',
+    'Authorization': 'Bearer $sendGridApiKey',
     'Content-Type': 'application/json',
   };
 
