@@ -43,7 +43,7 @@ Future<void> sendEmails({
   required String rubro,
   required String comentarios,
 }) async {
-  final sendGridApiKey = dotenv.env['SENDGRID_API_KEY'] ?? '';
+  const sendGridApiKey = String.fromEnvironment('SENDGRID_API_KEY');
   const fromEmail = 'soporte@assistify.lat';
   const adminEmail = 'manunv97@gmail.com';
 
