@@ -5,8 +5,7 @@ class SobreNosotros extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final size = MediaQuery.of(context).size;
-    final isWide = size.width > 800;
+     
 
     return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

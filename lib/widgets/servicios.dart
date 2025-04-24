@@ -14,6 +14,7 @@ class Servicios extends StatelessWidget {
       ["Cilindrado", FontAwesomeIcons.circle],
       ["Rolado", FontAwesomeIcons.circleNotch],
       ["Punzonado", FontAwesomeIcons.pencil],
+      // ignore: deprecated_member_use
       ["Balancinado", FontAwesomeIcons.balanceScale],
       ["Soldadura MIG, TIG y por punto", FontAwesomeIcons.fireFlameSimple],
       ["Pintura a horno", FontAwesomeIcons.paintRoller],
@@ -30,8 +31,6 @@ class Servicios extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isWide = size.width > 800;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
