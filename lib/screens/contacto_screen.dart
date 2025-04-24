@@ -24,7 +24,6 @@ class ContactoScreen extends StatelessWidget {
           ), Footer()],
         ),
       ),
-      floatingActionButton: const TestMailButton(),
     );
   }
 }
