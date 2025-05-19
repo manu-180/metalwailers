@@ -10,11 +10,13 @@ class ServiciosScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isWide = size.width > 800;
-    
+
+    final ScrollController scrollController = ScrollController(); // 👈
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
+        controller: scrollController, // 👈
         child: Column(
           children: [
             const CustomAppbar(),
@@ -23,15 +25,12 @@ class ServiciosScreen extends StatelessWidget {
                 vertical: size.height * 0.04,
                 horizontal: isWide ? size.width * 0.15 : size.width * 0.07,
               ),
-              child: Servicios(),
+              child: Servicios(scrollController: scrollController), // 👈
             ),
-            Footer()
-        
+            Footer(),
           ],
-          
         ),
       ),
     );
   }
 }
-

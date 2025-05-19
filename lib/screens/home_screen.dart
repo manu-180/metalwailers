@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             const CustomAppbar(),
             Center(child: Text("Contenido inicial")),
-            // Footer(),
+
           ],
         ),
       ),

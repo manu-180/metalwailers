@@ -8,7 +8,7 @@ class TestMailButton extends StatelessWidget {
   Future<void> _sendTestEmail() async {
     const functionUrl = 'https://assistify-token-generator-1014.twil.io/send-email'; // ⬅️ Reemplazá esto
 
-    final response = await http.post(
+   await http.post(
       Uri.parse(functionUrl),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
@@ -18,19 +18,15 @@ class TestMailButton extends StatelessWidget {
       }),
     );
 
-    if (response.statusCode == 200) {
-      print('✅ Correo enviado correctamente');
-    } else {
-      print('❌ Error al enviar correo: ${response.body}');
-    }
+  
   }
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: _sendTestEmail,
-      child: const Icon(Icons.send),
       tooltip: 'Enviar mail de prueba',
+      child: const Icon(Icons.send),
     );
   }
 }

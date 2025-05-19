@@ -44,14 +44,14 @@ class _CustomAppbarState extends State<CustomAppbar> {
               // Logo + flecha
               Row(
                 children: [
-                  GestureDetector(
-                    child: SvgPicture.asset(
-                      'assets/logo/loguito.svg',
-                      height: size.height * 0.12,
-                      fit: BoxFit.contain,
-                    ),
-                    onTap: () => context.push('/'),
-                  ),
+                  // GestureDetector(
+                  //   child: SvgPicture.asset(
+                  //     'assets/imges/loguito.svg',
+                  //     height: size.height * 0.12,
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  //   onTap: () => context.push('/'),
+                  // ),
                   if (!isWide)
                     GestureDetector(
                       onTap: () => setState(() => _isMenuOpen = !_isMenuOpen),
@@ -221,37 +221,61 @@ class _NavTextButtonState extends State<_NavTextButton> {
   @override
   Widget build(BuildContext context) {
     final Color baseColor = Colors.grey.shade300;
-    final Color hoverColor = Colors.grey.shade100;
+    final Color hoverColor = Colors.white;
+    final bool isActive = widget.isActive;
+    final Color finalColor = (_isHovering || isActive) ? hoverColor : baseColor;
+    final double textWidth = _calcularAnchoTexto(context, widget.label);
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color:
-                    widget.isActive || _isHovering
-                        ? baseColor
-                        : Colors.transparent,
-                width: 2,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 150),
+              style: TextStyle(
+                color: finalColor,
+                fontSize: MediaQuery.of(context).size.width * 0.014,
               ),
+              child: Text(widget.label),
             ),
-          ),
-          child: AnimatedDefaultTextStyle(
-            duration: const Duration(milliseconds: 150),
-            style: TextStyle(
-              color: _isHovering ? hoverColor : baseColor,
-              fontSize: MediaQuery.of(context).size.width * 0.014,
+            const SizedBox(height: 4),
+            AnimatedContainer(
+              duration: const Duration(milliseconds:150),
+              alignment: Alignment.centerLeft,
+              height: 2,
+              width: _isHovering
+                  ? widget.label == "Inicio"
+                      ? textWidth - 2
+                      : textWidth
+                  : 0,
+              color: hoverColor,
+              curve: Curves.easeInOut,
             ),
-            child: Text(widget.label),
-          ),
+          ],
         ),
       ),
     );
   }
+
+  double _calcularAnchoTexto(BuildContext context, String texto) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: texto,
+        style: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.014,
+        ),
+      ),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
+
+    return textPainter.size.width;
+  }
 }
+

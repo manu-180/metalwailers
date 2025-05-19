@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/appbar.dart';
 import 'package:metalwailers/widgets/contactanos.dart';
 import 'package:metalwailers/widgets/footer.dart';
-import 'package:metalwailers/widgets/prueba.dart';
 
 class ContactoScreen extends StatelessWidget {
   const ContactoScreen({super.key});

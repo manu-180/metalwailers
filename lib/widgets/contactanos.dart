@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -68,7 +67,7 @@ El equipo de Metalwailers
 ''';
 
   // 1. Enviar a administrador
-  final adminResponse = await http.post(
+ await http.post(
     functionUrl,
     headers: headers,
     body: jsonEncode({
@@ -79,7 +78,7 @@ El equipo de Metalwailers
   );
 
   // 2. Enviar a usuario
-  final userResponse = await http.post(
+await http.post(
     functionUrl,
     headers: headers,
     body: jsonEncode({
@@ -89,11 +88,7 @@ El equipo de Metalwailers
     }),
   );
 
-  if (adminResponse.statusCode == 200 && userResponse.statusCode == 200) {
-    print('✅ Correos enviados correctamente');
-  } else {
-    print('❌ Error al enviar: ${adminResponse.body} / ${userResponse.body}');
-  }
+  
 }
 
 
@@ -281,7 +276,7 @@ El equipo de Metalwailers
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: SizedBox(
-                    width: double.infinity,
+                    width: 250,
                     child: ElevatedButton(
                       onPressed: () {
   if (_formKey.currentState!.validate()) {
