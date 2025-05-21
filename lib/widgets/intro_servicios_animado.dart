@@ -61,7 +61,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with Tick
             opacity: _fade1,
             child: const Text(
               "Servicios que Ofrecemos",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
@@ -79,7 +79,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with Tick
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Acompañamos a nuestros clientes desde la etapa inicial del proyecto, ofreciendo asesoramiento técnico en diseño y desarrollo de piezas y estructuras metálicas.",
+                  "Brindamos un acompañamiento integral desde la concepción misma del proyecto, asesorando a nuestros clientes en cada decisión técnica y funcional. Nuestro equipo evalúa requerimientos específicos, propone soluciones viables y colabora activamente en el diseño y desarrollo de piezas y estructuras metálicas. Este enfoque personalizado garantiza que cada propuesta se ajuste a las necesidades reales del cliente, optimizando tiempos, costos y calidad desde la etapa de planificación hasta la ejecución final.",
                   style: TextStyle(color: Colors.white70),
                   textAlign: TextAlign.justify,
                 ),

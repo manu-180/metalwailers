@@ -255,14 +255,7 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                         child: Text(widget.title),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: _toggleExpand,
-                      child: AnimatedRotation(
-                        turns: _expandida ? 0.5 : 0,
-                        duration: const Duration(milliseconds: 300),
-                        child: const Icon(Icons.keyboard_arrow_down, color: Colors.white),
-                      ),
-                    ),
+                  
                   ],
                 ),
                 const SizedBox(height: 12),
