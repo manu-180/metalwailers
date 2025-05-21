@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ServicioConImagenAnimado extends StatefulWidget {
   final String titulo;
   final String descripcion;
+  final String extraDescripcion;
   final String imagenAsset;
   final ScrollController scrollController;
 
@@ -10,6 +11,7 @@ class ServicioConImagenAnimado extends StatefulWidget {
     super.key,
     required this.titulo,
     required this.descripcion,
+    required this.extraDescripcion,
     required this.imagenAsset,
     required this.scrollController,
   });
@@ -18,42 +20,36 @@ class ServicioConImagenAnimado extends StatefulWidget {
   State<ServicioConImagenAnimado> createState() => _ServicioConImagenAnimadoState();
 }
 
-class _ServicioConImagenAnimadoState extends State<ServicioConImagenAnimado>
-    with TickerProviderStateMixin {
+class _ServicioConImagenAnimadoState extends State<ServicioConImagenAnimado> with TickerProviderStateMixin {
   final GlobalKey _itemKey = GlobalKey();
-  bool _hovering = false;
-  bool _animStarted = false;
+  bool _isVisible = false;
+  bool _hoverActivo = false;
+  bool _expandida = false;
+  bool _mostrarExtra = false;
 
-  late AnimationController _cardController;
-  late AnimationController _imgController;
-
-  late Animation<double> _fadeCard;
-  late Animation<double> _fadeImg;
-  late Animation<Offset> _slideCard;
-  late Animation<Offset> _slideImg;
+  late AnimationController _textController;
+  late AnimationController _imageController;
+  late Animation<Offset> _offsetText;
+  late Animation<double> _opacityText;
+  late Animation<Offset> _offsetImage;
+  late Animation<double> _opacityImage;
 
   @override
   void initState() {
     super.initState();
 
-    _cardController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
+    _textController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    _imageController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+
+    _offsetText = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeOut),
     );
+    _opacityText = Tween<double>(begin: 0, end: 1).animate(_textController);
 
-    _imgController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
+    _offsetImage = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
+      CurvedAnimation(parent: _imageController, curve: Curves.easeOut),
     );
-
-    _fadeCard = Tween<double>(begin: 0, end: 1).animate(_cardController);
-    _fadeImg = Tween<double>(begin: 0, end: 1).animate(_imgController);
-
-    _slideCard = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _cardController, curve: Curves.easeOut));
-
-    _slideImg = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _imgController, curve: Curves.easeOut));
+    _opacityImage = Tween<double>(begin: 0, end: 1).animate(_imageController);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.scrollController.addListener(_onScroll);
@@ -62,14 +58,14 @@ class _ServicioConImagenAnimadoState extends State<ServicioConImagenAnimado>
   }
 
   void _onScroll() {
-    if (!_animStarted && _itemKey.currentContext != null) {
-      final box = _itemKey.currentContext!.findRenderObject() as RenderBox;
-      final position = box.localToGlobal(Offset.zero).dy;
+    if (!_isVisible && _itemKey.currentContext != null) {
+      final position = (_itemKey.currentContext!.findRenderObject() as RenderBox)
+          .localToGlobal(Offset.zero)
+          .dy;
       final screenHeight = MediaQuery.of(context).size.height;
-
-      if (position < screenHeight * 0.75) {
-        _animStarted = true;
-        _cardController.forward().whenComplete(() => _imgController.forward());
+      if (position < screenHeight * 0.8) {
+        _textController.forward().then((_) => _imageController.forward());
+        _isVisible = true;
       }
     }
   }
@@ -77,157 +73,166 @@ class _ServicioConImagenAnimadoState extends State<ServicioConImagenAnimado>
   @override
   void dispose() {
     widget.scrollController.removeListener(_onScroll);
-    _cardController.dispose();
-    _imgController.dispose();
+    _textController.dispose();
+    _imageController.dispose();
     super.dispose();
+  }
+
+  void _toggleExpand() {
+    setState(() {
+      _expandida = !_expandida;
+      _mostrarExtra = false;
+    });
+
+    if (_expandida) {
+      Future.delayed(const Duration(milliseconds: 150), () {
+        if (mounted) setState(() => _mostrarExtra = true);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 800;
 
-    return Padding(
+    return Container(
       key: _itemKey,
-      padding: const EdgeInsets.symmetric(vertical: 60),
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _hovering = true),
-        onExit: (_) => setState(() => _hovering = false),
-        child: isWide
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // 📝 Card texto
-                  Expanded(
+      margin: const EdgeInsets.symmetric(vertical: 40),
+      width: double.infinity,
+      child: isWide
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Card a la izquierda
+                Expanded(child: _buildCardContent()),
+                const SizedBox(width: 60),
+                // Imagen a la derecha
+                Expanded(
+                  child: FadeTransition(
+                    opacity: _opacityImage,
                     child: SlideTransition(
-                      position: _slideCard,
-                      child: FadeTransition(
-                        opacity: _fadeCard,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: _hovering
-                                ? [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 6),
-                                    )
-                                  ]
-                                : [],
-                          ),
-                          padding: const EdgeInsets.all(24),
-                          margin: const EdgeInsets.only(right: 40),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.titulo,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: _hovering ? Colors.black : Colors.grey.shade800,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                widget.descripcion,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  height: 1.6,
-                                  color: _hovering ? Colors.black : Colors.grey.shade800,
-                                ),
-                                textAlign: TextAlign.justify,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // 🖼 Imagen
-                  SlideTransition(
-                    position: _slideImg,
-                    child: FadeTransition(
-                      opacity: _fadeImg,
+                      position: _offsetImage,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.asset(
                           widget.imagenAsset,
-                          width: 420,
-                          height: 260,
+                          height: 350,
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SlideTransition(
-                    position: _slideCard,
-                    child: FadeTransition(
-                      opacity: _fadeCard,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: _hovering
-                              ? [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 6),
-                                  )
-                                ]
-                              : [],
-                        ),
-                        padding: const EdgeInsets.all(20),
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.titulo,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              widget.descripcion,
-                              style: const TextStyle(fontSize: 15, height: 1.6),
-                              textAlign: TextAlign.justify,
-                            ),
-                          ],
-                        ),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                _buildCardContent(),
+                const SizedBox(height: 24),
+                FadeTransition(
+                  opacity: _opacityImage,
+                  child: SlideTransition(
+                    position: _offsetImage,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        widget.imagenAsset,
+                        height: 300,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  SlideTransition(
-                    position: _slideImg,
-                    child: FadeTransition(
-                      opacity: _fadeImg,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          widget.imagenAsset,
-                          height: 220,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-      ),
+                ),
+              ],
+            ),
     );
   }
+
+  Widget _buildCardContent() {
+  return GestureDetector(
+    onTap: _toggleExpand,
+    child: MouseRegion(
+      onEnter: (_) => setState(() => _hoverActivo = true),
+      onExit: (_) => setState(() => _hoverActivo = false),
+      cursor: SystemMouseCursors.click,
+      child: FadeTransition(
+        opacity: _opacityText,
+        child: SlideTransition(
+          position: _offsetText,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+            transform: _hoverActivo ? Matrix4.translationValues(0, -8, 0) : Matrix4.identity(),
+            decoration: BoxDecoration(
+              color: _hoverActivo ? Colors.grey.shade800 : Colors.grey.shade900,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: _hoverActivo
+                  ? [BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 12, offset: const Offset(0, 8))]
+                  : [],
+            ),
+            padding: const EdgeInsets.all(24),
+            constraints: _expandida ? const BoxConstraints(minHeight: 350) : const BoxConstraints(minHeight: 0),
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 200),
+                          style: TextStyle(
+                            color: _hoverActivo ? Colors.white : Colors.white60,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          child: Text(widget.titulo),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: _toggleExpand,
+                        child: AnimatedRotation(
+                          turns: _expandida ? 0.5 : 0.0,
+                          duration: const Duration(milliseconds: 300),
+                          child: Icon(Icons.keyboard_arrow_down, color: Colors.white70),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.descripcion,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                    ),
+                  ),
+                  if (_expandida)
+                    AnimatedOpacity(
+                      opacity: _mostrarExtra ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          widget.extraDescripcion,
+                          style: const TextStyle(
+                            color: Colors.white54,
+                            fontSize: 14,
+                            height: 1.4,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 }

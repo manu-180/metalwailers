@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 class AnimatedCardConImagen extends StatefulWidget {
   final String title;
   final String description;
+  final String extraDescription;
   final String imagePath;
   final ScrollController scrollController;
-  final String extraDescription;
-
 
   const AnimatedCardConImagen({
     super.key,
     required this.title,
     required this.description,
+    required this.extraDescription,
     required this.imagePath,
     required this.scrollController,
-    required this.extraDescription,
   });
 
   @override
@@ -25,19 +24,17 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
     with TickerProviderStateMixin {
   final GlobalKey _itemKey = GlobalKey();
   bool _isVisible = false;
+  bool _hoverActivo = false;
+  bool _expandida = false;
+  bool _mostrarDescripcionExtra = false;
 
   late AnimationController _mainController;
   late AnimationController _imageController;
 
   late Animation<Offset> _cardOffset;
   late Animation<double> _cardOpacity;
-
   late Animation<Offset> _imageOffset;
   late Animation<double> _imageOpacity;
-
-  bool _hoverActivo = false;
-  bool _expandida = false;
-  bool _mostrarDescripcionExtra = false;
 
   @override
   void initState() {
@@ -47,7 +44,6 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-
     _imageController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -81,9 +77,9 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
 
   void _onScroll() {
     if (!_isVisible && _itemKey.currentContext != null) {
-      final RenderBox renderBox =
-          _itemKey.currentContext!.findRenderObject() as RenderBox;
-      final position = renderBox.localToGlobal(Offset.zero).dy;
+      final position = (_itemKey.currentContext!.findRenderObject() as RenderBox)
+          .localToGlobal(Offset.zero)
+          .dy;
       final screenHeight = MediaQuery.of(context).size.height;
 
       if (position < screenHeight * 0.8) {
@@ -101,9 +97,7 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
 
     if (_expandida) {
       Future.delayed(const Duration(milliseconds: 200), () {
-        if (mounted) {
-          setState(() => _mostrarDescripcionExtra = true);
-        }
+        if (mounted) setState(() => _mostrarDescripcionExtra = true);
       });
     }
   }
@@ -129,7 +123,7 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
           ? Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Card
+                // CARD
                 Expanded(
                   child: AnimatedBuilder(
                     animation: _mainController,
@@ -144,37 +138,30 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                   ),
                 ),
                 const SizedBox(width: 60),
-                // Imagen
+                // IMAGEN
                 Expanded(
                   child: FadeTransition(
-  opacity: _imageOpacity,
-  child: SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(0, 0.2), // desde abajo
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _imageController,
-      curve: Curves.easeOut,
-    )),
-    child: MouseRegion(
-                      onEnter: (_) => setState(() => _hoverActivo = true),
-                      onExit: (_) => setState(() => _hoverActivo = false),
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: _toggleExpand,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.asset(
-                            widget.imagePath,
-                            height: 350,
-                            fit: BoxFit.cover,
+                    opacity: _imageOpacity,
+                    child: SlideTransition(
+                      position: _imageOffset,
+                      child: MouseRegion(
+                        onEnter: (_) => setState(() => _hoverActivo = true),
+                        onExit: (_) => setState(() => _hoverActivo = false),
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: _toggleExpand,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.asset(
+                              widget.imagePath,
+                              height: 350,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
-  ),
-)
-
+                  ),
                 ),
               ],
             )
@@ -192,23 +179,26 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                   child: _buildCardContent(),
                 ),
                 const SizedBox(height: 24),
-                AnimatedBuilder(
-                  animation: _imageController,
-                  builder: (context, child) => Opacity(
-                    opacity: _imageOpacity.value,
-                    child: Transform.translate(
-                      offset: _imageOffset.value * 100,
-                      child: child,
+                FadeTransition(
+                  opacity: _imageOpacity,
+                  child: SlideTransition(
+                    position: _imageOffset,
+                    child: MouseRegion(
+                      onEnter: (_) => setState(() => _hoverActivo = true),
+                      onExit: (_) => setState(() => _hoverActivo = false),
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: _toggleExpand,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            widget.imagePath,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  child: ClipRRect(
-  borderRadius: BorderRadius.circular(16),
-  child: Image.asset(
-    widget.imagePath,
-    fit: BoxFit.cover,
-  ),
-),
-
                 ),
               ],
             ),
@@ -229,8 +219,7 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
               ? Matrix4.translationValues(0, -8, 0)
               : Matrix4.identity(),
           decoration: BoxDecoration(
-            color:
-                _hoverActivo ? Colors.grey.shade800 : Colors.grey.shade900,
+            color: _hoverActivo ? Colors.grey.shade800 : Colors.grey.shade900,
             borderRadius: BorderRadius.circular(12),
             boxShadow: _hoverActivo
                 ? [
@@ -253,14 +242,28 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 200),
-                  style: TextStyle(
-                    color: _hoverActivo ? Colors.white : Colors.white60,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  child: Text(widget.title),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 200),
+                        style: TextStyle(
+                          color: _hoverActivo ? Colors.white : Colors.white60,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        child: Text(widget.title),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _toggleExpand,
+                      child: AnimatedRotation(
+                        turns: _expandida ? 0.5 : 0,
+                        duration: const Duration(milliseconds: 300),
+                        child: const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -274,11 +277,11 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                   AnimatedOpacity(
                     opacity: _mostrarDescripcionExtra ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
-                    child:  Padding(
-                      padding: EdgeInsets.only(top: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16),
                       child: Text(
                         widget.extraDescription,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white54,
                           fontSize: 14,
                           height: 1.4,

@@ -1,234 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:metalwailers/widgets/servicio_con_imagen_animado.dart';
+import 'package:metalwailers/widgets/animated_info_card.dart';
 
-class Servicios extends StatefulWidget {
+class Servicios extends StatelessWidget {
   final ScrollController scrollController;
-  const Servicios({super.key, required this.scrollController});
+  final bool mostrar;
 
-  @override
-  State<Servicios> createState() => _ServiciosState();
-}
-
-class _ServiciosState extends State<Servicios> with TickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final List<Animation<Offset>> _slideAnimations;
-  late final List<Animation<double>> _fadeAnimations;
-
-  late final AnimationController _listaController;
-  late final Animation<Offset> _slideLista;
-  late final Animation<double> _fadeLista;
-
-  final List<Map<String, String>> servicios = [
-    {
-      'titulo': 'Corte CNC Láser',
-      'descripcion':
-          'Permite realizar cortes de alta precisión sobre chapas metálicas utilizando un haz láser concentrado. Ideal para detalles finos y acabados limpios.',
-      'imagen': 'imagen1.png',
-    },
-    {
-      'titulo': 'Corte CNC Plasma',
-      'descripcion':
-          'Utiliza gas ionizado para cortar metales conductores con rapidez y eficiencia, perfecto para cortes de mayor espesor.',
-      'imagen': 'imagen2.png',
-    },
-    {
-      'titulo': 'Guillotinado',
-      'descripcion':
-          'Consiste en cortar láminas metálicas con una cuchilla recta aplicando gran fuerza, obteniendo cortes rectos y precisos.',
-      'imagen': 'imagen3.png',
-    },
-    {
-      'titulo': 'Plegado',
-      'descripcion':
-          'Proceso para doblar chapas metálicas en ángulos determinados, utilizando prensas de precisión hidráulicas.',
-      'imagen': 'imagen4.png',
-    },
-    {
-      'titulo': 'Curvado',
-      'descripcion':
-          'Permite doblar tubos o perfiles de forma controlada para obtener curvas suaves sin dañar el material.',
-      'imagen': 'imagen5.png',
-    },
-    {
-      'titulo': 'Cilindrado',
-      'descripcion':
-          'Consiste en dar forma cilíndrica a una chapa plana pasando por una máquina roladora con rodillos.',
-      'imagen': 'imagen6.png',
-    },
-    {
-      'titulo': 'Rolado',
-      'descripcion':
-          'Técnica de formado para curvar chapas en diferentes radios mediante múltiples pasadas en rodillos.',
-      'imagen': 'imagen7.png',
-    },
-    {
-      'titulo': 'Punzonado',
-      'descripcion':
-          'Realiza perforaciones o formas en chapa con una prensa y punzón, ideal para producción en serie.',
-      'imagen': 'imagen8.png',
-    },
-    {
-      'titulo': 'Balancinado',
-      'descripcion':
-          'Utiliza balancines para operaciones repetitivas de corte o conformado con gran rapidez.',
-      'imagen': 'imagen9.png',
-    },
-    {
-      'titulo': 'Soldadura MIG, TIG y por punto',
-      'descripcion':
-          'Soldamos piezas con técnicas según la necesidad: MIG para rapidez, TIG para precisión, y por punto para estructuras livianas.',
-      'imagen': 'imagen10.png',
-    },
-    {
-      'titulo': 'Pintura a horno',
-      'descripcion':
-          'Aplicamos pintura electrostática horneada para acabados duraderos, resistentes y de excelente presentación.',
-      'imagen': 'imagen11.png',
-    },
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-
-    _fadeAnimations = List.generate(
-      5,
-      (i) => CurvedAnimation(
-        parent: _controller,
-        curve: Interval(i * 0.12, i * 0.12 + 0.4, curve: Curves.easeOut),
-      ),
-    );
-
-    _slideAnimations = List.generate(
-      5,
-      (i) => Tween<Offset>(
-        begin: const Offset(0, 0.2),
-        end: Offset.zero,
-      ).animate(
-        CurvedAnimation(
-          parent: _controller,
-          curve: Interval(i * 0.12, i * 0.12 + 0.4, curve: Curves.easeOut),
-        ),
-      ),
-    );
-
-    _listaController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-
-    _fadeLista = CurvedAnimation(
-      parent: _listaController,
-      curve: Curves.easeOut,
-    );
-
-    _slideLista = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(_fadeLista);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.forward().whenComplete(() {
-        _listaController.forward();
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _listaController.dispose();
-    super.dispose();
-  }
+  const Servicios({
+    super.key,
+    required this.scrollController,
+    required this.mostrar,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SlideTransition(
-          position: _slideAnimations[0],
-          child: FadeTransition(
-            opacity: _fadeAnimations[0],
-            child: const Text(
-              "Servicios que Ofrecemos",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        SlideTransition(
-          position: _slideAnimations[1],
-          child: FadeTransition(
-            opacity: _fadeAnimations[1],
-            child: const Text(
-              "Asesoramiento Integral",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        SlideTransition(
-          position: _slideAnimations[2],
-          child: FadeTransition(
-            opacity: _fadeAnimations[2],
-            child: const Text(
-              "Acompañamos a nuestros clientes desde la etapa inicial del proyecto, ofreciendo asesoramiento técnico en diseño y desarrollo de piezas y estructuras metálicas.",
-              textAlign: TextAlign.justify,
-            ),
-          ),
-        ),
-        const SizedBox(height: 32),
-        SlideTransition(
-          position: _slideAnimations[3],
-          child: FadeTransition(
-            opacity: _fadeAnimations[3],
-            child: const Text(
-              "Producción Metalúrgica",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        SlideTransition(
-          position: _slideAnimations[4],
-          child: FadeTransition(
-            opacity: _fadeAnimations[4],
-            child: const Text(
-              "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de última generación.",
-              textAlign: TextAlign.justify,
-            ),
-          ),
-        ),
-        const SizedBox(height: 40),
+    final List<Map<String, String>> servicios = [
+      {
+        'title': 'Corte CNC Láser',
+        'description': 'Permite realizar cortes de alta precisión sobre chapas metálicas utilizando un haz láser concentrado. Ideal para detalles finos y acabados limpios.',
+        'extraDescription': 'Utilizamos tecnología láser CNC para cortes complejos, limpios y con mínimas rebabas. Esta técnica es ideal para diseños detallados y producción en serie con calidad constante.',
+        'image': 'assets/images/imagen1.png',
+      },
+      {
+        'title': 'Corte CNC Plasma',
+        'description': 'Utiliza gas ionizado para cortar metales conductores con rapidez y eficiencia, perfecto para cortes de mayor espesor.',
+        'extraDescription': 'El plasma permite cortar chapas gruesas manteniendo una buena velocidad de producción y bordes bien definidos, ideal para estructuras metálicas robustas.',
+        'image': 'assets/images/imagen2.png',
+      },
+      {
+        'title': 'Guillotinado',
+        'description': 'Consiste en cortar láminas metálicas con una cuchilla recta aplicando gran fuerza, obteniendo cortes rectos y precisos.',
+        'extraDescription': 'Este proceso es ideal para grandes volúmenes de corte recto, garantizando rapidez, uniformidad y desperdicio mínimo de material.',
+        'image': 'assets/images/imagen3.png',
+      },
+      {
+        'title': 'Plegado',
+        'description': 'Proceso para doblar chapas metálicas en ángulos determinados, utilizando prensas de precisión hidráulicas.',
+        'extraDescription': 'Contamos con plegadoras CNC que nos permiten realizar dobleces exactos, optimizando tiempos y asegurando repetitividad para series pequeñas o grandes.',
+        'image': 'assets/images/imagen4.png',
+      },
+      {
+        'title': 'Curvado',
+        'description': 'Permite doblar tubos o perfiles de forma controlada para obtener curvas suaves sin dañar el material.',
+        'extraDescription': 'Utilizamos matrices especiales que permiten curvar sin marcar ni dañar el material, manteniendo su resistencia estructural intacta.',
+        'image': 'assets/images/imagen5.png',
+      },
+      {
+        'title': 'Cilindrado',
+        'description': 'Consiste en dar forma cilíndrica a una chapa plana pasando por una máquina roladora con rodillos.',
+        'extraDescription': 'Ideal para fabricar tubos metálicos, conductos y piezas circulares. Adaptamos el radio de cilindrado según el requerimiento del cliente.',
+        'image': 'assets/images/imagen6.png',
+      },
+      {
+        'title': 'Rolado',
+        'description': 'Técnica de formado para curvar chapas en diferentes radios mediante múltiples pasadas en rodillos.',
+        'extraDescription': 'Este proceso permite lograr radios amplios o cerrados de manera precisa y progresiva, conservando el espesor del material.',
+        'image': 'assets/images/imagen7.png',
+      },
+      {
+        'title': 'Punzonado',
+        'description': 'Realiza perforaciones o formas en chapa con una prensa y punzón, ideal para producción en serie.',
+        'extraDescription': 'Con punzonadoras CNC realizamos perforaciones repetitivas con máxima eficiencia y precisión. Excelente para piezas ventiladas, ranuradas o troqueladas.',
+        'image': 'assets/images/imagen8.png',
+      },
+      {
+        'title': 'Balancinado',
+        'description': 'Utiliza balancines para operaciones repetitivas de corte o conformado con gran rapidez.',
+        'extraDescription': 'Los balancines son ideales para troquelado y operaciones masivas, permitiendo un ritmo productivo continuo con bajo mantenimiento.',
+        'image': 'assets/images/imagen9.png',
+      },
+      {
+        'title': 'Soldadura MIG, TIG y por punto',
+        'description': 'Soldamos piezas con técnicas según la necesidad: MIG para rapidez, TIG para precisión, y por punto para estructuras livianas.',
+        'extraDescription': 'Cada técnica se aplica según el tipo de pieza y exigencia del cliente. Aseguramos uniones limpias, resistentes y estéticamente prolijas.',
+        'image': 'assets/images/imagen10.png',
+      },
+      {
+        'title': 'Pintura a horno',
+        'description': 'Aplicamos pintura electrostática horneada para acabados duraderos, resistentes y de excelente presentación.',
+        'extraDescription': 'Realizamos desengrase, pintura con carga electrostática y curado en horno. El resultado es una capa uniforme, adherente y con alta durabilidad.',
+        'image': 'assets/images/imagen11.png',
+      },
+    ];
 
-        // 👇 Animación de las cards de servicios
-        SlideTransition(
-          position: _slideLista,
-          child: FadeTransition(
-            opacity: _fadeLista,
-            child: Column(
-              children: servicios
-                  .map(
-                    (servicio) => ServicioConImagenAnimado(
-                      titulo: servicio['titulo']!,
-                      descripcion: servicio['descripcion']!,
-                      imagenAsset: 'assets/images/${servicio['imagen']}',
-                      scrollController: widget.scrollController,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 80),
-      ],
+    return AnimatedOpacity(
+      opacity: mostrar ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 500),
+      child: Column(
+        children: servicios.map((item) {
+          return AnimatedCardConImagen(
+            title: item['title']!,
+            description: item['description']!,
+            extraDescription: item['extraDescription']!,
+            imagePath: item['image']!,
+            scrollController: scrollController,
+          );
+        }).toList(),
+      ),
     );
   }
 }
