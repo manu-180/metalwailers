@@ -22,7 +22,7 @@ class ServiciosScreen extends StatelessWidget {
             const CustomAppbar(),
             Padding(
               padding: EdgeInsets.symmetric(
-                vertical: size.height * 0.04,
+                vertical: size.height * 0.1,
                 horizontal: isWide ? size.width * 0.15 : size.width * 0.07,
               ),
               child: Servicios(scrollController: scrollController), // 👈

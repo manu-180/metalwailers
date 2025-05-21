@@ -44,14 +44,14 @@ class _CustomAppbarState extends State<CustomAppbar> {
               // Logo + flecha
               Row(
                 children: [
-                  // GestureDetector(
-                  //   child: SvgPicture.asset(
-                  //     'assets/imges/loguito.svg',
-                  //     height: size.height * 0.12,
-                  //     fit: BoxFit.contain,
-                  //   ),
-                  //   onTap: () => context.push('/'),
-                  // ),
+                  GestureDetector(
+                    child: SvgPicture.asset(
+                      'assets/logo/loguito.svg',
+                      height: size.height * 0.12,
+                      fit: BoxFit.contain,
+                    ),
+                    onTap: () => context.push('/'),
+                  ),
                   if (!isWide)
                     GestureDetector(
                       onTap: () => setState(() => _isMenuOpen = !_isMenuOpen),
