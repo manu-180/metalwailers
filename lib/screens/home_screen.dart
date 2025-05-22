@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/appbar.dart';
-import 'package:metalwailers/widgets/animated_info_card.dart';
 import 'package:metalwailers/widgets/body_metalwailers.dart';
+import 'package:metalwailers/widgets/frase_final.dart'; // ⬅️ Importá el nuevo widget
 import 'package:metalwailers/widgets/footer.dart';
 import 'package:metalwailers/widgets/header.dart';
 
@@ -34,6 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollController: scrollController,
               mostrarContenido: mostrarBody,
             ),
+            // 👇 Acá insertás la frase final
+            if (mostrarBody)
+              FraseFinal(scrollController: scrollController, texto: 'Llevamos más de 30 años impulsando ideas y construyendo soluciones metalúrgicas confiables, precisas y a medida. En MetalWailers, tu proyecto es nuestra prioridad.'),
+              SizedBox(height: 100), // Espacio adicional
             const Footer(),
           ],
         ),
