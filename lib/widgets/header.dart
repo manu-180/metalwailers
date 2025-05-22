@@ -131,7 +131,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
             ),
           ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 100),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

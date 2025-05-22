@@ -6,7 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
-
+  
+  
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 800;
@@ -26,7 +27,7 @@ class Footer extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: _logoColumn(textColor)),
+        Expanded(child: _logoColumn(textColor,  context)),
         Expanded(child: _navColumn(textColor, context)),
         Expanded(child: _contactColumn(textColor)),
       ],
@@ -37,7 +38,7 @@ class Footer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _logoColumn(textColor),
+        _logoColumn(textColor,  context),
         const SizedBox(height: 24),
       
         _contactColumn(textColor),
@@ -45,9 +46,16 @@ class Footer extends StatelessWidget {
     );
   }
 
-  Widget _logoColumn(Color textColor) {
-    return Center(
-      child: SvgPicture.asset('assets/logo/loguito.svg', height: 160),
+  Widget _logoColumn(Color textColor, BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click ,
+      child: Center(
+        child: GestureDetector(
+          
+          child: SvgPicture.asset('assets/logo/loguito.svg', height: 160),
+          onTap: () => context.push('/'),
+        ),
+      ),
     );
   }
 
@@ -59,19 +67,22 @@ class Footer extends StatelessWidget {
       {'label': 'Contacto', 'route': '/contacto'},
     ];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:
-            links
-                .map(
-                  (link) => _HoverUnderlineText(
-                    label: link['label']!,
-                    onTap: () => context.push(link['route']!),
-                  ),
-                )
-                .toList(),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+              links
+                  .map(
+                    (link) => _HoverUnderlineText(
+                      label: link['label']!,
+                      onTap: () => context.push(link['route']!),
+                    ),
+                  )
+                  .toList(),
+        ),
       ),
     );
   }

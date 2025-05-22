@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             const CustomAppbar(),
             HeaderMetalWailers(onAnimacionTerminada: activarBody),
+            SizedBox(height: 20), // Espacio adicional
             BodyMetalWailers(
               scrollController: scrollController,
               mostrarContenido: mostrarBody,

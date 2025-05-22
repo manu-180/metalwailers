@@ -8,21 +8,29 @@ class ContactoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController(); // 👈
     final size = MediaQuery.of(context).size;
     final isWide = size.width > 1000;
 
     return Scaffold(
+      backgroundColor: Colors.black, // 👈 Fondo negro
       body: SingleChildScrollView(
+        controller: scrollController, // 👈
         child: Column(
-          children: [CustomAppbar(), Padding(
-            padding: EdgeInsets.symmetric(
+          children: [
+            const CustomAppbar(),
+            Padding(
+              padding: EdgeInsets.symmetric(
                 vertical: size.height * 0.04,
                 horizontal: isWide ? size.width * 0.15 : size.width * 0.07,
               ),
-            child: Contactanos(),
-          ), Footer()],
+              child: Contactanos(), // 👈 pasás el controller
+            ),
+            const Footer(),
+          ],
         ),
       ),
     );
   }
 }
+
