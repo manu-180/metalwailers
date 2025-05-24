@@ -215,21 +215,12 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
         decoration: BoxDecoration(
           color: _isHover ? Colors.grey.shade900 : Colors.black,
           borderRadius: BorderRadius.circular(12),
-          boxShadow:
-              _isHover
-                  ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 6),
-                    ),
-                  ]
-                  : [],
+      
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(widget.icon, color: _isHover ? Colors.white : Colors.white70),
+            Icon(widget.icon, color: _isHover ? Colors.white : Colors.white70, size: 35,),
 
             const SizedBox(width: 16),
             Expanded(
@@ -285,16 +276,7 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
         decoration: BoxDecoration(
           color: _isHover ? Colors.grey.shade800 : Colors.grey.shade900,
           borderRadius: BorderRadius.circular(10),
-          boxShadow:
-              _isHover
-                  ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                  : [],
+        
         ),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
@@ -303,7 +285,7 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
               Icon(
                 widget.icon,
                 color: _isHover ? Colors.white : Colors.white70,
-                size: 24,
+                size: 30,
               ),
               const SizedBox(width: 12),
               Text(

@@ -93,7 +93,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
             child: const Text(
               "Servicios que Ofrecemos",
               style: TextStyle(
-                fontSize: 35,
+                fontSize: 38,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -111,7 +111,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                 Text(
                   "Asesoramiento Integral",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -119,7 +119,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                 SizedBox(height: 8),
                 Text(
                   "Brindamos un acompañamiento integral desde la concepción misma del proyecto, asesorando a nuestros clientes en cada decisión técnica y funcional. Nuestro equipo evalúa requerimientos específicos, propone soluciones viables y colabora activamente en el diseño y desarrollo de piezas y estructuras metálicas. Este enfoque personalizado garantiza que cada propuesta se ajuste a las necesidades reales del cliente, optimizando tiempos, costos y calidad desde la etapa de planificación hasta la ejecución final.",
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(color: Colors.white70, fontSize: 17),
                   textAlign: TextAlign.justify,
                 ),
               ],
@@ -137,7 +137,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                 Text(
                   "Producción Metalúrgica",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -145,7 +145,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                 SizedBox(height: 8),
                 Text(
                   "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de última generación.",
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(color: Colors.white70, fontSize: 17),
                   textAlign: TextAlign.justify,
                 ),
               ],
