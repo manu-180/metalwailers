@@ -6,9 +6,10 @@ class TestMailButton extends StatelessWidget {
   const TestMailButton({super.key});
 
   Future<void> _sendTestEmail() async {
-    const functionUrl = 'https://assistify-token-generator-1014.twil.io/send-email'; // ⬅️ Reemplazá esto
+    const functionUrl =
+        'https://assistify-token-generator-1014.twil.io/send-email'; // ⬅️ Reemplazá esto
 
-   await http.post(
+    await http.post(
       Uri.parse(functionUrl),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
@@ -17,8 +18,6 @@ class TestMailButton extends StatelessWidget {
         'text': '123 🛠️',
       }),
     );
-
-  
   }
 
   @override

@@ -27,8 +27,10 @@ class SobreNosotros extends StatelessWidget {
         AnimatedTextBlock(
           scrollController: scrollController,
           child: Text(
-            'En Metalwailers somos especialistas en el diseño, desarrollo y fabricación de piezas y estructuras metálicas a medida. Contamos con más de 30 años de trayectoria en la industria, brindando soluciones integrales para distintos sectores.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            'En metalwailers somos especialistas en el diseño, desarrollo y fabricación de piezas y estructuras metálicas a medida. Contamos con más de 30 años de trayectoria en la industria, brindando soluciones integrales para distintos sectores.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
             textAlign: TextAlign.justify,
           ),
         ),
@@ -48,7 +50,9 @@ class SobreNosotros extends StatelessWidget {
           scrollController: scrollController,
           child: Text(
             'Brindar soluciones metalúrgicas innovadoras, eficientes y personalizadas, enfocadas en la calidad, la precisión y la satisfacción de nuestros clientes.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
             textAlign: TextAlign.justify,
           ),
         ),
@@ -82,7 +86,9 @@ class SobreNosotros extends StatelessWidget {
           scrollController: scrollController,
           child: Text(
             'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
             textAlign: TextAlign.justify,
           ),
         ),
@@ -102,7 +108,9 @@ class SobreNosotros extends StatelessWidget {
           scrollController: scrollController,
           child: Text(
             'Trabajamos con diversos sectores industriales, entre ellos:',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
             textAlign: TextAlign.justify,
           ),
         ),
@@ -166,15 +174,14 @@ class SobreNosotros extends StatelessWidget {
     ];
 
     return sectors.map((s) {
-  return AnimatedTextBlock(
-    scrollController: scrollController,
-    child: _HoverableSectorCard(
-      label: s['label'] as String,
-      icon: s['icon'] as IconData,
-    ),
-  );
-}).toList();
-
+      return AnimatedTextBlock(
+        scrollController: scrollController,
+        child: _HoverableSectorCard(
+          label: s['label'] as String,
+          icon: s['icon'] as IconData,
+        ),
+      );
+    }).toList();
   }
 }
 
@@ -208,23 +215,21 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
         decoration: BoxDecoration(
           color: _isHover ? Colors.grey.shade900 : Colors.black,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: _isHover
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 6),
-                  )
-                ]
-              : [],
+          boxShadow:
+              _isHover
+                  ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 6),
+                    ),
+                  ]
+                  : [],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-  widget.icon,
-  color: _isHover ? Colors.white : Colors.white70,
-),
+            Icon(widget.icon, color: _isHover ? Colors.white : Colors.white70),
 
             const SizedBox(width: 16),
             Expanded(
@@ -259,10 +264,7 @@ class _HoverableSectorCard extends StatefulWidget {
   final String label;
   final IconData icon;
 
-  const _HoverableSectorCard({
-    required this.label,
-    required this.icon,
-  });
+  const _HoverableSectorCard({required this.label, required this.icon});
 
   @override
   State<_HoverableSectorCard> createState() => _HoverableSectorCardState();
@@ -283,15 +285,16 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
         decoration: BoxDecoration(
           color: _isHover ? Colors.grey.shade800 : Colors.grey.shade900,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: _isHover
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : [],
+          boxShadow:
+              _isHover
+                  ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                  : [],
         ),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400),

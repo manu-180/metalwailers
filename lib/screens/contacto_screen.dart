@@ -26,6 +26,7 @@ class ContactoScreen extends StatelessWidget {
               ),
               child: Contactanos(), // 👈 pasás el controller
             ),
+            SizedBox(height: 70),
             const Footer(),
           ],
         ),
@@ -33,4 +34,3 @@ class ContactoScreen extends StatelessWidget {
     );
   }
 }
-

@@ -9,7 +9,8 @@ class IntroServiciosAnimado extends StatefulWidget {
   State<IntroServiciosAnimado> createState() => _IntroServiciosAnimadoState();
 }
 
-class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with TickerProviderStateMixin {
+class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fade1;
   late Animation<Offset> _slide1;
@@ -27,17 +28,47 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with Tick
       vsync: this,
     );
 
-    _fade1 = CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.3, curve: Curves.easeOut));
-    _slide1 = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.3, curve: Curves.easeOut)));
+    _fade1 = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.3, curve: Curves.easeOut),
+    );
+    _slide1 = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 0.3, curve: Curves.easeOut),
+      ),
+    );
 
-    _fade2 = CurvedAnimation(parent: _controller, curve: const Interval(0.3, 0.6, curve: Curves.easeOut));
-    _slide2 = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.3, 0.6, curve: Curves.easeOut)));
+    _fade2 = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.3, 0.6, curve: Curves.easeOut),
+    );
+    _slide2 = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.3, 0.6, curve: Curves.easeOut),
+      ),
+    );
 
-    _fade3 = CurvedAnimation(parent: _controller, curve: const Interval(0.6, 1.0, curve: Curves.easeOut));
-    _slide3 = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.6, 1.0, curve: Curves.easeOut)));
+    _fade3 = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
+    );
+    _slide3 = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
+      ),
+    );
 
     _controller.forward().whenComplete(() {
       widget.onAnimacionTerminada();
@@ -61,7 +92,11 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with Tick
             opacity: _fade1,
             child: const Text(
               "Servicios que Ofrecemos",
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -75,7 +110,11 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with Tick
               children: [
                 Text(
                   "Asesoramiento Integral",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
                 SizedBox(height: 8),
                 Text(
@@ -97,7 +136,11 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado> with Tick
               children: [
                 Text(
                   "Producción Metalúrgica",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
                 SizedBox(height: 8),
                 Text(

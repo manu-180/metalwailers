@@ -6,8 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
-  
-  
+
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 800;
@@ -27,7 +26,7 @@ class Footer extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: _logoColumn(textColor,  context)),
+        Expanded(child: _logoColumn(textColor, context)),
         Expanded(child: _navColumn(textColor, context)),
         Expanded(child: _contactColumn(textColor)),
       ],
@@ -38,9 +37,9 @@ class Footer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _logoColumn(textColor,  context),
+        _logoColumn(textColor, context),
         const SizedBox(height: 24),
-      
+
         _contactColumn(textColor),
       ],
     );
@@ -48,10 +47,9 @@ class Footer extends StatelessWidget {
 
   Widget _logoColumn(Color textColor, BuildContext context) {
     return MouseRegion(
-      cursor: SystemMouseCursors.click ,
+      cursor: SystemMouseCursors.click,
       child: Center(
         child: GestureDetector(
-          
           child: SvgPicture.asset('assets/logo/loguito.svg', height: 160),
           onTap: () => context.push('/'),
         ),
@@ -88,40 +86,39 @@ class Footer extends StatelessWidget {
   }
 
   Widget _contactColumn(Color textColor) {
-  return Center(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center, // <- aquí el cambio
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _contactItem(
-          FontAwesomeIcons.whatsapp,
-          '1162913437',
-          'https://wa.me/5491141941235',
-          textColor,
-        ),
-        _contactItem(
-          Icons.mail,
-          'contactanos@metalwailers.com',
-          'mailto:contactanos@metalwailers.com',
-          textColor,
-        ),
-        _contactItem(
-          Icons.location_on,
-          'GORRITI 1399, EL TALAR, TIGRE, PROV. BS.AS.',
-          'https://www.google.com/maps/place/GORRITI+1399,+El+Talar',
-          textColor,
-        ),
-        _contactItem(
-          FontAwesomeIcons.instagram,
-          'metalwailers',
-          'https://www.instagram.com/metalwailers',
-          textColor,
-        ),
-      ],
-    ),
-  );
-}
-
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center, // <- aquí el cambio
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _contactItem(
+            FontAwesomeIcons.whatsapp,
+            '1162913437',
+            'https://wa.me/5491141941235',
+            textColor,
+          ),
+          _contactItem(
+            Icons.mail,
+            'contactanos@metalwailers.com',
+            'mailto:contactanos@metalwailers.com',
+            textColor,
+          ),
+          _contactItem(
+            Icons.location_on,
+            'GORRITI 1399, EL TALAR, TIGRE, PROV. BS.AS.',
+            'https://www.google.com/maps/place/GORRITI+1399,+El+Talar',
+            textColor,
+          ),
+          _contactItem(
+            FontAwesomeIcons.instagram,
+            'metalwailers',
+            'https://www.instagram.com/metalwailers',
+            textColor,
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _contactItem(IconData icon, String label, String url, Color color) {
     return InkWell(

@@ -35,25 +35,49 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
       begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.4, curve: Curves.easeOut)),
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
+      ),
     );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.4, curve: Curves.easeOut)),
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
+      ),
     );
 
     _fadeLinea1 = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.45, 0.65, curve: Curves.easeOut)),
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.45, 0.65, curve: Curves.easeOut),
+      ),
     );
-    _offsetLinea1 = Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.45, 0.65, curve: Curves.easeOut)),
+    _offsetLinea1 = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.45, 0.65, curve: Curves.easeOut),
+      ),
     );
 
     _fadeLinea2 = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.60, 0.80, curve: Curves.easeOut)),
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.60, 0.80, curve: Curves.easeOut),
+      ),
     );
-    _offsetLinea2 = Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.60, 0.80, curve: Curves.easeOut)),
+    _offsetLinea2 = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.60, 0.80, curve: Curves.easeOut),
+      ),
     );
   }
 
@@ -62,7 +86,10 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
     super.didChangeDependencies();
 
     // Precarga segura
-    precacheImage(const AssetImage('assets/logo/header_logo.png'), context).then((_) {
+    precacheImage(
+      const AssetImage('assets/logo/header_logo.png'),
+      context,
+    ).then((_) {
       if (mounted) {
         setState(() => _imagenCargada = true);
         _iniciarAnimacion();
@@ -116,7 +143,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                         opacity: _imagenCargada ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 400),
                         child: Text(
-                          'MetalWailers',
+                          'METALWAILERS',
                           style: TextStyle(
                             fontSize: size.width > 600 ? size.width * 0.07 : 20,
                             fontWeight: FontWeight.bold,
@@ -165,7 +192,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

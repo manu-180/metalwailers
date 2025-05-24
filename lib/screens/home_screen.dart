@@ -37,8 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // 👇 Acá insertás la frase final
             if (mostrarBody)
-              FraseFinal(scrollController: scrollController, texto: 'Llevamos más de 30 años impulsando ideas y construyendo soluciones metalúrgicas confiables, precisas y a medida. En MetalWailers, tu proyecto es nuestra prioridad.'),
-              SizedBox(height: 100), // Espacio adicional
+              FraseFinal(
+                scrollController: scrollController,
+                texto:
+                    'Llevamos más de 30 años impulsando ideas y construyendo soluciones metalúrgicas confiables, precisas y a medida. En METALWAILERS, tu proyecto es nuestra prioridad.',
+              ),
+            SizedBox(height: 100), // Espacio adicional
             const Footer(),
           ],
         ),

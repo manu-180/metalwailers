@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AnimatedCardConImagen extends StatefulWidget {
   final String title;
@@ -6,6 +7,7 @@ class AnimatedCardConImagen extends StatefulWidget {
   final String extraDescription;
   final String imagePath;
   final ScrollController scrollController;
+  final String imageHoverPath;
 
   const AnimatedCardConImagen({
     super.key,
@@ -14,6 +16,7 @@ class AnimatedCardConImagen extends StatefulWidget {
     required this.extraDescription,
     required this.imagePath,
     required this.scrollController,
+    required this.imageHoverPath,
   });
 
   @override
@@ -143,23 +146,30 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                   const SizedBox(width: 100),
                   // IMAGEN
                   Expanded(
-                    child: FadeTransition(
-                      opacity: _imageOpacity,
-                      child: SlideTransition(
-                        position: _imageOffset,
-                        child: MouseRegion(
-                          onEnter: (_) => setState(() => _hoverActivo = true),
-                          onExit: (_) => setState(() => _hoverActivo = false),
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: _toggleExpand,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                widget.imagePath,
-                                height: 350,
-                                fit: BoxFit.cover,
-                              ),
+                    child: MouseRegion(
+                      onEnter: (_) => setState(() => _hoverActivo = true),
+                      onExit: (_) => setState(() => _hoverActivo = false),
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: _toggleExpand,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          switchInCurve: Curves.easeInOut,
+                          switchOutCurve: Curves.easeInOut,
+                          transitionBuilder: (child, animation) => FadeTransition(
+  opacity: animation,
+  child: child,
+),
+
+                          child: ClipRRect(
+                            key: ValueKey(_hoverActivo),
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.asset(
+                              _hoverActivo
+                                  ? widget.imageHoverPath
+                                  : widget.imagePath,
+                              height: 350,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),

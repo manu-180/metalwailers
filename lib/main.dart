@@ -3,7 +3,6 @@ import 'package:metalwailers/config/router/app_router.dart';
 import 'package:metalwailers/config/theme/app_theme.dart';
 
 void main() {
-  
   runApp(const MyApp());
 }
 
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
-      title: 'MetalWailers',
+      title: 'METALWAILERS',
       theme: AppTheme().getColor(),
     );
   }

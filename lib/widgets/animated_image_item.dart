@@ -35,16 +35,12 @@ class _AnimatedImageItemState extends State<AnimatedImageItem>
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(0, 0.2),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _opacityAnimation = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.scrollController.addListener(_onScroll);
@@ -77,22 +73,19 @@ class _AnimatedImageItemState extends State<AnimatedImageItem>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) => Opacity(
-        opacity: _opacityAnimation.value,
-        child: Transform.translate(
-          offset: _offsetAnimation.value * 100,
-          child: child,
-        ),
-      ),
+      builder:
+          (context, child) => Opacity(
+            opacity: _opacityAnimation.value,
+            child: Transform.translate(
+              offset: _offsetAnimation.value * 100,
+              child: child,
+            ),
+          ),
       child: Container(
         key: _itemKey,
         padding: const EdgeInsets.symmetric(vertical: 100),
         alignment: Alignment.center,
-        child: Image.asset(
-          widget.assetPath,
-          height: 200,
-          fit: BoxFit.contain,
-        ),
+        child: Image.asset(widget.assetPath, height: 200, fit: BoxFit.contain),
       ),
     );
   }

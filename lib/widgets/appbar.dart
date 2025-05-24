@@ -60,7 +60,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         turns: _isMenuOpen ? 0.5 : 0,
                         child: SizedBox(
                           height: size.height * 0.09,
-                          width: size.height * 0.09,  
+                          width: size.height * 0.09,
                           child: const Icon(
                             Icons.expand_more,
                             color: Colors.grey,
@@ -246,14 +246,15 @@ class _NavTextButtonState extends State<_NavTextButton> {
             ),
             const SizedBox(height: 4),
             AnimatedContainer(
-              duration: const Duration(milliseconds:150),
+              duration: const Duration(milliseconds: 150),
               alignment: Alignment.centerLeft,
               height: 2,
-              width: _isHovering
-                  ? widget.label == "Inicio"
-                      ? textWidth - 2
-                      : textWidth
-                  : 0,
+              width:
+                  _isHovering
+                      ? widget.label == "Inicio"
+                          ? textWidth - 2
+                          : textWidth
+                      : 0,
               color: hoverColor,
               curve: Curves.easeInOut,
             ),
@@ -267,9 +268,7 @@ class _NavTextButtonState extends State<_NavTextButton> {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: texto,
-        style: TextStyle(
-          fontSize: MediaQuery.of(context).size.width * 0.014,
-        ),
+        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.014),
       ),
       maxLines: 1,
       textDirection: TextDirection.ltr,
@@ -278,4 +277,3 @@ class _NavTextButtonState extends State<_NavTextButton> {
     return textPainter.size.width;
   }
 }
-

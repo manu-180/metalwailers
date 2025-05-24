@@ -35,16 +35,12 @@ class _AnimatedTextBlockState extends State<AnimatedTextBlock>
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(0, 0.2),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _opacityAnimation = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.scrollController.addListener(_onScroll);
@@ -54,9 +50,10 @@ class _AnimatedTextBlockState extends State<AnimatedTextBlock>
 
   void _onScroll() {
     if (!_isVisible && _itemKey.currentContext != null) {
-      final position = (_itemKey.currentContext!.findRenderObject() as RenderBox)
-          .localToGlobal(Offset.zero)
-          .dy;
+      final position =
+          (_itemKey.currentContext!.findRenderObject() as RenderBox)
+              .localToGlobal(Offset.zero)
+              .dy;
       final screenHeight = MediaQuery.of(context).size.height;
 
       if (position < screenHeight * 0.8) {
@@ -77,17 +74,15 @@ class _AnimatedTextBlockState extends State<AnimatedTextBlock>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) => Opacity(
-        opacity: _opacityAnimation.value,
-        child: Transform.translate(
-          offset: _offsetAnimation.value * 100,
-          child: child,
-        ),
-      ),
-      child: Container(
-        key: _itemKey,
-        child: widget.child,
-      ),
+      builder:
+          (context, child) => Opacity(
+            opacity: _opacityAnimation.value,
+            child: Transform.translate(
+              offset: _offsetAnimation.value * 100,
+              child: child,
+            ),
+          ),
+      child: Container(key: _itemKey, child: widget.child),
     );
   }
 }
