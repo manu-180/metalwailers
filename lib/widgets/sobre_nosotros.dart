@@ -34,66 +34,75 @@ class _SobreNosotrosState extends State<SobreNosotros> {
               'Brindar soluciones metalúrgicas innovadoras, eficientes y personalizadas, enfocadas en la calidad, la precisión y la satisfacción de nuestros clientes.',
           onAnimacionTerminada: activarContenido,
         ),
-        if (mostrarContenido) ...[
-       
-          
-          const SizedBox(height: 32),
-          AnimatedTextBlock(
-            scrollController: widget.scrollController,
-            child: Text(
-              '¿Por qué Elegirnos?',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-            ),
+        AnimatedOpacity(
+  opacity: mostrarContenido ? 1 : 0,
+  duration: const Duration(milliseconds: 500),
+  child: IgnorePointer(
+    ignoring: !mostrarContenido,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 32),
+        AnimatedTextBlock(
+          scrollController: widget.scrollController,
+          child: Text(
+            '¿Por qué Elegirnos?',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
           ),
-          const SizedBox(height: 20),
-          ..._buildReasonItems(),
-          const SizedBox(height: 40),
-          AnimatedTextBlock(
-            scrollController: widget.scrollController,
-            child: Text(
-              'Nuestros Clientes',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-            ),
+        ),
+        const SizedBox(height: 20),
+        ..._buildReasonItems(),
+        const SizedBox(height: 40),
+        AnimatedTextBlock(
+          scrollController: widget.scrollController,
+          child: Text(
+            'Nuestros Clientes',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
           ),
-          const SizedBox(height: 12),
-          AnimatedTextBlock(
-            scrollController: widget.scrollController,
-            child: Text(
-              'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-              textAlign: TextAlign.justify,
-            ),
+        ),
+        const SizedBox(height: 12),
+        AnimatedTextBlock(
+          scrollController: widget.scrollController,
+          child: Text(
+            'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            textAlign: TextAlign.justify,
           ),
-          const SizedBox(height: 40),
-          AnimatedTextBlock(
-            scrollController: widget.scrollController,
-            child: Text(
-              'Sectores que Confían en Nosotros',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-            ),
+        ),
+        const SizedBox(height: 40),
+        AnimatedTextBlock(
+          scrollController: widget.scrollController,
+          child: Text(
+            'Sectores que Confían en Nosotros',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
           ),
-          const SizedBox(height: 12),
-          AnimatedTextBlock(
-            scrollController: widget.scrollController,
-            child: Text(
-              'Trabajamos con diversos sectores industriales, entre ellos:',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-              textAlign: TextAlign.justify,
-            ),
+        ),
+        const SizedBox(height: 12),
+        AnimatedTextBlock(
+          scrollController: widget.scrollController,
+          child: Text(
+            'Trabajamos con diversos sectores industriales, entre ellos:',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            textAlign: TextAlign.justify,
           ),
-          const SizedBox(height: 24),
-          ..._buildSectorCards(),
-          const SizedBox(height: 50),
-        ],
+        ),
+        const SizedBox(height: 24),
+        ..._buildSectorCards(),
+        const SizedBox(height: 50),
+      ],
+    ),
+  ),
+)
+
       ],
     );
   }

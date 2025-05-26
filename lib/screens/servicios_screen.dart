@@ -27,58 +27,47 @@ class _ServiciosScreenState extends State<ServiciosScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 80), // altura del appbar fijo
-            child: SingleChildScrollView(
-              controller: scrollController,
+      body: SingleChildScrollView(
+        controller: scrollController,
+        child: Column(
+          children: [
+            CustomAppbar(),
+            
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: size.height * 0.1,
+                horizontal:
+                    isWide ? size.width * 0.15 : size.width * 0.07,
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: size.height * 0.1,
-                      horizontal:
-                          isWide ? size.width * 0.15 : size.width * 0.07,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IntroServiciosAnimado(
-                          titulotitulo: "Servicios que Ofrecemos",
-                          titulo1: "Asesoramiento Integral",
-                          body1:
-                              "Brindamos un acompañamiento integral desde la concepción misma del proyecto, asesorando a nuestros clientes en cada decisión técnica y funcional. Nuestro equipo evalúa requerimientos específicos, propone soluciones viables y colabora activamente en el diseño y desarrollo de piezas y estructuras metálicas. Este enfoque personalizado garantiza que cada propuesta se ajuste a las necesidades reales del cliente, optimizando tiempos, costos y calidad desde la etapa de planificación hasta la ejecución final.",
-                          titulo2: "Producción Metalúrgica",
-                          body2:
-                              "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de última generación.",
-                          onAnimacionTerminada: activarServicios,
-                        ),
-                        Servicios(
-                          scrollController: scrollController,
-                          mostrar: mostrarServicios,
-                        ),
-                      ],
-                    ),
+                  IntroServiciosAnimado(
+                    titulotitulo: "Servicios que Ofrecemos",
+                    titulo1: "Asesoramiento Integral",
+                    body1:
+                        "Brindamos un acompañamiento integral desde la concepción misma del proyecto, asesorando a nuestros clientes en cada decisión técnica y funcional. Nuestro equipo evalúa requerimientos específicos, propone soluciones viables y colabora activamente en el diseño y desarrollo de piezas y estructuras metálicas. Este enfoque personalizado garantiza que cada propuesta se ajuste a las necesidades reales del cliente, optimizando tiempos, costos y calidad desde la etapa de planificación hasta la ejecución final.",
+                    titulo2: "Producción Metalúrgica",
+                    body2:
+                        "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de última generación.",
+                    onAnimacionTerminada: activarServicios,
                   ),
-                  FraseFinal(
+                  Servicios(
                     scrollController: scrollController,
-                    texto:
-                        'Cada servicio que ofrecemos está respaldado por experiencia, tecnología y compromiso. En METALWAILERS, transformamos el metal en soluciones precisas, duraderas y pensadas para tu industria.',
+                    mostrar: mostrarServicios,
                   ),
-                  const SizedBox(height: 100),
-                  const Footer(),
                 ],
               ),
             ),
-          ),
-          const Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: CustomAppbar(), // se mantiene fijo arriba
-          ),
-        ],
+            FraseFinal(
+              scrollController: scrollController,
+              texto:
+                  'Cada servicio que ofrecemos está respaldado por experiencia, tecnología y compromiso. En METALWAILERS, transformamos el metal en soluciones precisas, duraderas y pensadas para tu industria.',
+            ),
+            const SizedBox(height: 100),
+            const Footer(),
+          ],
+        ),
       ),
     );
   }
