@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/animated_text_bloc.dart';
+import 'package:metalwailers/widgets/intro_servicios_animado.dart';
 
-class SobreNosotros extends StatelessWidget {
+class SobreNosotros extends StatefulWidget {
   final ScrollController scrollController;
 
   const SobreNosotros({super.key, required this.scrollController});
+
+  @override
+  State<SobreNosotros> createState() => _SobreNosotrosState();
+}
+
+class _SobreNosotrosState extends State<SobreNosotros> {
+  bool mostrarContenido = false;
+
+  void activarContenido() {
+    setState(() => mostrarContenido = true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,111 +24,76 @@ class SobreNosotros extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 50),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Sobre Nosotros',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 36,
-              color: Colors.white,
+        IntroServiciosAnimado(
+          titulotitulo: 'Sobre Nosotros',
+          titulo1: '¿Quienes Somos?',
+          body1:
+              'En metalwailers somos especialistas en el diseño, desarrollo y fabricación de piezas y estructuras metálicas a medida. Contamos con más de 30 años de trayectoria en la industria, brindando soluciones integrales para distintos sectores.',
+          titulo2: 'Nuestra Misión',
+          body2:
+              'Brindar soluciones metalúrgicas innovadoras, eficientes y personalizadas, enfocadas en la calidad, la precisión y la satisfacción de nuestros clientes.',
+          onAnimacionTerminada: activarContenido,
+        ),
+        if (mostrarContenido) ...[
+       
+          
+          const SizedBox(height: 32),
+          AnimatedTextBlock(
+            scrollController: widget.scrollController,
+            child: Text(
+              '¿Por qué Elegirnos?',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'En metalwailers somos especialistas en el diseño, desarrollo y fabricación de piezas y estructuras metálicas a medida. Contamos con más de 30 años de trayectoria en la industria, brindando soluciones integrales para distintos sectores.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-        const SizedBox(height: 32),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Nuestra Misión',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+          const SizedBox(height: 20),
+          ..._buildReasonItems(),
+          const SizedBox(height: 40),
+          AnimatedTextBlock(
+            scrollController: widget.scrollController,
+            child: Text(
+              'Nuestros Clientes',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Brindar soluciones metalúrgicas innovadoras, eficientes y personalizadas, enfocadas en la calidad, la precisión y la satisfacción de nuestros clientes.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-        const SizedBox(height: 32),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            '¿Por qué Elegirnos?',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+          const SizedBox(height: 12),
+          AnimatedTextBlock(
+            scrollController: widget.scrollController,
+            child: Text(
+              'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+              textAlign: TextAlign.justify,
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        ..._buildReasonItems(),
-
-        const SizedBox(height: 40),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Nuestros Clientes',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+          const SizedBox(height: 40),
+          AnimatedTextBlock(
+            scrollController: widget.scrollController,
+            child: Text(
+              'Sectores que Confían en Nosotros',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-        const SizedBox(height: 40),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Sectores que Confían en Nosotros',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+          const SizedBox(height: 12),
+          AnimatedTextBlock(
+            scrollController: widget.scrollController,
+            child: Text(
+              'Trabajamos con diversos sectores industriales, entre ellos:',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+              textAlign: TextAlign.justify,
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        AnimatedTextBlock(
-          scrollController: scrollController,
-          child: Text(
-            'Trabajamos con diversos sectores industriales, entre ellos:',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-        const SizedBox(height: 24),
-        ..._buildSectorCards(),
-        const SizedBox(height: 50),
+          const SizedBox(height: 24),
+          ..._buildSectorCards(),
+          const SizedBox(height: 50),
+        ],
       ],
     );
   }
@@ -151,7 +128,7 @@ class SobreNosotros extends StatelessWidget {
 
     return reasons.map((r) {
       return AnimatedTextBlock(
-        scrollController: scrollController,
+        scrollController: widget.scrollController,
         child: _HoverableReasonCard(
           title: r['title'] as String,
           description: r['description'] as String,
@@ -175,7 +152,7 @@ class SobreNosotros extends StatelessWidget {
 
     return sectors.map((s) {
       return AnimatedTextBlock(
-        scrollController: scrollController,
+        scrollController: widget.scrollController,
         child: _HoverableSectorCard(
           label: s['label'] as String,
           icon: s['icon'] as IconData,
@@ -215,13 +192,15 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
         decoration: BoxDecoration(
           color: _isHover ? Colors.grey.shade900 : Colors.black,
           borderRadius: BorderRadius.circular(12),
-      
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(widget.icon, color: _isHover ? Colors.white : Colors.white70, size: 35,),
-
+            Icon(
+              widget.icon,
+              color: _isHover ? Colors.white : Colors.white70,
+              size: 35,
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -276,7 +255,6 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
         decoration: BoxDecoration(
           color: _isHover ? Colors.grey.shade800 : Colors.grey.shade900,
           borderRadius: BorderRadius.circular(10),
-        
         ),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400),

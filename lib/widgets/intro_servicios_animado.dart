@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 
 class IntroServiciosAnimado extends StatefulWidget {
   final VoidCallback onAnimacionTerminada;
+  final String titulotitulo;
+  final String titulo1;
+  final String body1;
+  final String titulo2;
+  final String body2;
 
-  const IntroServiciosAnimado({super.key, required this.onAnimacionTerminada});
+  const IntroServiciosAnimado({
+    super.key,
+    required this.onAnimacionTerminada,
+    required this.titulotitulo,
+    required this.titulo1,
+    required this.body1,
+    required this.titulo2,
+    required this.body2,
+  });
 
   @override
   State<IntroServiciosAnimado> createState() => _IntroServiciosAnimadoState();
@@ -90,8 +103,8 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
           position: _slide1,
           child: FadeTransition(
             opacity: _fade1,
-            child: const Text(
-              "Servicios que Ofrecemos",
+            child: Text(
+              widget.titulotitulo,
               style: TextStyle(
                 fontSize: 38,
                 fontWeight: FontWeight.bold,
@@ -105,11 +118,11 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
           position: _slide2,
           child: FadeTransition(
             opacity: _fade2,
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Asesoramiento Integral",
+                  widget.titulo1,
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
@@ -118,7 +131,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Brindamos un acompañamiento integral desde la concepción misma del proyecto, asesorando a nuestros clientes en cada decisión técnica y funcional. Nuestro equipo evalúa requerimientos específicos, propone soluciones viables y colabora activamente en el diseño y desarrollo de piezas y estructuras metálicas. Este enfoque personalizado garantiza que cada propuesta se ajuste a las necesidades reales del cliente, optimizando tiempos, costos y calidad desde la etapa de planificación hasta la ejecución final.",
+                  widget.body1,
                   style: TextStyle(color: Colors.white70, fontSize: 17),
                   textAlign: TextAlign.justify,
                 ),
@@ -131,11 +144,11 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
           position: _slide3,
           child: FadeTransition(
             opacity: _fade3,
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Producción Metalúrgica",
+                  widget.titulo2,
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
@@ -144,7 +157,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de última generación.",
+                  widget.body2,
                   style: TextStyle(color: Colors.white70, fontSize: 17),
                   textAlign: TextAlign.justify,
                 ),

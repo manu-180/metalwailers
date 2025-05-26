@@ -156,10 +156,11 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                           duration: const Duration(milliseconds: 400),
                           switchInCurve: Curves.easeInOut,
                           switchOutCurve: Curves.easeInOut,
-                          transitionBuilder: (child, animation) => FadeTransition(
-  opacity: animation,
-  child: child,
-),
+                          transitionBuilder:
+                              (child, animation) => FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              ),
 
                           child: ClipRRect(
                             key: ValueKey(_hoverActivo),
@@ -248,10 +249,8 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                     : [],
           ),
           padding: const EdgeInsets.all(24),
-          constraints:
-              _expandida
-                  ? const BoxConstraints(minHeight: 350)
-                  : const BoxConstraints(minHeight: 0),
+          constraints: const BoxConstraints(),
+
           child: AnimatedSize(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOut,

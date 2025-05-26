@@ -45,6 +45,13 @@ class _ServiciosScreenState extends State<ServiciosScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         IntroServiciosAnimado(
+                          titulotitulo: "Servicios que Ofrecemos",
+                          titulo1: "Asesoramiento Integral",
+                          body1:
+                              "Brindamos un acompañamiento integral desde la concepción misma del proyecto, asesorando a nuestros clientes en cada decisión técnica y funcional. Nuestro equipo evalúa requerimientos específicos, propone soluciones viables y colabora activamente en el diseño y desarrollo de piezas y estructuras metálicas. Este enfoque personalizado garantiza que cada propuesta se ajuste a las necesidades reales del cliente, optimizando tiempos, costos y calidad desde la etapa de planificación hasta la ejecución final.",
+                          titulo2: "Producción Metalúrgica",
+                          body2:
+                              "Contamos con una amplia gama de procesos productivos, realizados con equipamiento de última generación.",
                           onAnimacionTerminada: activarServicios,
                         ),
                         Servicios(

@@ -94,7 +94,6 @@ class _FraseFinalState extends State<FraseFinal>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-         
             Container(
               key: _itemKey,
 

@@ -42,10 +42,11 @@ class _SobreNosotrosScreenState extends State<SobreNosotrosScreen> {
               ), // ✅ se lo pasás acá
             ),
             FraseFinal(
-  scrollController: _scrollController,
-  texto: 'En cada proyecto, fusionamos tradición metalúrgica y visión de futuro. MetalWailers es sinónimo de precisión, innovación y compromiso con tu crecimiento.',
-),
-SizedBox(height: 100), // Espacio entre FraseFinal y Footer
+              scrollController: _scrollController,
+              texto:
+                  'En cada proyecto, fusionamos tradición metalúrgica y visión de futuro. MetalWailers es sinónimo de precisión, innovación y compromiso con tu crecimiento.',
+            ),
+            SizedBox(height: 100), // Espacio entre FraseFinal y Footer
             const Footer(),
           ],
         ),
