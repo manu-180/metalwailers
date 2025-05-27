@@ -87,7 +87,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
 
     // Precarga segura
     precacheImage(
-      const AssetImage('assets/logo/header_logo.png'),
+      const AssetImage('assets/logo/logoweb.png'),
       context,
     ).then((_) {
       if (mounted) {
@@ -132,7 +132,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/logo/header_logo.png',
+                      'assets/logo/logoweb.png',
                       height: size.width > 600 ? size.width * 0.17 : 40,
                       frameBuilder: (context, child, frame, _) => child,
                     ),
@@ -147,7 +147,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                           style: TextStyle(
                             fontSize: size.width > 600 ? size.width * 0.07 : 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -170,7 +170,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                   'Soluciones metalúrgicas integrales a medida',
                   style: TextStyle(
                     fontSize: size.width > 600 ? size.width * 0.02 : 14,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -185,7 +185,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                   'Diseño, desarrollo y producción con excelencia técnica',
                   style: TextStyle(
                     fontSize: size.width > 600 ? size.width * 0.02 : 14,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),

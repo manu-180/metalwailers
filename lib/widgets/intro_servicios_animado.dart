@@ -108,7 +108,7 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
               style: TextStyle(
                 fontSize: 38,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ),
@@ -126,13 +126,13 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
                   widget.body1,
-                  style: TextStyle(color: Colors.white70, fontSize: 17),
+                  style: TextStyle(color: Colors.black, fontSize: 17),
                   textAlign: TextAlign.justify,
                 ),
               ],
@@ -152,13 +152,13 @@ class _IntroServiciosAnimadoState extends State<IntroServiciosAnimado>
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
                   widget.body2,
-                  style: TextStyle(color: Colors.white70, fontSize: 17),
+                  style: TextStyle(color: Colors.black, fontSize: 17),
                   textAlign: TextAlign.justify,
                 ),
               ],

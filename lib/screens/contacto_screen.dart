@@ -13,7 +13,7 @@ class ContactoScreen extends StatelessWidget {
     final isWide = size.width > 1000;
 
     return Scaffold(
-      backgroundColor: Colors.black, // 👈 Fondo negro
+      backgroundColor: Colors.white, // 👈 Fondo blanco
       body: SingleChildScrollView(
         controller: scrollController, // 👈
         child: Column(

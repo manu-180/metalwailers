@@ -26,7 +26,7 @@ class _SobreNosotrosScreenState extends State<SobreNosotrosScreen> {
     final isWide = size.width > 800;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         controller: _scrollController, // ✅ lo conectás acá
         child: Column(

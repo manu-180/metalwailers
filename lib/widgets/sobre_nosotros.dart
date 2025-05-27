@@ -49,7 +49,7 @@ class _SobreNosotrosState extends State<SobreNosotros> {
             '¿Por qué Elegirnos?',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
           ),
         ),
@@ -62,7 +62,7 @@ class _SobreNosotrosState extends State<SobreNosotros> {
             'Nuestros Clientes',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
           ),
         ),
@@ -71,7 +71,7 @@ class _SobreNosotrosState extends State<SobreNosotros> {
           scrollController: widget.scrollController,
           child: Text(
             'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.black),
             textAlign: TextAlign.justify,
           ),
         ),
@@ -82,7 +82,7 @@ class _SobreNosotrosState extends State<SobreNosotros> {
             'Sectores que Confían en Nosotros',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
           ),
         ),
@@ -198,8 +198,11 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
         duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(16),
+        transform: _isHover
+            ? Matrix4.translationValues(0, -6, 0)
+            : Matrix4.identity(),
         decoration: BoxDecoration(
-          color: _isHover ? Colors.grey.shade900 : Colors.black,
+          color:  _isHover ? Colors.grey.shade400 : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -207,8 +210,8 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
           children: [
             Icon(
               widget.icon,
-              color: _isHover ? Colors.white : Colors.white70,
-              size: 35,
+              color: _isHover ? Colors.black : Colors.black87,
+              size: 30,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -217,16 +220,18 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
                 children: [
                   Text(
                     widget.title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style:  TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      color: _isHover ? Colors.black : Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     widget.description,
-                    style: const TextStyle(color: Colors.white70),
+                    style: const TextStyle(
+                      color: Colors.black87,
+                    ),
                     textAlign: TextAlign.justify,
                   ),
                 ],
@@ -238,6 +243,8 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
     );
   }
 }
+
+
 
 class _HoverableSectorCard extends StatefulWidget {
   final String label;
@@ -261,8 +268,11 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
         duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        transform: _isHover
+            ? Matrix4.translationValues(0, -6, 0)
+            : Matrix4.identity(),
         decoration: BoxDecoration(
-          color: _isHover ? Colors.grey.shade800 : Colors.grey.shade900,
+          color:_isHover ? Colors.grey.shade400 : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Container(
@@ -271,8 +281,8 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
             children: [
               Icon(
                 widget.icon,
-                color: _isHover ? Colors.white : Colors.white70,
-                size: 30,
+                color: _isHover ? Colors.black : Colors.black87,
+                size: 28,
               ),
               const SizedBox(width: 12),
               Text(
@@ -280,7 +290,7 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: _isHover ? Colors.white : Colors.white70,
+                  color:  _isHover ? Colors.black : Colors.black87,
                 ),
               ),
             ],

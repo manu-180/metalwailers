@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/animated_card_con_imagen.dart';
-import 'package:metalwailers/widgets/appbar.dart';
-import 'package:metalwailers/widgets/footer.dart';
-import 'package:metalwailers/widgets/servicios.dart';
+
 
 class Servicios extends StatelessWidget {
   final ScrollController scrollController;

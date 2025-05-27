@@ -26,7 +26,7 @@ class _ServiciosScreenState extends State<ServiciosScreen> {
     final isWide = size.width > 800;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         controller: scrollController,
         child: Column(

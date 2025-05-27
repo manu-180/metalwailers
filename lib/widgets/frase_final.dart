@@ -102,7 +102,7 @@ class _FraseFinalState extends State<FraseFinal>
                 widget.texto,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
-                  color: Colors.white70,
+                  color: Colors.black,
                   fontSize: 24,
                   height: 1.6,
                   fontWeight: FontWeight.w400,
