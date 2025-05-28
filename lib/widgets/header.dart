@@ -182,7 +182,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
               child: SlideTransition(
                 position: _offsetLinea2,
                 child: Text(
-                  'Diseño, desarrollo y producción con excelencia técnica',
+                  'Diseño, desarrollo y producción con excelencia técnicaa',
                   style: TextStyle(
                     fontSize: size.width > 600 ? size.width * 0.02 : 14,
                     color: Colors.black,
