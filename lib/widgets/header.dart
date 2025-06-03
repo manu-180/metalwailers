@@ -115,10 +115,12 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isWide = size.width > 600;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        SizedBox(height: 20),
         AnimatedOpacity(
           opacity: _imagenCargada ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 400),
@@ -131,12 +133,12 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/logo/logoweb.png',
-                      height: size.width > 600 ? size.width * 0.17 : 40,
-                      frameBuilder: (context, child, frame, _) => child,
-                    ),
-                    const SizedBox(width: 12),
+                  //   Image.asset(
+                  //     'assets/logo/logoweb.png',
+                  //     height: isWide ? size.width * 0.17 : size.width * 0.26,
+                  //     frameBuilder: (context, child, frame, _) => child,
+                  //   ),
+                  //  SizedBox(width:isWide ?  12 : 0),
                     SlideTransition(
                       position: _offsetAnimation,
                       child: AnimatedOpacity(
@@ -145,7 +147,7 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                         child: Text(
                           'METALWAILERS',
                           style: TextStyle(
-                            fontSize: size.width > 600 ? size.width * 0.07 : 20,
+                            fontSize: isWide ? size.width * 0.07 : size.width * 0.12,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -158,40 +160,45 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
             ),
           ),
         ),
-        const SizedBox(height: 100),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FadeTransition(
-              opacity: _fadeLinea1,
-              child: SlideTransition(
-                position: _offsetLinea1,
-                child: Text(
-                  'Soluciones metalúrgicas integrales a medida',
-                  style: TextStyle(
-                    fontSize: size.width > 600 ? size.width * 0.02 : 14,
-                    color: Colors.black,
+         SizedBox(height: isWide ? 100: 50),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FadeTransition(
+                opacity: _fadeLinea1,
+                child: SlideTransition(
+                  position: _offsetLinea1,
+                  child: Text(
+                    'Soluciones metalúrgicas integrales a medida.',
+                    style: TextStyle(
+                      fontSize: isWide ? size.width * 0.02 : size.width * 0.06,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500
+                    ),
+                    textAlign: TextAlign.start,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            FadeTransition(
-              opacity: _fadeLinea2,
-              child: SlideTransition(
-                position: _offsetLinea2,
-                child: Text(
-                  'Diseño, desarrollo y producción con excelencia técnica',
-                  style: TextStyle(
-                    fontSize: size.width > 600 ? size.width * 0.02 : 14,
-                    color: Colors.black,
+              const SizedBox(height: 10),
+              FadeTransition(
+                opacity: _fadeLinea2,
+                child: SlideTransition(
+                  position: _offsetLinea2,
+                  child: Text(
+                    'Diseño, desarrollo y producción con excelencia técnica.',
+                    style: TextStyle(
+                      fontSize: isWide ? size.width * 0.02 : size.width * 0.06,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500
+                    ),
+                    textAlign: TextAlign.start,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

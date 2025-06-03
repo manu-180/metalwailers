@@ -252,7 +252,7 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                     widget.title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 20,
                       color: _hoverActivo ? Colors.black : Colors.black87,
                     ),
                   ),
@@ -260,8 +260,10 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
                   Text(
                     widget.description,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 18,
                       color: Colors.black,
+                fontWeight: FontWeight.w400
+
                     ),
                   ),
                   AnimatedSize(
@@ -276,8 +278,9 @@ class _AnimatedCardConImagenState extends State<AnimatedCardConImagen>
             child: Text(
               widget.extraDescription,
               style: const TextStyle(
-                fontSize: 13,
+                fontSize: 18,
                 color: Colors.black,
+                fontWeight: FontWeight.w400
               ),
             ),
           ),

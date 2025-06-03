@@ -4,6 +4,7 @@ import 'package:metalwailers/widgets/footer.dart';
 import 'package:metalwailers/widgets/frase_final.dart';
 import 'package:metalwailers/widgets/intro_servicios_animado.dart';
 import 'package:metalwailers/widgets/servicios.dart';
+import 'package:metalwailers/widgets/wpp_floating_button.dart';
 
 class ServiciosScreen extends StatefulWidget {
   const ServiciosScreen({super.key});
@@ -32,12 +33,11 @@ class _ServiciosScreenState extends State<ServiciosScreen> {
         child: Column(
           children: [
             CustomAppbar(),
-            
+
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: size.height * 0.1,
-                horizontal:
-                    isWide ? size.width * 0.15 : size.width * 0.07,
+                horizontal: isWide ? size.width * 0.15 : size.width * 0.07,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,6 +69,7 @@ class _ServiciosScreenState extends State<ServiciosScreen> {
           ],
         ),
       ),
+      floatingActionButton: WhatsappFloatingButton(),
     );
   }
 }

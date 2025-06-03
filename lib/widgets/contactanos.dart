@@ -74,17 +74,17 @@ class _ContactanosState extends State<Contactanos> {
 
     return isWide
         ? Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: _leftColumn()),
-              const SizedBox(width: 40),
-              Expanded(child: _rightColumn()),
-            ],
-          )
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _leftColumn()),
+            const SizedBox(width: 40),
+            Expanded(child: _rightColumn()),
+          ],
+        )
         : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_leftColumn(), const SizedBox(height: 32), _rightColumn()],
-          );
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [_leftColumn(), const SizedBox(height: 32), _rightColumn()],
+        );
   }
 
   Widget _leftColumn() {
@@ -154,117 +154,123 @@ class _ContactanosState extends State<Contactanos> {
     ];
 
     return StatefulBuilder(
-      builder: (context, setState) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 50),
-          const Text(
-            'Hablemos de tu Proyecto',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "¿Tenés una idea o necesitás una solución concreta? Te ayudamos a llevarla a cabo",
-            textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 16, color: Colors.black),
-          ),
-          const SizedBox(height: 24),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                _inputField(
-                  controller: _nameController,
-                  label: 'Nombre y Apellido / Empresa',
+      builder:
+          (context, setState) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              const Text(
+                'Hablemos de tu Proyecto',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                const SizedBox(height: 16),
-                _inputField(
-                  controller: _emailController,
-                  label: 'Correo Electrónico',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16),
-                _inputField(
-                  controller: _phoneController,
-                  label: 'Teléfono de contacto',
-                  keyboardType: TextInputType.phone,
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: selectedServicio,
-                  dropdownColor: Colors.white,
-                  iconEnabledColor: Colors.black,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    labelText: '¿Qué servicio estás buscando?',
-                    labelStyle: const TextStyle(color: Colors.black),
-                    border: const OutlineInputBorder(),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "¿Tenés una idea o necesitás una solución concreta? Te ayudamos a llevarla a cabo",
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              const SizedBox(height: 24),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _inputField(
+                      controller: _nameController,
+                      label: 'Nombre y Apellido / Empresa',
                     ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                    const SizedBox(height: 16),
+                    _inputField(
+                      controller: _emailController,
+                      label: 'Correo Electrónico',
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                  ),
-                  onChanged: (value) => setState(() => selectedServicio = value),
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Este campo es requerido' : null,
-                  items: servicios
-                      .map(
-                        (service) => DropdownMenuItem(
-                          value: service,
-                          child: Text(service),
+                    const SizedBox(height: 16),
+                    _inputField(
+                      controller: _phoneController,
+                      label: 'Teléfono de contacto',
+                      keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      value: selectedServicio,
+                      dropdownColor: Colors.white,
+                      iconEnabledColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: '¿Qué servicio estás buscando?',
+                        labelStyle: const TextStyle(color: Colors.black),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
                         ),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: 16),
-                _inputField(
-                  controller: _rubroController,
-                  label: 'Rubro o industria de tu proyecto',
-                ),
-                const SizedBox(height: 16),
-                _inputField(
-                  controller: _comentariosController,
-                  label: 'Comentarios / Consulta específica',
-                  maxLines: 5,
-                ),
-                const SizedBox(height: 24),
-                HoverAnimatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      sendEmails(
-                        nombre: _nameController.text,
-                        email: _emailController.text,
-                        telefono: _phoneController.text,
-                        servicio: selectedServicio!,
-                        rubro: _rubroController.text,
-                        comentarios: _comentariosController.text,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.black,
-                          duration: Duration(seconds: 6),
-                          content: Text(
-                            'Gracias por contactarte con Metalwailers. Te responderemos a la brevedad',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
                         ),
-                      );
-                    }
-                  },
-                  text: "Enviar consulta",
+                      ),
+                      onChanged:
+                          (value) => setState(() => selectedServicio = value),
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Este campo es requerido'
+                                  : null,
+                      items:
+                          servicios
+                              .map(
+                                (service) => DropdownMenuItem(
+                                  value: service,
+                                  child: Text(service),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                    const SizedBox(height: 16),
+                    _inputField(
+                      controller: _rubroController,
+                      label: 'Rubro o industria de tu proyecto',
+                    ),
+                    const SizedBox(height: 16),
+                    _inputField(
+                      controller: _comentariosController,
+                      label: 'Comentarios / Consulta específica',
+                      maxLines: 5,
+                    ),
+                    const SizedBox(height: 24),
+                    HoverAnimatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          sendEmails(
+                            nombre: _nameController.text,
+                            email: _emailController.text,
+                            telefono: _phoneController.text,
+                            servicio: selectedServicio!,
+                            rubro: _rubroController.text,
+                            comentarios: _comentariosController.text,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.black,
+                              duration: Duration(seconds: 6),
+                              content: Text(
+                                'Gracias por contactarte con Metalwailers. Te responderemos a la brevedad',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      text: "Enviar consulta",
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 50),
+            ],
           ),
-          const SizedBox(height: 50),
-        ],
-      ),
     );
   }
 
@@ -291,8 +297,12 @@ class _ContactanosState extends State<Contactanos> {
           borderSide: BorderSide(color: Colors.black),
         ),
       ),
-      validator: validator ??
-          (value) => (value == null || value.isEmpty) ? 'Este campo es requerido' : null,
+      validator:
+          validator ??
+          (value) =>
+              (value == null || value.isEmpty)
+                  ? 'Este campo es requerido'
+                  : null,
     );
   }
 }
@@ -326,52 +336,52 @@ class _InfoCardState extends State<_InfoCard> {
       child: GestureDetector(
         onTap: () => launchUrl(Uri.parse(widget.url)),
         child: AnimatedContainer(
-  duration: const Duration(milliseconds: 200),
-  margin: const EdgeInsets.only(bottom: 24),
-  padding: const EdgeInsets.all(16),
-  transform: _isHover
-      ? Matrix4.translationValues(0, -6, 0)
-      : Matrix4.identity(),
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(12),
-    color: _isHover ? Colors.grey.shade400 : Colors.grey.shade200
-  ),
-  child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Icon(
-        widget.icon,
-        color: _isHover ? Colors.black : Colors.black87,
-        size: 28,
-      ),
-      const SizedBox(width: 16),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+          duration: const Duration(milliseconds: 200),
+          margin: const EdgeInsets.only(bottom: 24),
+          padding: const EdgeInsets.all(16),
+          transform:
+              _isHover
+                  ? Matrix4.translationValues(0, -6, 0)
+                  : Matrix4.identity(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: _isHover ? Colors.grey.shade400 : Colors.grey.shade200,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                widget.icon,
                 color: _isHover ? Colors.black : Colors.black87,
+                size: 28,
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              widget.subtitle,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: _isHover ? Colors.black : Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.subtitle,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    ],
-  ),
-)
-
       ),
     );
   }

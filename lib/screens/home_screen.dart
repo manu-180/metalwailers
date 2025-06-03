@@ -4,6 +4,7 @@ import 'package:metalwailers/widgets/body_metalwailers.dart';
 import 'package:metalwailers/widgets/frase_final.dart'; // ⬅️ Importá el nuevo widget
 import 'package:metalwailers/widgets/footer.dart';
 import 'package:metalwailers/widgets/header.dart';
+import 'package:metalwailers/widgets/wpp_floating_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isWide = size.width > 800;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -30,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             const CustomAppbar(),
             HeaderMetalWailers(onAnimacionTerminada: activarBody),
-            SizedBox(height: 20), // Espacio adicional
+            SizedBox(height: 20),
             BodyMetalWailers(
               scrollController: scrollController,
               mostrarContenido: mostrarBody,
@@ -47,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      floatingActionButton: WhatsappFloatingButton(),
     );
   }
 }

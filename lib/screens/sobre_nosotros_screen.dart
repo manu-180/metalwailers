@@ -3,6 +3,7 @@ import 'package:metalwailers/widgets/appbar.dart';
 import 'package:metalwailers/widgets/footer.dart';
 import 'package:metalwailers/widgets/frase_final.dart';
 import 'package:metalwailers/widgets/sobre_nosotros.dart';
+import 'package:metalwailers/widgets/wpp_floating_button.dart';
 
 class SobreNosotrosScreen extends StatefulWidget {
   const SobreNosotrosScreen({super.key});
@@ -51,6 +52,7 @@ class _SobreNosotrosScreenState extends State<SobreNosotrosScreen> {
           ],
         ),
       ),
+      floatingActionButton: WhatsappFloatingButton(),
     );
   }
 }

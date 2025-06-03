@@ -53,24 +53,21 @@ class BodyMetalWailers extends StatelessWidget {
       },
     ];
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 80, top: 60),
-      child: AnimatedOpacity(
-        opacity: mostrarContenido ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 600),
-        child: Column(
-          children:
-              contenido.map((item) {
-                return AnimatedCardConImagen(
-                  title: item['title']!,
-                  description: item['description']!,
-                  imagePath: item['image']!,
-                  extraDescription: item['extraDescription']!,
-                  scrollController: scrollController,
-                  imageHoverPath: item['imageHover']!,  
-                );
-              }).toList(),
-        ),
+    return AnimatedOpacity(
+      opacity: mostrarContenido ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 600),
+      child: Column(
+        children:
+            contenido.map((item) {
+              return AnimatedCardConImagen(
+                title: item['title']!,
+                description: item['description']!,
+                imagePath: item['image']!,
+                extraDescription: item['extraDescription']!,
+                scrollController: scrollController,
+                imageHoverPath: item['imageHover']!,  
+              );
+            }).toList(),
       ),
     );
   }

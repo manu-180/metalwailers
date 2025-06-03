@@ -35,74 +35,77 @@ class _SobreNosotrosState extends State<SobreNosotros> {
           onAnimacionTerminada: activarContenido,
         ),
         AnimatedOpacity(
-  opacity: mostrarContenido ? 1 : 0,
-  duration: const Duration(milliseconds: 500),
-  child: IgnorePointer(
-    ignoring: !mostrarContenido,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 32),
-        AnimatedTextBlock(
-          scrollController: widget.scrollController,
-          child: Text(
-            '¿Por qué Elegirnos?',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+          opacity: mostrarContenido ? 1 : 0,
+          duration: const Duration(milliseconds: 500),
+          child: IgnorePointer(
+            ignoring: !mostrarContenido,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 32),
+                AnimatedTextBlock(
+                  scrollController: widget.scrollController,
+                  child: Text(
+                    '¿Por qué Elegirnos?',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        ..._buildReasonItems(),
-        const SizedBox(height: 40),
-        AnimatedTextBlock(
-          scrollController: widget.scrollController,
-          child: Text(
-            'Nuestros Clientes',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+                const SizedBox(height: 20),
+                ..._buildReasonItems(),
+                const SizedBox(height: 40),
+                AnimatedTextBlock(
+                  scrollController: widget.scrollController,
+                  child: Text(
+                    'Nuestros Clientes',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        AnimatedTextBlock(
-          scrollController: widget.scrollController,
-          child: Text(
-            'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.black),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-        const SizedBox(height: 40),
-        AnimatedTextBlock(
-          scrollController: widget.scrollController,
-          child: Text(
-            'Sectores que Confían en Nosotros',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+                const SizedBox(height: 12),
+                AnimatedTextBlock(
+                  scrollController: widget.scrollController,
+                  child: Text(
+                    'Colaboramos con pequeñas y grandes empresas que valoran la excelencia técnica y el compromiso. Nuestra experiencia nos permite acompañar proyectos exigentes con soluciones confiables, ágiles y efectivas.',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                    textAlign: TextAlign.justify,
+                  ),
                 ),
+                const SizedBox(height: 40),
+                AnimatedTextBlock(
+                  scrollController: widget.scrollController,
+                  child: Text(
+                    'Sectores que Confían en Nosotros',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                AnimatedTextBlock(
+                  scrollController: widget.scrollController,
+                  child: Text(
+                    'Trabajamos con diversos sectores industriales, entre ellos:',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ..._buildSectorCards(),
+                const SizedBox(height: 50),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 12),
-        AnimatedTextBlock(
-          scrollController: widget.scrollController,
-          child: Text(
-            'Trabajamos con diversos sectores industriales, entre ellos:',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-        const SizedBox(height: 24),
-        ..._buildSectorCards(),
-        const SizedBox(height: 50),
-      ],
-    ),
-  ),
-)
-
       ],
     );
   }
@@ -198,11 +201,10 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
         duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(16),
-        transform: _isHover
-            ? Matrix4.translationValues(0, -6, 0)
-            : Matrix4.identity(),
+        transform:
+            _isHover ? Matrix4.translationValues(0, -6, 0) : Matrix4.identity(),
         decoration: BoxDecoration(
-          color:  _isHover ? Colors.grey.shade400 : Colors.grey.shade200,
+          color: _isHover ? Colors.grey.shade400 : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -220,7 +222,7 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
                 children: [
                   Text(
                     widget.title,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: _isHover ? Colors.black : Colors.black87,
@@ -229,9 +231,7 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
                   const SizedBox(height: 6),
                   Text(
                     widget.description,
-                    style: const TextStyle(
-                      color: Colors.black87,
-                    ),
+                    style: const TextStyle(color: Colors.black87),
                     textAlign: TextAlign.justify,
                   ),
                 ],
@@ -243,8 +243,6 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
     );
   }
 }
-
-
 
 class _HoverableSectorCard extends StatefulWidget {
   final String label;
@@ -268,11 +266,10 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
         duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        transform: _isHover
-            ? Matrix4.translationValues(0, -6, 0)
-            : Matrix4.identity(),
+        transform:
+            _isHover ? Matrix4.translationValues(0, -6, 0) : Matrix4.identity(),
         decoration: BoxDecoration(
-          color:_isHover ? Colors.grey.shade400 : Colors.grey.shade200,
+          color: _isHover ? Colors.grey.shade400 : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Container(
@@ -290,7 +287,7 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color:  _isHover ? Colors.black : Colors.black87,
+                  color: _isHover ? Colors.black : Colors.black87,
                 ),
               ),
             ],

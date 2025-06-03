@@ -89,7 +89,7 @@ class _FraseFinalState extends State<FraseFinal>
           ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: isWide ? size.width * 0.15 : size.width * 0.10,
+          horizontal: isWide ? size.width * 0.15 : size.width * 0.1,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,8 +104,7 @@ class _FraseFinalState extends State<FraseFinal>
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 24,
-                  height: 1.6,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

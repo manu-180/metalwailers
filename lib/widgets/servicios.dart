@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metalwailers/widgets/animated_card_con_imagen.dart';
 
-
 class Servicios extends StatelessWidget {
   final ScrollController scrollController;
   final bool mostrar;
@@ -39,8 +38,8 @@ class Servicios extends StatelessWidget {
             'Consiste en cortar láminas metálicas con una cuchilla recta aplicando gran fuerza, obteniendo cortes rectos y precisos.',
         'extraDescription':
             'Este proceso es ideal para grandes volúmenes de corte recto, garantizando rapidez, uniformidad y desperdicio mínimo de material.',
-        'image': 'assets/images/guillotinado.png',
-        'imageHover': 'assets/images/guillotinado2.png',
+        'image': 'assets/images/guillotinadonew.png',
+        'imageHover': 'assets/images/guillotinadonew2.png',
       },
       {
         'title': 'Plegado',
@@ -48,8 +47,8 @@ class Servicios extends StatelessWidget {
             'Proceso para doblar chapas metálicas en ángulos determinados, utilizando prensas de precisión hidráulicas.',
         'extraDescription':
             'Contamos con plegadoras CNC que nos permiten realizar dobleces exactos, optimizando tiempos y asegurando repetitividad para series pequeñas o grandes.',
-        'image': 'assets/images/plegado.png',
-        'imageHover': 'assets/images/plegado2.png',
+        'image': 'assets/images/plegadonew.jpeg',
+        'imageHover': 'assets/images/plegadonew2.jpeg',
       },
       {
         'title': 'Curvado',
@@ -58,7 +57,7 @@ class Servicios extends StatelessWidget {
         'extraDescription':
             'Utilizamos matrices especiales que permiten curvar sin marcar ni dañar el material, manteniendo su resistencia estructural intacta.',
         'image': 'assets/images/curvado.png',
-        'imageHover': 'assets/images/curvado2.png',
+        'imageHover': 'assets/images/curvadonew.png',
       },
       {
         'title': 'Cilindrado',
@@ -75,8 +74,8 @@ class Servicios extends StatelessWidget {
             'Técnica de formado para curvar chapas en diferentes radios mediante múltiples pasadas en rodillos.',
         'extraDescription':
             'Este proceso permite lograr radios amplios o cerrados de manera precisa y progresiva, conservando el espesor del material.',
-        'image': 'assets/images/rolado.png',
-        'imageHover': 'assets/images/rolado2.png',
+        'image': 'assets/images/roladonew.png',
+        'imageHover': 'assets/images/roladonew2.png',
       },
       {
         'title': 'Punzonado',
@@ -93,8 +92,8 @@ class Servicios extends StatelessWidget {
             'Utiliza balancines para operaciones repetitivas de corte o conformado con gran rapidez.',
         'extraDescription':
             'Los balancines son ideales para troquelado y operaciones masivas, permitiendo un ritmo productivo continuo con bajo mantenimiento.',
-        'image': 'assets/images/balancinado.png',
-        'imageHover': 'assets/images/balancinado2.png',
+        'image': 'assets/images/balancinadonew.png',
+        'imageHover': 'assets/images/balancinadonew2.png',
       },
       {
         'title': 'Soldadura MIG, TIG y por punto',

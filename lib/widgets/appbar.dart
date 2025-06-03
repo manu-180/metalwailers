@@ -61,9 +61,10 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         child: SizedBox(
                           height: size.height * 0.09,
                           width: size.height * 0.09,
-                          child: const Icon(
+                          child: Icon(
                             Icons.expand_more,
-                            color: Colors.grey,
+                            color: Colors.white,
+                            size: size.height * 0.045,
                           ),
                         ),
                       ),
@@ -91,19 +92,23 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         ),
                       ),
                       SizedBox(width: size.width * 0.015),
-                      IconButton(
-                        onPressed: () async {
-                          final uri = Uri.parse("https://wa.me/5491141941235");
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(
-                              uri,
-                              mode: LaunchMode.externalApplication,
+                      SizedBox(
+                        child: IconButton(
+                          onPressed: () async {
+                            final uri = Uri.parse(
+                              "https://wa.me/5491162913437",
                             );
-                          }
-                        },
-                        icon: const FaIcon(
-                          FontAwesomeIcons.whatsapp,
-                          color: Colors.grey,
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
+                            }
+                          },
+                          icon: const FaIcon(
+                            FontAwesomeIcons.whatsapp,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       SizedBox(width: size.width * 0.005),
@@ -121,7 +126,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         },
                         icon: const FaIcon(
                           FontAwesomeIcons.instagram,
-                          color: Colors.grey,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -130,7 +135,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                     children: [
                       IconButton(
                         onPressed: () async {
-                          final uri = Uri.parse("https://wa.me/5491141941235");
+                          final uri = Uri.parse("https://wa.me/5491162913437");
                           if (await canLaunchUrl(uri)) {
                             await launchUrl(
                               uri,
@@ -138,12 +143,13 @@ class _CustomAppbarState extends State<CustomAppbar> {
                             );
                           }
                         },
-                        icon: const FaIcon(
+                        icon: FaIcon(
                           FontAwesomeIcons.whatsapp,
-                          color: Colors.grey,
+                          color: Colors.white,
+                          size: size.height * 0.04,
                         ),
                       ),
-                      SizedBox(width: size.width * 0.005),
+                      SizedBox(width: size.width * 0.015),
                       IconButton(
                         onPressed: () async {
                           final uri = Uri.parse(
@@ -156,11 +162,13 @@ class _CustomAppbarState extends State<CustomAppbar> {
                             );
                           }
                         },
-                        icon: const FaIcon(
+                        icon: FaIcon(
                           FontAwesomeIcons.instagram,
-                          color: Colors.grey,
+                          color: Colors.white,
+                          size: size.height * 0.04,
                         ),
                       ),
+                      SizedBox(width: size.width * 0.015),
                     ],
                   ),
             ],
