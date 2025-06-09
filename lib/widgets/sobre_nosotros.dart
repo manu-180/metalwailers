@@ -224,14 +224,14 @@ class _HoverableReasonCardState extends State<_HoverableReasonCard> {
                     widget.title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 20,
                       color: _isHover ? Colors.black : Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     widget.description,
-                    style: const TextStyle(color: Colors.black87),
+                    style: const TextStyle(color: Colors.black87, fontSize: 18),
                     textAlign: TextAlign.justify,
                   ),
                 ],
@@ -285,7 +285,7 @@ class _HoverableSectorCardState extends State<_HoverableSectorCard> {
               Text(
                 widget.label,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: _isHover ? Colors.black : Colors.black87,
                 ),

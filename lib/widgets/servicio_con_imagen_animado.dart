@@ -236,7 +236,7 @@ class _ServicioConImagenAnimadoState extends State<ServicioConImagenAnimado>
                       widget.descripcion,
                       style: const TextStyle(
                         color: Colors.white70,
-                        fontSize: 16,
+                        fontSize: 18,
                       ),
                     ),
                     if (_expandida)
@@ -249,7 +249,7 @@ class _ServicioConImagenAnimadoState extends State<ServicioConImagenAnimado>
                             widget.extraDescripcion,
                             style: const TextStyle(
                               color: Colors.white54,
-                              fontSize: 14,
+                              fontSize: 18,
                               height: 1.4,
                             ),
                           ),

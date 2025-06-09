@@ -131,7 +131,7 @@ class Footer extends StatelessWidget {
             Icon(icon, size: 18, color: color),
             const SizedBox(width: 12),
             Flexible(
-              child: Text(label, style: TextStyle(color: color, fontSize: 14)),
+              child: Text(label, style: TextStyle(color: color, fontSize: 16)),
             ),
           ],
         ),

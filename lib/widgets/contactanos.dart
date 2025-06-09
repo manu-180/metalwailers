@@ -364,7 +364,7 @@ class _InfoCardState extends State<_InfoCard> {
                       widget.title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 20,
                         color: _isHover ? Colors.black : Colors.black87,
                       ),
                     ),
@@ -372,7 +372,7 @@ class _InfoCardState extends State<_InfoCard> {
                     Text(
                       widget.subtitle,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 18,
                         color: Colors.black87,
                       ),
                     ),
