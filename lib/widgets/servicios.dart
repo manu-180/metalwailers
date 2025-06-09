@@ -56,8 +56,8 @@ class Servicios extends StatelessWidget {
             'Permite doblar tubos o perfiles de forma controlada para obtener curvas suaves sin dañar el material.',
         'extraDescription':
             'Utilizamos matrices especiales que permiten curvar sin marcar ni dañar el material, manteniendo su resistencia estructural intacta.',
-        'image': 'assets/images/curvado.png',
-        'imageHover': 'assets/images/curvadonew.png',
+        'image': 'assets/images/dobladoranew.png',
+        'imageHover': 'assets/images/dobladoranew2.png',
       },
       {
         'title': 'Cilindrado',

@@ -90,8 +90,8 @@ class _ContactanosState extends State<Contactanos> {
   Widget _leftColumn() {
     final items = [
       [
-        'Teléfonos',
-        '11 62913437\n11 59628757',
+        'Whatsapp',
+        '1162913437',
         FontAwesomeIcons.whatsapp,
         'https://wa.me/5491162913437',
       ],

@@ -133,12 +133,14 @@ class _HeaderMetalWailersState extends State<HeaderMetalWailers>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  //   Image.asset(
-                  //     'assets/logo/logoweb.png',
-                  //     height: isWide ? size.width * 0.17 : size.width * 0.26,
-                  //     frameBuilder: (context, child, frame, _) => child,
-                  //   ),
-                  //  SizedBox(width:isWide ?  12 : 0),
+                    isWide ?
+                    Image.asset(
+                      'assets/logo/logowebbbbb.png',
+                      height: isWide ? size.width * 0.17 : size.width * 0.26,
+                      frameBuilder: (context, child, frame, _) => child,
+                    )
+                    : SizedBox.shrink(),
+                   SizedBox(width:isWide ?  12 : 0),
                     SlideTransition(
                       position: _offsetAnimation,
                       child: AnimatedOpacity(

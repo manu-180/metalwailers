@@ -28,8 +28,10 @@ class _WhatsappFloatingButtonState extends State<WhatsappFloatingButton> {
 
   @override
   Widget build(BuildContext context) {
+
+
     final icono = AnimatedScale(
-      scale: _esWebDesktop && _isHovered ? 1.15 : 1.0,
+      scale: _esWebDesktop && _isHovered ? 2.0 : 1.4,
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOut,
       child: Container(
@@ -47,17 +49,20 @@ class _WhatsappFloatingButtonState extends State<WhatsappFloatingButton> {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: GestureDetector(
-        onTap: _openWhatsapp,
-        child:
-            _esWebDesktop
-                ? MouseRegion(
-                  onEnter: (_) => setState(() => _isHovered = true),
-                  onExit: (_) => setState(() => _isHovered = false),
-                  child: icono,
-                )
-                : icono,
+      padding: const EdgeInsets.all(25.0),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: _openWhatsapp,
+          child:
+              _esWebDesktop
+                  ? MouseRegion(
+                    onEnter: (_) => setState(() => _isHovered = true),
+                    onExit: (_) => setState(() => _isHovered = false),
+                    child: icono,
+                  )
+                  : icono,
+        ),
       ),
     );
   }
