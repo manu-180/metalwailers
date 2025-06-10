@@ -52,7 +52,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         height: size.height * 0.12,
                         fit: BoxFit.contain,
                       ),
-                      onTap: () => context.push('/'),
+                      onTap: () => context.go('/'),
                     ),
                   ),
                   if (!isWide)
@@ -89,7 +89,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                             route: item['route']!,
                             isActive: currentRoute == item['route'],
                             onTap: () {
-                              context.push(item['route']!);
+                              context.go(item['route']!);
                             },
                           ),
                         ),
@@ -195,7 +195,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                               style: TextStyle(color: metallicGrey),
                             ),
                             onTap: () {
-                              context.push(item['route']!);
+                              context.go(item['route']!);
                               setState(() => _isMenuOpen = false);
                             },
                           ),

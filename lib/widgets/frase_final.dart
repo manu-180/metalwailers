@@ -111,7 +111,7 @@ class _FraseFinalState extends State<FraseFinal>
             SizedBox(height: size.height * 0.05),
             HoverAnimatedButton(
               onPressed: () {
-                context.push("/contacto");
+                context.go("/contacto");
               },
               text: "Contactanos",
             ),

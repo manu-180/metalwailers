@@ -51,7 +51,7 @@ class Footer extends StatelessWidget {
       child: Center(
         child: GestureDetector(
           child: SvgPicture.asset('assets/logo/loguito.svg', height: 160),
-          onTap: () => context.push('/'),
+          onTap: () => context.go('/'),
         ),
       ),
     );
@@ -76,7 +76,7 @@ class Footer extends StatelessWidget {
                   .map(
                     (link) => _HoverUnderlineText(
                       label: link['label']!,
-                      onTap: () => context.push(link['route']!),
+                      onTap: () => context.go(link['route']!),
                     ),
                   )
                   .toList(),
