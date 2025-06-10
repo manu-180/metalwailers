@@ -64,7 +64,7 @@ class _ServiciosScreenState extends State<ServiciosScreen> {
               texto:
                   'Cada servicio que ofrecemos está respaldado por experiencia, tecnología y compromiso. En METALWAILERS, transformamos el metal en soluciones precisas, duraderas y pensadas para tu industria.',
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 101),
             const Footer(),
           ],
         ),
