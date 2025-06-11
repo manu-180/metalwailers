@@ -3,7 +3,9 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "f3cb38eddd663a29b926e35f687f04a3",
+const RESOURCES = {".vercel/project.json": "6fccefdb5cb501d8634c89e434cb1ddb",
+".vercel/README.txt": "2b13c79d37d6ed82a3255b83b6815034",
+"assets/AssetManifest.bin": "f3cb38eddd663a29b926e35f687f04a3",
 "assets/AssetManifest.bin.json": "fb8cf1f2ebb20f2fffe0cde7d97cbb15",
 "assets/AssetManifest.json": "122a7a1d8ab9e2a8d427ee2084839a52",
 "assets/assets/images/balancinadonew.png": "71cde42cae6fa6cea8fe982e5b8e39cb",
@@ -74,7 +76,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "f3cb38eddd663a29b926e35f687f04a3
 "canvaskit/skwasm_st.wasm": "56c3973560dfcbf28ce47cebe40f3206",
 "favicon.png": "7da4c63ce88d3c46e9a6dc50ec1930c8",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
-"flutter_bootstrap.js": "c6c3f3fcafc39c507cdc21ee46685217",
+"flutter_bootstrap.js": "fa03e6680d4e9f8eec8e0cc48bae40f6",
 "icons/Icon-192.png": "3a9d65259a2aa72445ea818cc362381e",
 "icons/Icon-512.png": "c1f7d2ffb1651cee0a2abc3f7e945c12",
 "icons/Icon-maskable-192.png": "3a9d65259a2aa72445ea818cc362381e",

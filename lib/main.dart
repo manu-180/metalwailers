@@ -12,7 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the roasdasdsadasfdasfdasgadsfdasfot of your application.
+  // Ahora si
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
