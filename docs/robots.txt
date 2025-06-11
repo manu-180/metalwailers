@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://metalwailers.com/sitemap.xml
