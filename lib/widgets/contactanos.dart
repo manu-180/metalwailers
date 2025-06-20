@@ -372,7 +372,7 @@ class _InfoCardState extends State<_InfoCard> {
                     Text(
                       widget.subtitle,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Colors.black87,
                       ),
                     ),

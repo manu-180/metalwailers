@@ -47,8 +47,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
-                      child: SvgPicture.asset(
-                        'assets/logo/loguito.svg',
+                      child: Image.asset(
+                        'assets/logo/loguitoo.png',
                         height: size.height * 0.12,
                         fit: BoxFit.contain,
                       ),

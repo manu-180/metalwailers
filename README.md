@@ -31,3 +31,14 @@ git add .
 git commit -m "actualizando pagina webbb" 
 git push
 
+
+
+# Desde la raíz del proyecto
+flutter build web
+# Copia el vercel.json a la carpeta de salida
+copy vercel.json build\web\
+# Ponete en esa carpeta
+cd build\web
+# Y deploy principal
+vercel --prod
+
