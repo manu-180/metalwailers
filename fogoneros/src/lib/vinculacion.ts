@@ -10,6 +10,8 @@ import {
   estadoConexion,
   numeroVinculado,
   registrarWebhook,
+  webhookVigente,
+  type EstadoConexion,
 } from '@/lib/evolution';
 
 type Vinculo = { estado: EstadoWhatsapp; qr: string | null; numero: string | null };
@@ -21,41 +23,54 @@ async function leerGuardado(): Promise<Guardado> {
   return data as Guardado;
 }
 
-async function guardar(estado: EstadoWhatsapp, numero: string | null): Promise<void> {
-  const { error } = await supabaseAdmin()
+// Condicional sobre lo leído: entre la lectura y este update desvincular() puede haber
+// dejado sin_vincular, y un close del webhook que venía en camino no lo tiene que pisar.
+async function guardar(estado: EstadoWhatsapp, numero: string | null, previo: EstadoWhatsapp | null): Promise<void> {
+  const ahora = new Date().toISOString();
+  const nuevoVinculo = estado === 'conectado' && (previo === 'sin_vincular' || previo === 'conectando');
+  let consulta = supabaseAdmin()
     .from('fg_config')
-    .update({ wa_estado: estado, wa_numero: numero, wa_estado_at: new Date().toISOString() })
+    .update({ wa_estado: estado, wa_numero: numero, wa_estado_at: ahora, ...(nuevoVinculo ? { vinculado_at: ahora } : {}) })
     .eq('id', 1);
+  if (previo) consulta = consulta.eq('wa_estado', previo);
+  const { error } = await consulta;
   if (error) throw new Error(`No pude guardar el estado de WhatsApp: ${error.code}`);
 }
 
-async function asegurarWebhook(): Promise<void> {
+// Sin webhook no entra ningún mensaje aunque la sesión esté abierta: se muestra como
+// desconectado para que el panel lo marque y el cron lo vuelva a intentar.
+async function alConectar(guardado: Guardado): Promise<{ estado: EstadoWhatsapp; numero: string | null }> {
+  const numero = await numeroVinculado().catch((error) => {
+    console.error('[vinculacion] no pude leer el número vinculado', detalleError(error));
+    return guardado.wa_numero;
+  });
   try {
     await registrarWebhook();
   } catch (error) {
     console.error('[vinculacion] no pude registrar el webhook', detalleError(error));
+    await guardar('desconectado', numero, guardado.wa_estado);
+    return { estado: 'desconectado', numero };
   }
+  await guardar('conectado', numero, guardado.wa_estado);
+  return { estado: 'conectado', numero };
 }
 
-async function alConectar(numeroAnterior: string | null): Promise<string | null> {
-  const numero = await numeroVinculado().catch((error) => {
-    console.error('[vinculacion] no pude leer el número vinculado', detalleError(error));
-    return numeroAnterior;
-  });
-  await asegurarWebhook();
-  await guardar('conectado', numero);
-  return numero;
+function estadoSinSesion(conexion: EstadoConexion, guardado: Guardado): EstadoWhatsapp {
+  return conexion === 'inexistente' ? 'sin_vincular' : estadoDesdeEvolution(conexion, guardado.wa_estado, guardado.wa_numero);
+}
+
+async function asentar(conexion: EstadoConexion, guardado: Guardado) {
+  const estado = estadoSinSesion(conexion, guardado);
+  const numero = estado === 'sin_vincular' ? null : guardado.wa_numero;
+  if (estado !== guardado.wa_estado) await guardar(estado, numero, guardado.wa_estado);
+  return { estado, numero };
 }
 
 export async function estadoVinculacion(): Promise<{ estado: EstadoWhatsapp; numero: string | null }> {
   const guardado = await leerGuardado();
   const conexion = await estadoConexion();
   if (conexion === 'desconocido') return { estado: guardado.wa_estado, numero: guardado.wa_numero };
-
-  const estado = conexion === 'inexistente' ? 'sin_vincular' : estadoDesdeEvolution(conexion, guardado.wa_estado, guardado.wa_numero);
-  const numero = estado === 'sin_vincular' ? null : guardado.wa_numero;
-  if (estado !== guardado.wa_estado) await guardar(estado, numero);
-  return { estado, numero };
+  return asentar(conexion, guardado);
 }
 
 export async function iniciarVinculacion(): Promise<Vinculo> {
@@ -63,14 +78,11 @@ export async function iniciarVinculacion(): Promise<Vinculo> {
   try {
     const conexion = await estadoConexion();
     if (conexion === 'desconocido') return { estado: guardado.wa_estado, qr: null, numero: guardado.wa_numero };
-    if (conexion === 'open') {
-      const numero = await alConectar(guardado.wa_numero);
-      return { estado: 'conectado', qr: null, numero };
-    }
+    if (conexion === 'open') return { ...(await alConectar(guardado)), qr: null };
 
     const cuerpo = conexion === 'inexistente' ? await crearInstancia() : await conectarInstancia();
-    await asegurarWebhook();
-    await guardar('conectando', guardado.wa_numero);
+    await registrarWebhook();
+    await guardar('conectando', guardado.wa_numero, guardado.wa_estado);
     return { estado: 'conectando', qr: leerQr(cuerpo), numero: guardado.wa_numero };
   } catch (error) {
     console.error('[vinculacion] no pude iniciar la vinculación', detalleError(error));
@@ -85,13 +97,10 @@ export async function consultarVinculacion(): Promise<Vinculo> {
 
   if (conexion === 'open') {
     if (guardado.wa_estado === 'conectado') return { estado: 'conectado', qr: null, numero: guardado.wa_numero };
-    const numero = await alConectar(guardado.wa_numero);
-    return { estado: 'conectado', qr: null, numero };
+    return { ...(await alConectar(guardado)), qr: null };
   }
 
-  const estado = conexion === 'inexistente' ? 'sin_vincular' : estadoDesdeEvolution(conexion, guardado.wa_estado, guardado.wa_numero);
-  const numero = estado === 'sin_vincular' ? null : guardado.wa_numero;
-  if (estado !== guardado.wa_estado) await guardar(estado, numero);
+  const { estado, numero } = await asentar(conexion, guardado);
 
   // El QR rota cada pocos segundos: si la pantalla se quedara con el primero, el
   // escaneo fallaría.
@@ -107,14 +116,31 @@ export async function consultarVinculacion(): Promise<Vinculo> {
 
 export async function desvincular(): Promise<void> {
   await cerrarSesion();
-  await guardar('sin_vincular', null);
+  await guardar('sin_vincular', null, null);
 }
 
 export async function aplicarEstadoDelWebhook(conexion: string, numero: string | null): Promise<void> {
   const guardado = await leerGuardado();
   const estado = estadoDesdeEvolution(conexion, guardado.wa_estado, guardado.wa_numero);
   if (estado === guardado.wa_estado) return;
-  await guardar(estado, estado === 'sin_vincular' ? null : (numero ?? guardado.wa_numero));
+  await guardar(estado, estado === 'sin_vincular' ? null : (numero ?? guardado.wa_numero), guardado.wa_estado);
+}
+
+async function verificarWebhook(guardado: Guardado): Promise<void> {
+  let vigente: boolean;
+  try {
+    vigente = await webhookVigente();
+  } catch (error) {
+    console.error('[vinculacion] no pude consultar el webhook', detalleError(error));
+    return;
+  }
+  if (vigente) return;
+  try {
+    await registrarWebhook();
+  } catch (error) {
+    console.error('[vinculacion] no pude reasegurar el webhook', detalleError(error));
+    await guardar('desconectado', guardado.wa_numero, guardado.wa_estado);
+  }
 }
 
 export async function refrescarEstado(): Promise<void> {
@@ -122,10 +148,10 @@ export async function refrescarEstado(): Promise<void> {
   const conexion = await estadoConexion();
   if (conexion === 'desconocido') return;
 
-  if (conexion === 'open') {
-    if (guardado.wa_estado !== 'conectado') await alConectar(guardado.wa_numero);
+  if (conexion !== 'open') {
+    await asentar(conexion, guardado);
     return;
   }
-  const estado = conexion === 'inexistente' ? 'sin_vincular' : estadoDesdeEvolution(conexion, guardado.wa_estado, guardado.wa_numero);
-  if (estado !== guardado.wa_estado) await guardar(estado, estado === 'sin_vincular' ? null : guardado.wa_numero);
+  if (guardado.wa_estado === 'conectado') await verificarWebhook(guardado);
+  else await alConectar(guardado);
 }

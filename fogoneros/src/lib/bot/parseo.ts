@@ -1,4 +1,5 @@
 import type { TipoMensaje } from '@/lib/tipos';
+import { recortar } from './salida';
 
 export type MensajeEntrante = {
   waId: string;
@@ -13,6 +14,7 @@ export type MensajeEntrante = {
   nombreArchivo: string | null;
   tamano: number | null;
   origen: string | null;
+  atrasado: boolean;
   crudo: unknown;
 };
 
@@ -24,6 +26,7 @@ export type EventoWebhook =
 type Objeto = Record<string, unknown>;
 
 const VENTANA_MS = 10 * 60 * 1000;
+const MAX_ATRASO_MS = 24 * 60 * 60 * 1000;
 // El jid termina adentro de un filtro `.or()` de PostgREST: todo lo que no tenga
 // esta forma exacta se descarta acá, antes de llegar a la base.
 const JID = /^(\d+)(?::\d+)?@(s\.whatsapp\.net|lid)$/;
@@ -136,7 +139,11 @@ function parsearMensaje(item: unknown, ahoraMs: number): MensajeEntrante | null 
 
   if (item.type !== undefined && item.type !== 'notify') return null;
   const segundos = numero(item.messageTimestamp);
-  if (segundos !== null && ahoraMs - segundos * 1000 > VENTANA_MS) return null;
+  const edadMs = segundos === null ? 0 : ahoraMs - segundos * 1000;
+  if (edadMs > MAX_ATRASO_MS) {
+    console.warn('[parseo] se ignoró un mensaje de más de 24 h');
+    return null;
+  }
 
   const mensaje = desenvolver(item.message);
   const contenido = contenidoDe(mensaje);
@@ -152,8 +159,10 @@ function parsearMensaje(item: unknown, ahoraMs: number): MensajeEntrante | null 
     telefono: telefono?.digitos ?? null,
     nombre: fromMe ? null : textoNoVacio(item.pushName)?.trim() ?? null,
     origen: origenDe(item, mensaje),
+    atrasado: edadMs > VENTANA_MS,
     crudo: item,
     ...contenido,
+    texto: fromMe || !contenido.texto ? contenido.texto : recortar(contenido.texto),
   };
 }
 

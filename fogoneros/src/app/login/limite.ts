@@ -6,8 +6,8 @@ const MAX_POR_IP = 20;
 
 type Registro = { fallos: number; vence: number };
 
-// En memoria de cada instancia: frena al que prueba a mano, no a un ataque distribuido.
-// La demora de 1 s y el límite propio de Supabase Auth cubren el resto.
+// Filtro menor, no una barrera: vive en la memoria de cada instancia y se reparte entre
+// ellas. La barrera son las contraseñas aleatorias largas; esto sólo saca al que prueba a mano.
 const registros = new Map<string, Registro>();
 
 function fallos(clave: string) {

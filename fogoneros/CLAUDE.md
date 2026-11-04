@@ -8,7 +8,7 @@ Leé también `AGENTS.md` (Next 16 cambia APIs) y `docs/PROGRESS.md`.
 
 | Cosa | Dónde |
 |---|---|
-| Producción | Vercel `fogoneros-app` (team de manu-180), Root Directory `fogoneros`, dominio app.metalwailers.com |
+| Producción | Vercel `fogoneros-app` (team de manu-180), Root Directory `fogoneros`, dominio app.metalwailers.com; el webhook usa `APP_URL` = fogoneros-app.vercel.app |
 | Base | Supabase `ktmbtpuhqqofdkisqseq`, compartido: tablas `fg_*`, bucket privado `fogoneros` |
 | WhatsApp | Instancia `fogoneros-mw` del Evolution compartido con los closers |
 | Secretos | envkit `fogoneros-mw` (`.envkit` en esta carpeta). En local: `envkit run -- npx next dev` |

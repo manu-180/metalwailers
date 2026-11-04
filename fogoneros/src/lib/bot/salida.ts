@@ -1,4 +1,5 @@
 const MAX_MENSAJES = 3;
+const MAX_TEXTO_CLIENTE = 2000;
 const ETIQUETA = /<\/?[a-zñ_][\w-]*[^<>]*>/i;
 const CORCHETES = /\[[^\]]*\]/;
 const SILENCIO = /^silencio[.!]?$/i;
@@ -8,6 +9,14 @@ const NO_ES_NOMBRE = new Set([
   'oficial', 'negocio', 'comercial', 'srl', 'sa', 'sas', 'muebles', 'deco', 'hierros', 'parrillas', 'fogoneros',
   'fogones', 'construcciones', 'servicios', 'atencion', 'cliente', 'whatsapp', 'y', 'e',
 ]);
+
+export function recortar(texto: string): string {
+  return texto.length > MAX_TEXTO_CLIENTE ? texto.slice(0, MAX_TEXTO_CLIENTE) : texto;
+}
+
+export function esSilencio(texto: string): boolean {
+  return SILENCIO.test(texto.trim());
+}
 
 function quitarMarkdown(texto: string): string {
   return texto

@@ -32,6 +32,8 @@ export default function PaginaPrivacidad() {
         <li>Supabase, donde se guardan las charlas.</li>
         <li>Vercel, donde funciona este sistema.</li>
       </ul>
+      <h2>Cuánto tiempo los guardamos</h2>
+      <p>Mientras Fogoneros MW siga usando el servicio, o hasta que pidas la baja.</p>
       <h2>Cómo pedir la baja</h2>
       <p>
         Escribinos por el mismo WhatsApp de Fogoneros MW y pedinos que borremos tus datos. También podés pedir ver qué

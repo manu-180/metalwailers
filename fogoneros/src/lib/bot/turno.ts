@@ -5,8 +5,8 @@ import { enviarAudioDelBot, enviarTextoDelBot } from '@/lib/enviar';
 import { detalleError } from '@/lib/evolution';
 import { leerAdjunto, leerDelBucket } from '@/lib/media';
 import type { Chat, Config, EntradaContexto, Mensaje, Nota } from '@/lib/tipos';
-import { adjuntosParaCargar, armarHistorial, type Adjunto } from './historial';
-import { armarSystem, bloqueTurno, FRASE_DE_PASE, HERRAMIENTAS, type DatosDelTurno } from './prompt';
+import { adjuntosParaCargar, armarHistorial, esPosterior, sinAtender, type Adjunto } from './historial';
+import { armarSystem, bloqueTurno, FRASE_DE_PASE, FRASE_DE_TOPE, HERRAMIENTAS } from './prompt';
 import { interpretarRespuesta } from './respuesta';
 import { armarSaludo, delayHumano } from './salida';
 
@@ -17,18 +17,34 @@ const LIMITE_NOTAS = 40;
 const ESPERA_MEDIA_MS = 30_000;
 const PAUSA_MEDIA_MS = 1500;
 const DELAY_AUDIO_MS = 3000;
-const REINTENTOS_HASTA_AVISAR_MS = 20 * 60 * 1000;
+// La función muere a los 120 s: empezar a enviar más tarde deja respuestas por la mitad.
+const PLAZO_PARA_ENVIAR_MS = 80_000;
+const TOPE_TURNOS_POR_HORA = 15;
+const TOPE_TURNOS_POR_DIA = 500;
 
 type Fin = 'listo' | 'otra_vez';
+type Situacion = 'responde' | 'apagado' | 'sin_whatsapp';
+
+type Turno = {
+  inicioMs: number;
+  puedeDescartar: boolean;
+  corte: string | null;
+};
 
 class EnvioFallido extends Error {}
+class PlazoVencido extends Error {}
+class TurnoCortado extends Error {
+  constructor(readonly situacion: Situacion) {
+    super(`Turno cortado: ${situacion}`);
+  }
+}
 
 const esperar = (ms: number) => new Promise((resolver) => setTimeout(resolver, ms));
 
-async function ultimoDelCliente(chatId: string): Promise<{ id: string } | null> {
+async function ultimoDelCliente(chatId: string): Promise<{ id: string; creado: string } | null> {
   const { data, error } = await supabaseAdmin()
     .from('fg_mensajes')
-    .select('id')
+    .select('id, creado')
     .eq('chat_id', chatId)
     .eq('autor', 'cliente')
     .order('creado', { ascending: false })
@@ -38,16 +54,16 @@ async function ultimoDelCliente(chatId: string): Promise<{ id: string } | null> 
   return data;
 }
 
-export async function programarTurno(chatId: string, mensajeId: string): Promise<void> {
+export async function programarTurno(chatId: string, mensajeId: string, inicioMs: number): Promise<void> {
   await esperar(DEBOUNCE_MS);
   const ultimo = await ultimoDelCliente(chatId);
   if (ultimo?.id !== mensajeId) return;
-  await procesarChat(chatId);
+  await procesarChat(chatId, inicioMs);
 }
 
-export async function procesarChat(chatId: string): Promise<void> {
-  const fin = await unTurno(chatId, true);
-  if (fin === 'otra_vez') await unTurno(chatId, false);
+export async function procesarChat(chatId: string, inicioMs = Date.now()): Promise<void> {
+  const fin = await unTurno(chatId, inicioMs, true);
+  if (fin === 'otra_vez') await unTurno(chatId, inicioMs, false);
 }
 
 async function actualizarChat(chatId: string, cambios: Record<string, unknown>): Promise<void> {
@@ -55,12 +71,24 @@ async function actualizarChat(chatId: string, cambios: Record<string, unknown>):
   if (error) console.error('[turno] no pude actualizar el chat', { chatId, codigo: error.code });
 }
 
+// Siempre con bot_activo=true en el filtro: si Claudia ya entró, la charla es de ella y
+// un aviso del bot no le puede volver a prender la alerta.
+async function avisarAClaudia(chatId: string, cambios: Record<string, unknown>): Promise<void> {
+  const { error } = await supabaseAdmin().from('fg_chats').update(cambios).eq('id', chatId).eq('bot_activo', true);
+  if (error) console.error('[turno] no pude avisarle a Claudia', { chatId, codigo: error.code });
+}
+
 function marcarAtencion(chatId: string, motivo: string): Promise<void> {
-  return actualizarChat(chatId, { atencion: true, atencion_motivo: motivo });
+  return avisarAClaudia(chatId, { atencion: true, atencion_motivo: motivo });
 }
 
 function pasarAClaudia(chatId: string, motivo: string): Promise<void> {
-  return actualizarChat(chatId, { atencion: true, atencion_motivo: motivo, bot_activo: false });
+  return avisarAClaudia(chatId, { atencion: true, atencion_motivo: motivo, bot_activo: false });
+}
+
+async function marcarAtendido(chatId: string, hasta: string): Promise<void> {
+  const { error } = await supabaseAdmin().from('fg_chats').update({ atendido_hasta: hasta }).eq('id', chatId);
+  if (error) throw new Error(`No pude marcar lo atendido: ${error.code}`);
 }
 
 async function leerEstado(chatId: string): Promise<{ config: Config; chat: Chat } | null> {
@@ -73,9 +101,26 @@ async function leerEstado(chatId: string): Promise<{ config: Config; chat: Chat 
   return chat.data ? { config: config.data as Config, chat: chat.data as Chat } : null;
 }
 
-async function puedeResponder(chatId: string): Promise<boolean> {
+function situacionDe(config: Config, chat: Chat): Situacion {
+  if (!config.bot_activo || !chat.bot_activo) return 'apagado';
+  return config.wa_estado === 'conectado' ? 'responde' : 'sin_whatsapp';
+}
+
+async function exigirQueSiga(chatId: string): Promise<void> {
   const estado = await leerEstado(chatId);
-  return Boolean(estado?.config.bot_activo && estado.chat.bot_activo && estado.config.wa_estado === 'conectado');
+  const situacion = estado ? situacionDe(estado.config, estado.chat) : 'apagado';
+  if (situacion !== 'responde') throw new TurnoCortado(situacion);
+}
+
+function exigirPlazo(turno: Turno): void {
+  if (Date.now() - turno.inicioMs > PLAZO_PARA_ENVIAR_MS) throw new PlazoVencido('Se venció el plazo para enviar');
+}
+
+async function enviarSiSigue(chat: Chat, texto: string): Promise<string> {
+  await exigirQueSiga(chat.id);
+  const envio = await enviarTextoDelBot(chat, texto, delayHumano(texto));
+  if (!envio.ok) throw new EnvioFallido(`No salió una respuesta del bot: ${envio.error}`);
+  return envio.id;
 }
 
 // Un audio tarda más en transcribirse que el debounce: si el cliente manda audio y
@@ -97,48 +142,63 @@ async function esperarMediaEnCurso(chatId: string): Promise<void> {
   }
 }
 
-type Saludo = { ids: string[]; texto: string | null; audioMandado: boolean };
+type Saludo = { texto: string | null; audioMandado: boolean };
 
-async function mandarAudioDeBienvenida(config: Config, chat: Chat): Promise<string | null> {
-  if (!config.audio_path) return null;
+async function mandarAudioDeBienvenida(config: Config, chat: Chat): Promise<boolean> {
+  if (!config.audio_path) return false;
   const path = config.audio_path;
+  let base64: string;
   try {
-    const contenido = await leerDelBucket(path);
-    const envio = await enviarAudioDelBot(
-      chat,
-      { base64: contenido.toString('base64'), path, mime: config.audio_mime, nombre: config.audio_nombre },
-      DELAY_AUDIO_MS,
-    );
-    if (envio.ok) return envio.id;
-    await marcarAtencion(chat.id, `No salió el audio de bienvenida: ${envio.error}`);
+    base64 = (await leerDelBucket(path)).toString('base64');
   } catch (error) {
     console.error('[turno] no pude leer el audio de bienvenida', { chatId: chat.id, ...detalleError(error) });
     await marcarAtencion(chat.id, 'No se pudo leer el audio de bienvenida');
+    return false;
   }
-  return null;
+
+  await exigirQueSiga(chat.id);
+  const envio = await enviarAudioDelBot(chat, { base64, path, mime: config.audio_mime, nombre: config.audio_nombre }, DELAY_AUDIO_MS);
+  if (envio.ok) return true;
+  await marcarAtencion(chat.id, `No salió el audio de bienvenida: ${envio.error}`);
+  return false;
 }
 
+// `saludo_enviado` es sólo el reclamo: lo que salió de verdad lo dicen las filas, que se
+// insertan antes de enviar. Sin fila no hubo envío, así que completar lo que falta tras
+// una función muerta no puede saludar dos veces. Una fila en 'enviando' cuenta como
+// enviada por la misma razón que en el historial.
 async function primerContacto(config: Config, chat: Chat): Promise<Saludo | null> {
-  if (chat.saludo_enviado) return null;
-  const { data, error } = await supabaseAdmin()
-    .from('fg_chats')
-    .update({ saludo_enviado: true })
-    .eq('id', chat.id)
-    .eq('saludo_enviado', false)
-    .select('id');
-  if (error) throw new Error(`No pude marcar el saludo: ${error.code}`);
-  if (!data?.length) return null;
+  if (chat.saludo_enviado && chat.atendido_hasta !== null) return null;
 
-  const ids: string[] = [];
-  const texto = armarSaludo(config.saludo, chat.nombre) || null;
-  if (texto) {
-    const envio = await enviarTextoDelBot(chat, texto, delayHumano(texto));
-    if (!envio.ok) throw new EnvioFallido(`No salió el saludo: ${envio.error}`);
-    ids.push(envio.id);
+  const db = supabaseAdmin();
+  if (!chat.saludo_enviado) {
+    const { data, error } = await db.from('fg_chats').update({ saludo_enviado: true }).eq('id', chat.id).eq('saludo_enviado', false).select('id');
+    if (error) throw new Error(`No pude marcar el saludo: ${error.code}`);
+    if (!data?.length) return null;
   }
-  const audioId = await mandarAudioDeBienvenida(config, chat);
-  if (audioId) ids.push(audioId);
-  return { ids, texto, audioMandado: audioId !== null };
+
+  const { data: filas, error } = await db
+    .from('fg_mensajes')
+    .select('tipo, texto')
+    .eq('chat_id', chat.id)
+    .eq('autor', 'bot')
+    .neq('estado', 'error')
+    .order('creado', { ascending: true })
+    .limit(5);
+  if (error) throw new Error(`No pude leer lo ya enviado: ${error.code}`);
+
+  let texto = (filas ?? []).find((f) => f.tipo === 'texto')?.texto ?? null;
+  if (!texto) {
+    const armado = armarSaludo(config.saludo, chat.nombre);
+    if (armado) {
+      await enviarSiSigue(chat, armado).catch((falla) => {
+        throw falla instanceof EnvioFallido ? new EnvioFallido(falla.message.replace('una respuesta del bot', 'el saludo')) : falla;
+      });
+      texto = armado;
+    }
+  }
+  const audioMandado = (filas ?? []).some((f) => f.tipo === 'audio') || (await mandarAudioDeBienvenida(config, chat));
+  return { texto, audioMandado };
 }
 
 async function cargarConversacion(chatId: string) {
@@ -146,21 +206,21 @@ async function cargarConversacion(chatId: string) {
   const [mensajes, contexto, notas] = await Promise.all([
     db.from('fg_mensajes').select('*').eq('chat_id', chatId).order('creado', { ascending: false }).limit(LIMITE_HISTORIAL),
     db.from('fg_contexto').select('titulo, contenido').eq('activo', true).order('orden').order('creado'),
-    db.from('fg_notas').select('respuesta, por_que, como').eq('activa', true).order('creado', { ascending: false }).limit(LIMITE_NOTAS),
+    db.from('fg_notas').select('por_que, como').eq('activa', true).order('creado', { ascending: false }).limit(LIMITE_NOTAS),
   ]);
   const error = mensajes.error ?? contexto.error ?? notas.error;
   if (error) throw new Error(`No pude leer la conversación: ${error.code}`);
   return {
     mensajes: ((mensajes.data ?? []) as Mensaje[]).reverse(),
     contexto: (contexto.data ?? []) as Pick<EntradaContexto, 'titulo' | 'contenido'>[],
-    notas: (notas.data ?? []) as Pick<Nota, 'respuesta' | 'por_que' | 'como'>[],
+    notas: (notas.data ?? []) as Pick<Nota, 'por_que' | 'como'>[],
   };
 }
 
-async function cargarAdjuntos(mensajes: Mensaje[], excluir: Set<string>): Promise<Map<string, Adjunto>> {
+async function cargarAdjuntos(mensajes: Mensaje[], atendidoHasta: string | null): Promise<Map<string, Adjunto>> {
   const adjuntos = new Map<string, Adjunto>();
   await Promise.all(
-    adjuntosParaCargar(mensajes, excluir).map(async (m) => {
+    adjuntosParaCargar(mensajes, atendidoHasta).map(async (m) => {
       const adjunto = await leerAdjunto(m.media_path!, m.media_mime!);
       if (adjunto) adjuntos.set(m.id, adjunto);
     }),
@@ -168,97 +228,155 @@ async function cargarAdjuntos(mensajes: Mensaje[], excluir: Set<string>): Promis
   return adjuntos;
 }
 
-async function responder(config: Config, chat: Chat, corte: { id: string }, puedeDescartar: boolean): Promise<Fin> {
+async function contarTurnos(desdeMs: number, chatId?: string): Promise<number> {
+  let consulta = supabaseAdmin()
+    .from('fg_turnos_llm')
+    .select('id', { count: 'exact', head: true })
+    .gte('creado', new Date(Date.now() - desdeMs).toISOString());
+  if (chatId) consulta = consulta.eq('chat_id', chatId);
+  const { count, error } = await consulta;
+  if (error) throw new Error(`No pude contar los turnos: ${error.code}`);
+  return count ?? 0;
+}
+
+async function topeAlcanzado(chatId: string): Promise<'dia' | 'chat' | null> {
+  const [delDia, delChat] = await Promise.all([contarTurnos(24 * 60 * 60 * 1000), contarTurnos(60 * 60 * 1000, chatId)]);
+  if (delDia >= TOPE_TURNOS_POR_DIA) return 'dia';
+  return delChat >= TOPE_TURNOS_POR_HORA ? 'chat' : null;
+}
+
+async function anotarTurno(chatId: string): Promise<void> {
+  const { error } = await supabaseAdmin().from('fg_turnos_llm').insert({ chat_id: chatId });
+  if (error) throw new Error(`No pude anotar el turno: ${error.code}`);
+}
+
+async function responder(config: Config, chat: Chat, turno: Turno): Promise<Fin> {
+  exigirPlazo(turno);
   const saludo = await primerContacto(config, chat);
   const { mensajes, contexto, notas } = await cargarConversacion(chat.id);
 
-  const excluir = new Set(saludo?.ids ?? []);
-  const adjuntos = await cargarAdjuntos(mensajes, excluir);
-  const historial = armarHistorial(mensajes, { excluir, adjuntos });
+  const pendientes = sinAtender(mensajes, chat.atendido_hasta);
+  const corte = pendientes.at(-1)?.creado;
+  if (!corte) return 'listo';
+  turno.corte = corte;
+
+  const tope = await topeAlcanzado(chat.id);
+  if (tope === 'dia') {
+    console.error('[turno] se alcanzó el tope diario de turnos', { chatId: chat.id });
+    await marcarAtencion(chat.id, 'Se alcanzó el tope diario del asistente');
+    return 'listo';
+  }
+  if (tope === 'chat') {
+    await exigirQueSiga(chat.id);
+    await marcarAtendido(chat.id, corte);
+    await enviarConPase(chat, [FRASE_DE_TOPE], 'Muchos mensajes seguidos');
+    return 'listo';
+  }
+
+  exigirPlazo(turno);
+  const adjuntos = await cargarAdjuntos(mensajes, chat.atendido_hasta);
+  const historial = armarHistorial(mensajes, { atendidoHasta: chat.atendido_hasta, adjuntos });
   if (historial.at(-1)?.role !== 'user') return 'listo';
 
-  const datos: DatosDelTurno = {
-    ahora: new Date(),
-    primerContacto: saludo !== null,
-    saludo: saludo?.texto ?? null,
-    audioMandado: saludo?.audioMandado ?? false,
-  };
+  await anotarTurno(chat.id);
   const respuesta = await pedirRespuesta({
-    system: [...armarSystem(contexto, notas), bloqueTurno(datos)],
+    system: [
+      ...armarSystem(contexto, notas),
+      bloqueTurno({ ahora: new Date(), primerContacto: saludo !== null, saludo: saludo?.texto ?? null, audioMandado: saludo?.audioMandado ?? false }),
+    ],
     messages: historial,
     tools: HERRAMIENTAS,
   });
   const { partes, pasarMotivo, fallo } = interpretarRespuesta(respuesta);
 
+  await exigirQueSiga(chat.id);
+  exigirPlazo(turno);
+
   if (fallo) {
     console.error('[turno] el modelo no dio una respuesta usable', { chatId: chat.id, fallo });
+    await marcarAtendido(chat.id, corte);
     await pasarAClaudia(chat.id, 'El asistente no pudo responder este mensaje');
     return 'listo';
   }
 
-  if (!pasarMotivo) {
+  if (!pasarMotivo && turno.puedeDescartar) {
     const ultimo = await ultimoDelCliente(chat.id);
-    if (puedeDescartar && ultimo?.id !== corte.id) return 'otra_vez';
-    if (!(await puedeResponder(chat.id))) return 'listo';
+    if (ultimo && esPosterior(ultimo.creado, corte)) return 'otra_vez';
   }
 
-  const salida = pasarMotivo && partes.length === 0 ? [FRASE_DE_PASE] : partes;
-  if (pasarMotivo) await pasarAClaudia(chat.id, pasarMotivo);
+  // Antes del primer envío: si la función muere a mitad de las partes, un reintento
+  // repetiría lo que ya salió, y duplicar es peor que dejar una parte sin mandar.
+  await marcarAtendido(chat.id, corte);
 
-  for (const parte of salida) {
-    const envio = await enviarTextoDelBot(chat, parte, delayHumano(parte));
-    if (!envio.ok) throw new EnvioFallido(`No salió una respuesta del bot: ${envio.error}`);
-  }
+  if (pasarMotivo) await enviarConPase(chat, partes.length > 0 ? partes : [FRASE_DE_PASE], pasarMotivo);
+  else for (const parte of partes) await enviarSiSigue(chat, parte);
   return 'listo';
 }
 
-async function hayAlgoNuevo(chatId: string, corteId: string): Promise<boolean> {
+// La frase sale antes de apagar el bot, porque cada envío exige que siga prendido.
+async function enviarConPase(chat: Chat, partes: string[], motivo: string): Promise<void> {
   try {
-    return (await ultimoDelCliente(chatId))?.id !== corteId;
+    for (const parte of partes) await enviarSiSigue(chat, parte);
+  } catch (falla) {
+    if (falla instanceof EnvioFallido) await pasarAClaudia(chat.id, motivo);
+    throw falla;
+  }
+  await pasarAClaudia(chat.id, motivo);
+}
+
+async function hayAlgoNuevo(chatId: string, corte: string): Promise<boolean> {
+  try {
+    const ultimo = await ultimoDelCliente(chatId);
+    return ultimo !== null && esPosterior(ultimo.creado, corte);
   } catch {
     return true;
   }
 }
 
-async function unTurno(chatId: string, puedeDescartar: boolean): Promise<Fin> {
+async function unTurno(chatId: string, inicioMs: number, puedeDescartar: boolean): Promise<Fin> {
   const estado = await leerEstado(chatId);
   if (!estado) return 'listo';
   const { config, chat } = estado;
 
-  if (!config.bot_activo || !chat.bot_activo || config.wa_estado !== 'conectado') {
+  const situacion = situacionDe(config, chat);
+  if (situacion === 'apagado') {
     await actualizarChat(chatId, { pendiente: false, pendiente_desde: null });
     return 'listo';
   }
+  // Sin WhatsApp queda pendiente: cuando reconecte, el cron responde.
+  if (situacion === 'sin_whatsapp') return 'listo';
 
   const { data: tomado, error } = await supabaseAdmin().rpc('fg_tomar_turno', { p_chat: chatId, p_segundos: LOCK_SEGUNDOS });
   if (error) throw new Error(`No pude tomar el turno: ${error.code}`);
   if (!tomado) return 'listo';
 
+  const turno: Turno = { inicioMs, puedeDescartar, corte: null };
   let fin: Fin = 'listo';
   let dejarPendiente = false;
-  let corte: { id: string } | null = null;
   try {
     await esperarMediaEnCurso(chatId);
-    corte = await ultimoDelCliente(chatId);
-    if (corte) fin = await responder(config, chat, corte, puedeDescartar);
+    fin = await responder(config, chat, turno);
   } catch (falla) {
-    console.error('[turno] falló el turno', { chatId, ...detalleError(falla) });
-    if (falla instanceof EnvioFallido) {
+    if (falla instanceof TurnoCortado) {
+      dejarPendiente = falla.situacion === 'sin_whatsapp';
+    } else if (falla instanceof EnvioFallido) {
+      console.error('[turno] falló un envío', { chatId });
       await marcarAtencion(chatId, falla.message);
     } else if (esErrorPermanente(falla)) {
+      console.error('[turno] error permanente', { chatId, ...detalleError(falla) });
       await marcarAtencion(chatId, 'El asistente no pudo responder este mensaje');
     } else {
+      console.error('[turno] falló el turno', { chatId, ...detalleError(falla) });
       dejarPendiente = true;
-      const desde = chat.pendiente_desde ? new Date(chat.pendiente_desde).getTime() : Date.now();
-      if (Date.now() - desde > REINTENTOS_HASTA_AVISAR_MS) await marcarAtencion(chatId, 'El asistente lleva un rato sin poder responder');
     }
   } finally {
-    const seguirPendiente = dejarPendiente || fin === 'otra_vez' || (corte !== null && (await hayAlgoNuevo(chatId, corte.id)));
+    const nuevo = turno.corte !== null && (await hayAlgoNuevo(chatId, turno.corte));
+    const seguirPendiente = dejarPendiente || fin === 'otra_vez' || nuevo;
     await actualizarChat(chatId, {
       procesando_hasta: null,
       ...(seguirPendiente ? {} : { pendiente: false, pendiente_desde: null }),
     });
-    if (seguirPendiente && !dejarPendiente) fin = 'otra_vez';
+    if (nuevo && !dejarPendiente) fin = 'otra_vez';
   }
   return fin;
 }

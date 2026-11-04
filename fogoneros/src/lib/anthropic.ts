@@ -26,7 +26,7 @@ const fetchSinEsperarCupo: typeof fetch = async (url, init) => {
 function cliente(apiKey: string): Anthropic {
   let existente = clientes.get(apiKey);
   if (!existente) {
-    existente = new Anthropic({ apiKey, maxRetries: 2, timeout: 60_000, fetch: fetchSinEsperarCupo });
+    existente = new Anthropic({ apiKey, maxRetries: 1, timeout: 30_000, fetch: fetchSinEsperarCupo });
     clientes.set(apiKey, existente);
   }
   return existente;

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { esFromMe, interpretarEvento } from '../parseo';
 
 const AHORA = 1_800_000_000_000;
@@ -80,12 +80,31 @@ describe('interpretarEvento', () => {
     expect(uno(evento(mensaje({ type: 'notify' }))).waId).toBe('ABC');
   });
 
-  it('ignora mensajes de más de 10 minutos, también con timestamp string o Long', () => {
+  it('marca atrasado lo de más de 10 minutos, también con timestamp string o Long', () => {
     const viejo = SEG - 601;
     for (const messageTimestamp of [viejo, String(viejo), { low: viejo, high: 0 }]) {
-      expect(interpretarEvento(evento(mensaje({ messageTimestamp })), 'fogoneros-mw', AHORA).tipo).toBe('ignorar');
+      expect(uno(evento(mensaje({ messageTimestamp }))).atrasado).toBe(true);
     }
-    expect(uno(evento(mensaje({ messageTimestamp: SEG - 500 }))).waId).toBe('ABC');
+    expect(uno(evento(mensaje({ messageTimestamp: SEG - 500 }))).atrasado).toBe(false);
+  });
+
+  it('ignora lo de más de 24 horas avisando sin datos personales', () => {
+    const aviso = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const r = interpretarEvento(evento(mensaje({ messageTimestamp: SEG - 86_401 })), 'fogoneros-mw', AHORA);
+    expect(r.tipo).toBe('ignorar');
+    expect(JSON.stringify(aviso.mock.calls)).not.toContain('5491155550000');
+    aviso.mockRestore();
+  });
+
+  it('recorta el texto del cliente a 2000 caracteres, también el pie', () => {
+    const largo = 'x'.repeat(5000);
+    expect(uno(evento(mensaje({ message: { conversation: largo } }))).texto).toHaveLength(2000);
+    expect(uno(evento(mensaje({ message: { imageMessage: { caption: largo } } }))).texto).toHaveLength(2000);
+  });
+
+  it('no recorta lo que escribe Claudia', () => {
+    const largo = 'x'.repeat(5000);
+    expect(uno(evento(mensaje({ message: { conversation: largo } }, { fromMe: true }))).texto).toHaveLength(5000);
   });
 
   it('resuelve @lid con el teléfono de remoteJidAlt', () => {

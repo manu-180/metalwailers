@@ -49,7 +49,7 @@ export function Burbuja({ mensaje: m, url, onRenovar, onReintentar }: Props) {
         )}
         <Contenido mensaje={m} url={url} onRenovar={onRenovar} />
         <p className="mt-1 text-right text-base text-tinta-2" suppressHydrationWarning>
-          {m.estado === 'enviando' ? 'Enviando…' : horaCorta(m.creado)}
+          {propio && m.estado === 'enviando' ? 'Enviando…' : horaCorta(m.creado)}
         </p>
       </div>
 
@@ -124,12 +124,11 @@ function Medio({ mensaje: m, url, onRenovar }: { mensaje: MensajeLocal; url?: st
     return (
       <a
         href={url}
-        target="_blank"
-        rel="noopener noreferrer"
+        download={m.media_nombre ?? true}
         className="flex min-h-11 items-center gap-2 rounded-lg font-semibold underline underline-offset-4"
       >
         <IconoDocumento className="shrink-0" />
-        {m.media_nombre ?? 'Abrir archivo'}
+        {m.media_nombre ?? 'Bajar archivo'}
       </a>
     );
   }

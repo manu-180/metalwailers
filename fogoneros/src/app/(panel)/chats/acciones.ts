@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { enviarComoHumano } from '@/lib/enviar';
-import { firmarRutas, leerChats, leerMensajes, type ChatVista, type MensajeVista, type NotaVista, type UrlsFirmadas } from '@/lib/queries';
+import { firmarMedia, leerChats, leerMensajes, type ChatVista, type MensajeVista, type NotaVista, type UrlsFirmadas } from '@/lib/queries';
 import { exigirEquipo } from '@/lib/sesion';
 import type { Resultado } from '../acciones';
 
@@ -46,7 +46,7 @@ export async function mensajesDelChat(
   if (!sesion.ok) return sesion;
   try {
     const mensajes = await leerMensajes(id.data, fecha.data);
-    return { ok: true, mensajes, urls: await firmarRutas(mensajes.map((m) => m.media_path)) };
+    return { ok: true, mensajes, urls: await firmarMedia(mensajes) };
   } catch {
     return { ok: false, error: 'No pudimos traer los mensajes. Probá de nuevo.' };
   }
@@ -57,9 +57,9 @@ export async function urlsDeMensajes(ids: string[]): Promise<Resultado<{ urls: U
   if (!validos.success) return { ok: false, error: 'No pudimos abrir el archivo.' };
   const sesion = await exigirEquipo();
   if (!sesion.ok) return sesion;
-  const { data, error } = await sesion.supabase.from('fg_mensajes').select('media_path').in('id', validos.data);
+  const { data, error } = await sesion.supabase.from('fg_mensajes').select('media_path, tipo').in('id', validos.data);
   if (error) return { ok: false, error: 'No pudimos abrir el archivo.' };
-  return { ok: true, urls: await firmarRutas((data ?? []).map((f) => f.media_path as string | null)) };
+  return { ok: true, urls: await firmarMedia(data ?? []) };
 }
 
 async function actualizarChat(chatId: string, campos: Record<string, unknown>): Promise<Resultado> {

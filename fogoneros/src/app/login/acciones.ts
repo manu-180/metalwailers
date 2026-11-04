@@ -25,7 +25,11 @@ const esquema = z.object({
 
 const MENSAJE_GENERICO = 'No pudimos entrar. Revisá los datos o probá de nuevo en unos minutos.';
 
-const demora = () => new Promise((r) => setTimeout(r, 1000));
+const DEMORA_MS = 1500;
+
+// Medido desde el inicio y no como pausa fija: si no, un intento bloqueado, que no llega a
+// Supabase, contestaría más rápido y delataría el bloqueo.
+const demoraConstante = (inicio: number) => new Promise((r) => setTimeout(r, Math.max(0, inicio + DEMORA_MS - Date.now())));
 
 export async function entrar(_previo: EstadoLogin, datos: FormData): Promise<EstadoLogin> {
   const crudo = { usuario: String(datos.get('usuario') ?? ''), contrasena: String(datos.get('contrasena') ?? '') };
@@ -38,12 +42,13 @@ export async function entrar(_previo: EstadoLogin, datos: FormData): Promise<Est
     };
   }
 
+  const inicio = Date.now();
   const { usuario, contrasena } = validado.data;
   const encabezados = await headers();
   const ip = encabezados.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local';
 
   if (bloqueado(ip, usuario)) {
-    await demora();
+    await demoraConstante(inicio);
     return { usuario, error: MENSAJE_GENERICO };
   }
 
@@ -64,7 +69,7 @@ export async function entrar(_previo: EstadoLogin, datos: FormData): Promise<Est
 
   if (!adentro) {
     anotarFallo(ip, usuario);
-    await demora();
+    await demoraConstante(inicio);
     return { usuario, error: MENSAJE_GENERICO };
   }
 

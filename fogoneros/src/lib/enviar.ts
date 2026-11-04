@@ -76,7 +76,15 @@ export function enviarAudioDelBot(
 }
 
 export function apagarBotPorHumano() {
-  return { bot_activo: false, atencion: false, atencion_motivo: null, saludo_enviado: true, pendiente: false, pendiente_desde: null };
+  return {
+    bot_activo: false,
+    atencion: false,
+    atencion_motivo: null,
+    saludo_enviado: true,
+    pendiente: false,
+    pendiente_desde: null,
+    atendido_hasta: new Date().toISOString(),
+  };
 }
 
 export async function enviarComoHumano(chatId: string, texto: string): Promise<{ ok: true } | { ok: false; error: string }> {

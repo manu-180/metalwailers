@@ -6,6 +6,7 @@ import { tokenValido } from '@/lib/bot/token';
 import { aplicarEstadoDelWebhook } from '@/lib/vinculacion';
 
 export async function POST(request: Request) {
+  const inicioMs = Date.now();
   if (!tokenValido(request.headers.get('x-fg-token'), process.env.WEBHOOK_SECRET)) {
     return Response.json({ error: 'no autorizado' }, { status: 401 });
   }
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
     } else if (evento.tipo === 'mensajes') {
       const tareas: Tarea[] = [];
       for (const mensaje of evento.mensajes) {
-        const tarea = await registrarEntrante(mensaje);
+        const tarea = await registrarEntrante(mensaje, inicioMs);
         if (tarea) tareas.push(tarea);
       }
       if (tareas.length > 0) after(() => Promise.all(tareas.map(ejecutarTarea)));

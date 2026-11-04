@@ -14,7 +14,7 @@ export default function PaginaLogin() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-4 py-8">
       <Marca tam={40} />
       <h1 className="mt-8 text-5xl font-bold">Entrá al panel</h1>
-      <p className="mt-2 text-tinta-2">Con tu usuario, por ejemplo santi o claudia.</p>
+      <p className="mt-2 text-tinta-2">Con tu usuario y tu contraseña.</p>
       <div className="placa mt-6 rounded-2xl p-5">
         <FormularioLogin />
       </div>

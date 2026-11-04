@@ -1,4 +1,4 @@
-import { limpiarSalida } from './salida';
+import { esSilencio, limpiarSalida } from './salida';
 
 type BloqueRespuesta = { type: string; text?: string; name?: string; input?: unknown };
 
@@ -14,6 +14,7 @@ export type RespuestaInterpretada = {
 };
 
 const MOTIVO_POR_DEFECTO = 'El asistente pidió que siga Claudia';
+const MOTIVO_TEXTO_INVALIDO = 'El asistente escribió algo que no se podía mandar';
 
 function motivoDe(input: unknown): string {
   const motivo = (input as { motivo?: unknown } | null)?.motivo;
@@ -33,5 +34,9 @@ export function interpretarRespuesta(respuesta: RespuestaModelo): RespuestaInter
     .join('\n\n');
   const pasar = respuesta.content.find((b) => b.type === 'tool_use' && b.name === 'pasar_a_claudia');
 
-  return { partes: limpiarSalida(texto), pasarMotivo: pasar ? motivoDe(pasar.input) : null, fallo: null };
+  const partes = limpiarSalida(texto);
+  if (pasar) return { partes, pasarMotivo: motivoDe(pasar.input), fallo: null };
+  // Texto que el filtro dejó en nada no es silencio: la persona quedaría sin respuesta sin que nadie se entere.
+  const perdido = partes.length === 0 && texto.trim() !== '' && !esSilencio(texto);
+  return { partes, pasarMotivo: perdido ? MOTIVO_TEXTO_INVALIDO : null, fallo: null };
 }

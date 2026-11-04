@@ -7,7 +7,7 @@ const TIMEOUT_MS = 15_000;
 // Evolution retiene el POST mientras dura `delay` y además convierte el audio con
 // ffmpeg antes de responder.
 const TIMEOUT_ENVIO_MS = 45_000;
-const TIMEOUT_MEDIA_MS = 60_000;
+const TIMEOUT_MEDIA_MS = 45_000;
 const EVENTOS = ['MESSAGES_UPSERT', 'CONNECTION_UPDATE'];
 
 export type EstadoConexion = 'open' | 'connecting' | 'close' | 'inexistente' | 'desconocido';
@@ -76,11 +76,11 @@ export async function enviarAudio(numero: string, base64: string, delayMs = 0): 
   return waIdDe(cuerpo);
 }
 
-export async function bajarMedia(crudo: unknown): Promise<{ base64: string; mimetype: string | null } | null> {
+export async function bajarMedia(crudo: unknown, timeoutMs = TIMEOUT_MEDIA_MS): Promise<{ base64: string; mimetype: string | null } | null> {
   const cuerpo = (await evoFetch(`/chat/getBase64FromMediaMessage/${instancia()}`, {
     method: 'POST',
     body: { message: crudo, convertToMp4: false },
-    timeoutMs: TIMEOUT_MEDIA_MS,
+    timeoutMs,
   })) as { base64?: unknown; mimetype?: unknown } | null;
   if (typeof cuerpo?.base64 !== 'string' || !cuerpo.base64) return null;
   return { base64: cuerpo.base64, mimetype: typeof cuerpo.mimetype === 'string' ? cuerpo.mimetype : null };
@@ -118,16 +118,26 @@ export function conectarInstancia(): Promise<unknown> {
   return evoFetch(`/instance/connect/${instancia()}`, { timeoutMs: 30_000 });
 }
 
+function urlDelWebhook(): string {
+  const app = (process.env.APP_URL ?? '').replace(/\/+$/, '');
+  if (!app) throw new Error('Falta APP_URL');
+  return `${app}/api/webhook/evolution`;
+}
+
+export async function webhookVigente(): Promise<boolean> {
+  const cuerpo = (await evoFetch(`/webhook/find/${instancia()}`)) as { url?: unknown; enabled?: unknown } | null;
+  return cuerpo?.enabled === true && cuerpo.url === urlDelWebhook();
+}
+
 export async function registrarWebhook(): Promise<void> {
   const secreto = process.env.WEBHOOK_SECRET;
-  const app = (process.env.APP_URL ?? '').replace(/\/+$/, '');
-  if (!secreto || !app) throw new Error('Faltan WEBHOOK_SECRET o APP_URL');
+  if (!secreto) throw new Error('Falta WEBHOOK_SECRET');
   await evoFetch(`/webhook/set/${instancia()}`, {
     method: 'POST',
     body: {
       webhook: {
         enabled: true,
-        url: `${app}/api/webhook/evolution`,
+        url: urlDelWebhook(),
         headers: { 'x-fg-token': secreto },
         // La 2.3.7 lee byEvents y base64 de este objeto: webhookByEvents y webhookBase64
         // pasan la validación y se ignoran en silencio.

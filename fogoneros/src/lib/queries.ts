@@ -97,13 +97,24 @@ export async function leerContexto() {
 }
 
 // El bucket no tiene políticas para `authenticated`: firmar requiere service role.
-// Los paths salen siempre de filas ya leídas con la sesión y su RLS, nunca del navegador.
-export async function firmarRutas(rutas: (string | null | undefined)[]): Promise<UrlsFirmadas> {
+// Los paths salen de filas leídas con la sesión y su RLS, o de guardarAudio, que valida
+// el formato y que el objeto exista antes de llegar acá.
+export async function firmarRutas(rutas: (string | null | undefined)[], opciones?: { descarga: boolean }): Promise<UrlsFirmadas> {
   const unicas = [...new Set(rutas.filter((r): r is string => Boolean(r)))];
   if (unicas.length === 0) return {};
-  const { data, error } = await supabaseAdmin().storage.from(BUCKET).createSignedUrls(unicas, VIDA_URL_SEGUNDOS);
+  const { data, error } = await supabaseAdmin()
+    .storage.from(BUCKET)
+    .createSignedUrls(unicas, VIDA_URL_SEGUNDOS, opciones?.descarga ? { download: true } : undefined);
   if (error || !data) return {};
   const urls: UrlsFirmadas = {};
   for (const f of data) if (f.path && f.signedUrl) urls[f.path] = f.signedUrl;
   return urls;
+}
+
+// Un documento puede ser cualquier cosa que mandó un desconocido: se baja, no se abre.
+export async function firmarMedia(filas: { media_path: string | null; tipo: string }[]): Promise<UrlsFirmadas> {
+  const documentos = filas.filter((f) => f.tipo === 'documento').map((f) => f.media_path);
+  const resto = filas.filter((f) => f.tipo !== 'documento').map((f) => f.media_path);
+  const [urlsResto, urlsDocumentos] = await Promise.all([firmarRutas(resto), firmarRutas(documentos, { descarga: true })]);
+  return { ...urlsResto, ...urlsDocumentos };
 }

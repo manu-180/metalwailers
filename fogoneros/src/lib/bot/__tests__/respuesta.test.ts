@@ -39,7 +39,18 @@ describe('interpretarRespuesta', () => {
     expect(r).toMatchObject({ partes: [], fallo: 'cortada' });
   });
 
+  it('texto que el filtro deja en nada pasa a Claudia', () => {
+    const r = interpretarRespuesta({ stop_reason: 'end_turn', content: [{ type: 'text', text: '<interno>x</interno>' }] });
+    expect(r.partes).toEqual([]);
+    expect(r.pasarMotivo).toBeTruthy();
+  });
+
+  it('sin texto no pasa a nadie', () => {
+    expect(interpretarRespuesta({ stop_reason: 'end_turn', content: [] }).pasarMotivo).toBeNull();
+  });
+
   it('SILENCIO es no responder', () => {
-    expect(interpretarRespuesta({ stop_reason: 'end_turn', content: [{ type: 'text', text: 'SILENCIO' }] }).partes).toEqual([]);
+    const r = interpretarRespuesta({ stop_reason: 'end_turn', content: [{ type: 'text', text: 'SILENCIO' }] });
+    expect(r).toEqual({ partes: [], pasarMotivo: null, fallo: null });
   });
 });

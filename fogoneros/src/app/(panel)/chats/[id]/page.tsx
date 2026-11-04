@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { z } from 'zod';
 import { Conversacion } from '@/components/chats/conversacion';
-import { firmarRutas, leerChat, leerMensajes, leerNotasDelChat, POR_PAGINA_MENSAJES } from '@/lib/queries';
+import { firmarMedia, leerChat, leerMensajes, leerNotasDelChat, POR_PAGINA_MENSAJES } from '@/lib/queries';
 
 export const metadata: Metadata = {
   title: 'Chat',
@@ -16,7 +16,7 @@ export default async function PaginaChat({ params }: { params: Promise<{ id: str
 
   const [chat, mensajes, notas] = await Promise.all([leerChat(id), leerMensajes(id), leerNotasDelChat(id)]);
   if (!chat) notFound();
-  const urls = await firmarRutas(mensajes.map((m) => m.media_path));
+  const urls = await firmarMedia(mensajes);
 
   return (
     <Conversacion

@@ -49,8 +49,10 @@ export async function pedirSubidaAudio(mime: string): Promise<Resultado<{ path: 
   return { ok: true, path: data.path, token: data.token };
 }
 
+// El path vuelve del navegador: tiene que tener la forma exacta que emite pedirSubidaAudio
+// y el objeto tiene que existir, o el bot saludaría con un audio que no está.
 const AudioEntrada = z.object({
-  path: z.string().regex(/^audio\/bienvenida-\d+\.(mp3|m4a|aac|ogg|webm|wav)$/),
+  path: z.string().regex(/^audio\/bienvenida-\d{13}\.(mp3|m4a|aac|ogg|webm|wav)$/),
   mime: z.string().min(1).max(100),
   nombre: z.string().trim().min(1).max(200),
 });
@@ -61,6 +63,9 @@ export async function guardarAudio(entrada: unknown): Promise<Resultado<{ url: s
   const sesion = await exigirEquipo();
   if (!sesion.ok) return sesion;
   const { path, mime, nombre } = datos.data;
+  if (EXTENSIONES[mime.split(';')[0].trim().toLowerCase()] !== path.split('.').pop()) return { ok: false, error: NO_GUARDO };
+  const { data: existe } = await supabaseAdmin().storage.from(BUCKET).exists(path);
+  if (!existe) return { ok: false, error: NO_GUARDO };
   const { error } = await sesion.supabase
     .from('fg_config')
     .update({ audio_path: path, audio_mime: mime, audio_nombre: nombre, actualizado: new Date().toISOString() })

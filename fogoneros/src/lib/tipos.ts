@@ -14,6 +14,7 @@ export type Config = {
   wa_estado: EstadoWhatsapp;
   wa_numero: string | null;
   wa_estado_at: string | null;
+  vinculado_at: string | null;
   actualizado: string;
 };
 
@@ -42,6 +43,7 @@ export type Chat = {
   pendiente: boolean;
   pendiente_desde: string | null;
   procesando_hasta: string | null;
+  atendido_hasta: string | null;
   ultimo_at: string | null;
   ultimo_preview: string | null;
   ultimo_autor: Autor | null;
