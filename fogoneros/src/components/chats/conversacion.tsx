@@ -232,7 +232,7 @@ export function Conversacion({ chat: chatInicial, mensajes, urls: urlsIniciales,
 
         <form onSubmit={alEnviar} className="border-t border-linea bg-placa/70 px-3 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
           <div className="mx-auto max-w-3xl">
-            <p className="mb-1.5 text-base text-tinta-2">Si escribís vos, el bot deja de contestar en este chat.</p>
+            <p className="mb-1.5 text-base text-tinta-2">Si escribís vos, el bot deja de contestar acá.</p>
             <div className="flex items-end gap-2">
               <label className="min-w-0 flex-1">
                 <span className="sr-only">Escribirle al cliente</span>
