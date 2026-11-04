@@ -14,8 +14,10 @@ export function FormularioLogin() {
   return (
     <form action={accion} className="flex flex-col gap-4" noValidate>
       <Campo
-        etiqueta="Usuario"
+        etiqueta="Mail"
         name="usuario"
+        type="email"
+        inputMode="email"
         defaultValue={estado.usuario}
         autoComplete="username"
         autoCapitalize="none"
