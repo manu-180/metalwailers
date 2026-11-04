@@ -4,12 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { Marca } from '@/components/ui/marca';
-import { IconoChats, IconoContexto, IconoCuenta, IconoInicio, IconoWhatsapp } from '@/components/ui/iconos';
+import { IconoChats, IconoCuenta, IconoInicio, IconoWhatsapp } from '@/components/ui/iconos';
 
 const SECCIONES = [
   { href: '/', texto: 'Inicio', Icono: IconoInicio },
   { href: '/chats', texto: 'Chats', Icono: IconoChats },
-  { href: '/contexto', texto: 'Contexto', Icono: IconoContexto },
   { href: '/whatsapp', texto: 'WhatsApp', Icono: IconoWhatsapp },
 ];
 
@@ -85,7 +84,7 @@ export function MarcoPanel({ ruta, banner, pieLateral, children }: Props & { rut
 
         <nav
           aria-label="Secciones"
-          className={`grid grid-cols-4 border-t border-linea bg-placa pb-[env(safe-area-inset-bottom)] md:hidden ${
+          className={`grid grid-cols-3 border-t border-linea bg-placa pb-[env(safe-area-inset-bottom)] md:hidden ${
             enConversacion ? 'hidden' : ''
           }`}
         >

@@ -36,14 +36,6 @@ export const IconoChats = (p: Props) => (
   </Base>
 );
 
-export const IconoContexto = (p: Props) => (
-  <Base {...p}>
-    <path d="M6 4h11a1 1 0 0 1 1 1v15H7a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1Z" />
-    <path d="M5 18a2 2 0 0 1 2-2h11" />
-    <path d="M9 8h5M9 11h3" />
-  </Base>
-);
-
 export const IconoWhatsapp = (p: Props) => (
   <Base {...p}>
     <rect x="7" y="3" width="10" height="18" rx="2" />

@@ -1,7 +1,7 @@
 import 'server-only';
 import { supabaseServidor } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { BUCKET, type Chat, type Config, type EntradaContexto, type Mensaje, type Metricas, type Nota } from '@/lib/tipos';
+import { BUCKET, type Chat, type Config, type Mensaje, type Metricas, type Nota } from '@/lib/tipos';
 
 export const POR_PAGINA_CHATS = 50;
 export const POR_PAGINA_MENSAJES = 60;
@@ -11,7 +11,6 @@ const COL_CHAT = 'id,telefono,nombre,bot_activo,atencion,atencion_motivo,no_leid
 const COL_MENSAJE = 'id,chat_id,autor,tipo,texto,transcripcion,media_path,media_mime,media_nombre,estado,creado';
 const COL_NOTA = 'id,mensaje_id,chat_id,respuesta,por_que,como,activa,autor,creado';
 const COL_CONFIG = 'id,bot_activo,saludo,audio_path,audio_mime,audio_nombre,wa_estado,wa_numero';
-const COL_CONTEXTO = 'id,titulo,contenido,orden,activo';
 
 export type ChatVista = Pick<
   Chat,
@@ -26,7 +25,6 @@ export type ConfigVista = Pick<
   Config,
   'id' | 'bot_activo' | 'saludo' | 'audio_path' | 'audio_mime' | 'audio_nombre' | 'wa_estado' | 'wa_numero'
 >;
-export type ContextoVista = Pick<EntradaContexto, 'id' | 'titulo' | 'contenido' | 'orden' | 'activo'>;
 export type UrlsFirmadas = Record<string, string>;
 
 function firme<T>(r: { data: T | null; error: { message: string } | null }): T {
@@ -77,23 +75,6 @@ export async function leerNotasDelChat(chatId: string) {
     .eq('activa', true)
     .order('creado', { ascending: true });
   return firme(r) as NotaVista[];
-}
-
-export async function leerNotasActivas() {
-  const supabase = await supabaseServidor();
-  const r = await supabase
-    .from('fg_notas')
-    .select(COL_NOTA)
-    .eq('activa', true)
-    .order('creado', { ascending: false })
-    .limit(200);
-  return firme(r) as NotaVista[];
-}
-
-export async function leerContexto() {
-  const supabase = await supabaseServidor();
-  const r = await supabase.from('fg_contexto').select(COL_CONTEXTO).order('orden', { ascending: true });
-  return firme(r) as ContextoVista[];
 }
 
 // El bucket no tiene políticas para `authenticated`: firmar requiere service role.

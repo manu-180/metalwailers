@@ -9,7 +9,7 @@ import { Boton } from '@/components/ui/boton';
 import { Confirmar } from '@/components/ui/dialogo';
 import { IconoTilde } from '@/components/ui/iconos';
 
-const CADA_MS = 3000;
+const CADA_MS = 2000;
 const FALLOS_TOLERADOS = 3;
 
 export function PanelWhatsapp() {
@@ -20,16 +20,25 @@ export function PanelWhatsapp() {
   const [error, setError] = useState<string>();
   const [confirmar, setConfirmar] = useState(false);
   const [generando, iniciar] = useTransition();
+  const [, iniciarDesvinculo] = useTransition();
   const fallos = useRef(0);
+  const arrancado = useRef(false);
 
   const conectado = config.wa_estado === 'conectado';
   const mostrandoQr = esperandoQr && !conectado;
 
+  // Sin conectar, el QR se pide al entrar: quien llega acá viene a escanearlo.
   useEffect(() => {
-    revisarEstado().then((r) => {
-      if (r.ok) parcharConfig({ wa_estado: r.estado, wa_numero: r.numero });
-    });
-  }, [parcharConfig]);
+    if (arrancado.current) return;
+    arrancado.current = true;
+    if (conectado) {
+      revisarEstado().then((r) => {
+        if (r.ok) parcharConfig({ wa_estado: r.estado, wa_numero: r.numero });
+      });
+    } else {
+      generar();
+    }
+  });
 
   // El estado de la vinculación lo tiene el servidor de WhatsApp y no pasa por la base,
   // así que mientras se muestra el QR se consulta; el código además vence y hay que renovarlo.
@@ -88,7 +97,7 @@ export function PanelWhatsapp() {
     setConfirmar(false);
     const previo = { wa_estado: config.wa_estado, wa_numero: config.wa_numero };
     parcharConfig({ wa_estado: 'sin_vincular', wa_numero: null });
-    iniciar(async () => {
+    iniciarDesvinculo(async () => {
       const r = await quitarVinculo();
       if (r.ok) return;
       parcharConfig(previo);
@@ -120,7 +129,7 @@ export function PanelWhatsapp() {
     );
   }
 
-  if (mostrandoQr) {
+  if (mostrandoQr || (generando && !conectado)) {
     return (
       <section className="placa flex flex-col gap-4 rounded-2xl p-5">
         <div className="mx-auto w-full max-w-80 rounded-2xl bg-white p-3">

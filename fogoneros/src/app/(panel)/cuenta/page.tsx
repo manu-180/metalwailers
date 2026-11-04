@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { CerrarSesion } from '@/components/panel/cuenta';
 import { NombreCuenta } from '@/components/panel/nombre-cuenta';
 
@@ -19,14 +18,6 @@ export default function PaginaCuenta() {
           <CerrarSesion ancho />
         </div>
       </section>
-      <nav aria-label="Información legal" className="flex gap-5 text-tinta-2">
-        <Link href="/privacidad" className="inline-flex min-h-11 items-center underline underline-offset-4">
-          Privacidad
-        </Link>
-        <Link href="/terminos" className="inline-flex min-h-11 items-center underline underline-offset-4">
-          Términos
-        </Link>
-      </nav>
     </div>
   );
 }
