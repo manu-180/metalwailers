@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from 'react';
 import { redirect } from 'next/navigation';
+import { connection } from 'next/server';
 import { Cascaron, MarcoPanel } from '@/components/panel/cascaron';
 import { BannerWhatsapp, PanelVivo } from '@/components/panel/vivo';
 import { CerrarSesion, PieLateral, SinAcceso } from '@/components/panel/cuenta';
@@ -22,6 +23,7 @@ export default function PanelLayout({ children }: { children: ReactNode }) {
 }
 
 async function Guardia({ children }: { children: ReactNode }) {
+  await connection();
   const acceso = await accesoActual();
   if (acceso.estado === 'fuera') redirect('/login');
   if (acceso.estado === 'ajeno') {
