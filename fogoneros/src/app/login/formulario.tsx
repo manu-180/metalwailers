@@ -37,7 +37,7 @@ export function FormularioLogin() {
           type="button"
           onClick={() => setVer((v) => !v)}
           aria-pressed={ver}
-          className="mt-1 min-h-11 rounded-lg px-1 font-semibold text-brasa-texto"
+          className="mt-2 min-h-11 rounded-lg px-1 font-semibold text-brasa-texto"
         >
           {ver ? 'Ocultar contraseña' : 'Ver contraseña'}
         </button>

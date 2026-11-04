@@ -30,7 +30,7 @@ export function esMedia(tipo: TipoMensaje): boolean {
 // que un HTML con su tipo real quedaría ejecutable bajo el dominio de Storage.
 export function tipoParaBucket(mime: string): string {
   const base = mime.split(';')[0].trim().toLowerCase();
-  return SERVIBLES.test(base) ? base : 'application/octet-stream';
+  return SERVIBLES.has(base) ? base : 'application/octet-stream';
 }
 
 type Destino = { id: string; chat_id: string; tipo: TipoMensaje };
