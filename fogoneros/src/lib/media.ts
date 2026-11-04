@@ -12,7 +12,13 @@ const MAX_MEDIA_BYTES = 26_214_400;
 const MAX_ADJUNTO_BYTES = 5 * 1024 * 1024;
 const MAX_AUDIO_TRANSCRIBIR_BYTES = 16 * 1024 * 1024;
 const TIMEOUT_REPARAR_MS = 20_000;
-const SERVIBLES = /^(audio\/|video\/|image\/(jpeg|png|webp|gif)$|application\/pdf$)/;
+const SERVIBLES = new Set([
+  'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/aac', 'audio/webm', 'audio/wav', 'audio/amr',
+  'video/mp4', 'video/3gpp', 'video/webm', 'video/quicktime',
+  'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+  'application/pdf',
+  // Sin prefijos: 'audio/x,text/html' pasaría una regex y el bucket lo serviría tal cual.
+]);
 
 const NOMBRES: Partial<Record<TipoMensaje, string>> = {
   audio: 'el audio',
@@ -30,7 +36,7 @@ export function esMedia(tipo: TipoMensaje): boolean {
 // que un HTML con su tipo real quedaría ejecutable bajo el dominio de Storage.
 export function tipoParaBucket(mime: string): string {
   const base = mime.split(';')[0].trim().toLowerCase();
-  return SERVIBLES.test(base) ? base : 'application/octet-stream';
+  return SERVIBLES.has(base) ? base : 'application/octet-stream';
 }
 
 type Destino = { id: string; chat_id: string; tipo: TipoMensaje };
