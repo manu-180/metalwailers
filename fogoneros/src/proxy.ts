@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PUBLICAS = ['/login', '/privacidad', '/terminos'];
+const PUBLICAS = ['/login', '/privacidad', '/terminos', '/previa'];
 
 export async function proxy(request: NextRequest) {
   let respuesta = NextResponse.next({ request });

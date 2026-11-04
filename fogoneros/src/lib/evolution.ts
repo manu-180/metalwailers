@@ -127,7 +127,7 @@ export async function registrarWebhook(): Promise<void> {
     body: {
       webhook: {
         enabled: true,
-        url: `${app}/api/webhook/evolution?t=${encodeURIComponent(secreto)}`,
+        url: `${app}/api/webhook/evolution`,
         headers: { 'x-fg-token': secreto },
         // La 2.3.7 lee byEvents y base64 de este objeto: webhookByEvents y webhookBase64
         // pasan la validación y se ignoran en silencio.

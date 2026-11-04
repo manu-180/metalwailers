@@ -1,6 +1,6 @@
 import { Suspense, type ReactNode } from 'react';
 import { redirect } from 'next/navigation';
-import { Cascaron } from '@/components/panel/cascaron';
+import { Cascaron, MarcoPanel } from '@/components/panel/cascaron';
 import { BannerWhatsapp, PanelVivo } from '@/components/panel/vivo';
 import { CerrarSesion, PieLateral, SinAcceso } from '@/components/panel/cuenta';
 import { EsqueletoPagina } from '@/components/ui/esqueletos';
@@ -11,9 +11,9 @@ export default function PanelLayout({ children }: { children: ReactNode }) {
   return (
     <Suspense
       fallback={
-        <Cascaron>
+        <MarcoPanel ruta="">
           <EsqueletoPagina />
-        </Cascaron>
+        </MarcoPanel>
       }
     >
       <Guardia>{children}</Guardia>

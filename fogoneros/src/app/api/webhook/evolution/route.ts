@@ -6,9 +6,7 @@ import { tokenValido } from '@/lib/bot/token';
 import { aplicarEstadoDelWebhook } from '@/lib/vinculacion';
 
 export async function POST(request: Request) {
-  const secreto = process.env.WEBHOOK_SECRET;
-  const porQuery = new URL(request.url).searchParams.get('t');
-  if (!tokenValido(request.headers.get('x-fg-token'), secreto) && !tokenValido(porQuery, secreto)) {
+  if (!tokenValido(request.headers.get('x-fg-token'), process.env.WEBHOOK_SECRET)) {
     return Response.json({ error: 'no autorizado' }, { status: 401 });
   }
 

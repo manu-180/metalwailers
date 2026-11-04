@@ -15,8 +15,14 @@ const SECCIONES = [
 
 const activa = (ruta: string, href: string) => (href === '/' ? ruta === '/' : ruta === href || ruta.startsWith(`${href}/`));
 
-export function Cascaron({ banner, pieLateral, children }: { banner?: ReactNode; pieLateral?: ReactNode; children: ReactNode }) {
-  const ruta = usePathname();
+type Props = { banner?: ReactNode; pieLateral?: ReactNode; children: ReactNode };
+
+export function Cascaron(props: Props) {
+  return <MarcoPanel ruta={usePathname()} {...props} />;
+}
+
+// Sin usePathname: es el fallback que se prerenderiza, antes de que exista la URL real.
+export function MarcoPanel({ ruta, banner, pieLateral, children }: Props & { ruta: string }) {
   const enConversacion = /^\/chats\/.+/.test(ruta);
 
   return (
