@@ -4,6 +4,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { supabaseServidor } from '@/lib/supabase/server';
+import { cuentaDe } from './cuentas';
 import { anotarFallo, bloqueado, limpiarFallos } from './limite';
 
 export type EstadoLogin = {
@@ -17,9 +18,9 @@ const esquema = z.object({
     .string()
     .trim()
     .toLowerCase()
-    .min(1, 'Escribí tu usuario')
-    .max(40, 'Ese usuario es muy largo')
-    .regex(/^[a-z0-9._-]+$/, 'Escribí sólo tu usuario, sin espacios'),
+    .min(1, 'Escribí tu mail')
+    .max(80, 'Ese mail es muy largo')
+    .email('Revisá que el mail esté bien escrito'),
   contrasena: z.string().min(1, 'Escribí tu contraseña').max(200, 'Esa contraseña es muy larga'),
 });
 
@@ -52,11 +53,15 @@ export async function entrar(_previo: EstadoLogin, datos: FormData): Promise<Est
     return { usuario, error: MENSAJE_GENERICO };
   }
 
+  const cuenta = cuentaDe(usuario);
+  if (!cuenta) {
+    anotarFallo(ip, usuario);
+    await demoraConstante(inicio);
+    return { usuario, error: MENSAJE_GENERICO };
+  }
+
   const supabase = await supabaseServidor();
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: `${usuario}@metalwailers.com`,
-    password: contrasena,
-  });
+  const { data, error } = await supabase.auth.signInWithPassword({ email: cuenta, password: contrasena });
 
   // El proyecto tiene usuarios de otras apps: con contraseña correcta pero fuera
   // del equipo se cierra la sesión recién abierta y se contesta igual que un error.
