@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { Marca } from '@/components/ui/marca';
 import { FormularioLogin } from './formulario';
 
@@ -19,14 +18,6 @@ export default function PaginaLogin() {
         <FormularioLogin />
       </div>
       <p className="mt-4 text-tinta-2">Si te olvidaste la contraseña avisale a Manu.</p>
-      <nav aria-label="Información legal" className="mt-6 flex gap-5 text-tinta-2">
-        <Link href="/privacidad" className="inline-flex min-h-11 items-center underline underline-offset-4">
-          Privacidad
-        </Link>
-        <Link href="/terminos" className="inline-flex min-h-11 items-center underline underline-offset-4">
-          Términos
-        </Link>
-      </nav>
     </main>
   );
 }

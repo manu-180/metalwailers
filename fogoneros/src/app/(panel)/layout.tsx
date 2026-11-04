@@ -24,7 +24,8 @@ export default function PanelLayout({ children }: { children: ReactNode }) {
 
 async function Guardia({ children }: { children: ReactNode }) {
   await connection();
-  const acceso = await accesoActual();
+  // En paralelo: si el usuario no es del equipo, la RLS hace fallar leerConfig y se descarta.
+  const [acceso, config] = await Promise.all([accesoActual(), leerConfig().catch(() => null)]);
   if (acceso.estado === 'fuera') redirect('/login');
   if (acceso.estado === 'ajeno') {
     return (
@@ -33,9 +34,8 @@ async function Guardia({ children }: { children: ReactNode }) {
       </SinAcceso>
     );
   }
-  const config = await leerConfig();
   return (
-    <PanelVivo inicial={config} nombre={acceso.nombre}>
+    <PanelVivo inicial={config ?? (await leerConfig())} nombre={acceso.nombre}>
       <Cascaron banner={<BannerWhatsapp />} pieLateral={<PieLateral nombre={acceso.nombre} />}>
         {children}
       </Cascaron>

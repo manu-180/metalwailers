@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "regions": ["gru1"],
+  "regions": ["pdx1"],
   "ignoreCommand": "git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- . && exit 0 || exit 1",
   "functions": {
     "src/app/api/webhook/evolution/route.ts": { "maxDuration": 120 },

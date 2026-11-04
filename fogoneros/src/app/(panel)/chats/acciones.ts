@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { enviarComoHumano } from '@/lib/enviar';
 import { firmarMedia, leerChats, leerMensajes, type ChatVista, type MensajeVista, type NotaVista, type UrlsFirmadas } from '@/lib/queries';
@@ -144,7 +143,6 @@ export async function guardarNota(mensajeId: string, porQue: string, como: strin
     .single();
   if (error || !nota) return { ok: false, error: 'No pudimos guardar la nota. Probá de nuevo.' };
 
-  revalidatePath('/contexto');
   return { ok: true, nota: nota as NotaVista };
 }
 

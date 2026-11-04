@@ -25,8 +25,10 @@ export async function exigirEquipo() {
   const supabase = await supabaseServidor();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return { ok: false as const, error: 'Se venció la sesión. Volvé a entrar.' };
-  const { data: esEquipo, error } = await supabase.rpc('fg_es_equipo');
+  const [{ data: esEquipo, error }, { data: fila }] = await Promise.all([
+    supabase.rpc('fg_es_equipo'),
+    supabase.from('fg_equipo').select('nombre').eq('user_id', auth.user.id).maybeSingle(),
+  ]);
   if (error || !esEquipo) return { ok: false as const, error: 'Tu usuario no tiene acceso a este panel.' };
-  const { data: fila } = await supabase.from('fg_equipo').select('nombre').eq('user_id', auth.user.id).maybeSingle();
   return { ok: true as const, supabase, nombre: (fila?.nombre as string | undefined) ?? 'Equipo' };
 }

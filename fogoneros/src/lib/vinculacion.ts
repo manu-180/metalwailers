@@ -67,21 +67,22 @@ async function asentar(conexion: EstadoConexion, guardado: Guardado) {
 }
 
 export async function estadoVinculacion(): Promise<{ estado: EstadoWhatsapp; numero: string | null }> {
-  const guardado = await leerGuardado();
-  const conexion = await estadoConexion();
+  const [guardado, conexion] = await Promise.all([leerGuardado(), estadoConexion()]);
   if (conexion === 'desconocido') return { estado: guardado.wa_estado, numero: guardado.wa_numero };
   return asentar(conexion, guardado);
 }
 
 export async function iniciarVinculacion(): Promise<Vinculo> {
-  const guardado = await leerGuardado();
+  const [guardado, conexion] = await Promise.all([leerGuardado(), estadoConexion()]);
   try {
-    const conexion = await estadoConexion();
     if (conexion === 'desconocido') return { estado: guardado.wa_estado, qr: null, numero: guardado.wa_numero };
     if (conexion === 'open') return { ...(await alConectar(guardado)), qr: null };
 
-    const cuerpo = conexion === 'inexistente' ? await crearInstancia() : await conectarInstancia();
-    await registrarWebhook();
+    // Con la instancia creada el webhook se registra en paralelo al pedido del QR.
+    const cuerpo =
+      conexion === 'inexistente'
+        ? await crearInstancia().then(async (c) => (await registrarWebhook(), c))
+        : (await Promise.all([conectarInstancia(), registrarWebhook()]))[0];
     await guardar('conectando', guardado.wa_numero, guardado.wa_estado);
     return { estado: 'conectando', qr: leerQr(cuerpo), numero: guardado.wa_numero };
   } catch (error) {
@@ -91,8 +92,7 @@ export async function iniciarVinculacion(): Promise<Vinculo> {
 }
 
 export async function consultarVinculacion(): Promise<Vinculo> {
-  const guardado = await leerGuardado();
-  const conexion = await estadoConexion();
+  const [guardado, conexion] = await Promise.all([leerGuardado(), estadoConexion()]);
   if (conexion === 'desconocido') return { estado: guardado.wa_estado, qr: null, numero: guardado.wa_numero };
 
   if (conexion === 'open') {
@@ -144,8 +144,7 @@ async function verificarWebhook(guardado: Guardado): Promise<void> {
 }
 
 export async function refrescarEstado(): Promise<void> {
-  const guardado = await leerGuardado();
-  const conexion = await estadoConexion();
+  const [guardado, conexion] = await Promise.all([leerGuardado(), estadoConexion()]);
   if (conexion === 'desconocido') return;
 
   if (conexion !== 'open') {
