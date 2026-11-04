@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--fuente-texto), ui-sans-serif, sans-serif;
+  --font-titulo: var(--fuente-titulo), var(--fuente-texto), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  --color-fondo: #131110;
+  --color-placa: #1c1916;
+  --color-alta: #27231f;
+  --color-linea: #3d372f;
+  --color-control: #7f7568;
+  --color-tinta: #f5f0e8;
+  --color-tinta-2: #cfc6b9;
+  --color-tinta-3: #a89e90;
+  --color-acero: #93a0ab;
+  --color-brasa: #f2792b;
+  --color-brasa-viva: #ff8f45;
+  --color-sobre-brasa: #1b0e05;
+  --color-brasa-texto: #ffa264;
+  --color-brasa-fondo: #33200f;
+  --color-cliente: #27231f;
+  --color-bot: #3a2415;
+  --color-humano: #26323a;
+  --color-peligro: #ffa198;
+  --color-peligro-fondo: #3d1c18;
+  --color-peligro-boton: #8e2a20;
+  --color-exito: #a6dcb0;
+
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-hoja: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-pulso: pulso 1.6s ease-in-out infinite;
+  --animate-entra: entra 220ms var(--ease-salida) both;
+}
+
+@keyframes pulso {
+  50% {
+    opacity: 0.45;
   }
 }
 
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-fondo);
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+  overflow-wrap: anywhere;
+}
+
+/* Grano fijo y calor de brasa abajo: da chapa sin tocar la pintura de lo que scrollea. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(120% 70% at 12% 112%, rgb(242 121 43 / 0.1), transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titulo);
+  line-height: 1.1;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brasa-texto);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+button,
+a,
+summary,
+label[for],
+[role="switch"] {
+  touch-action: manipulation;
+}
+
+button:not(:disabled),
+summary {
+  cursor: pointer;
+}
+
+textarea {
+  field-sizing: content;
+}
+
+audio {
+  color-scheme: dark;
+  width: 100%;
+  max-width: 100%;
+  height: 44px;
+}
+
+.placa {
+  background: var(--color-placa);
+  border: 1px solid var(--color-linea);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 10px 24px -18px rgb(0 0 0 / 0.8);
+}
+
+.esqueleto {
+  background: var(--color-alta);
+  border-radius: 8px;
+  animation: var(--animate-pulso);
+}
+
+dialog.dialogo,
+dialog.hoja {
+  color: inherit;
+  background: var(--color-placa);
+  border: 1px solid var(--color-linea);
+  padding: 0;
+  opacity: 0;
+  transition:
+    opacity 180ms var(--ease-salida),
+    transform 280ms var(--ease-hoja),
+    overlay 280ms allow-discrete,
+    display 280ms allow-discrete;
+}
+
+dialog.dialogo[open],
+dialog.hoja[open] {
+  opacity: 1;
+  transform: none;
+}
+
+dialog.dialogo::backdrop,
+dialog.hoja::backdrop {
+  background: rgb(8 6 5 / 0);
+  transition:
+    background 220ms ease,
+    overlay 280ms allow-discrete,
+    display 280ms allow-discrete;
+}
+
+dialog.dialogo[open]::backdrop,
+dialog.hoja[open]::backdrop {
+  background: rgb(8 6 5 / 0.66);
+}
+
+dialog.dialogo {
+  margin: auto;
+  width: min(30rem, calc(100vw - 2rem));
+  border-radius: 16px;
+  transform: scale(0.96);
+}
+
+dialog.hoja {
+  margin: auto 0 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 90dvh;
+  border-radius: 18px 18px 0 0;
+  border-width: 1px 0 0;
+  transform: translateY(100%);
+}
+
+@media (min-width: 768px) {
+  dialog.hoja {
+    margin: 0 0 0 auto;
+    width: min(32rem, 92vw);
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border-width: 0 0 0 1px;
+    transform: translateX(100%);
+  }
+}
+
+@starting-style {
+  dialog.dialogo[open],
+  dialog.hoja[open] {
+    opacity: 0;
+  }
+
+  dialog.dialogo[open] {
+    transform: scale(0.96);
+  }
+
+  dialog.hoja[open] {
+    transform: translateY(100%);
+  }
+
+  dialog.dialogo[open]::backdrop,
+  dialog.hoja[open]::backdrop {
+    background: rgb(8 6 5 / 0);
+  }
+}
+
+@media (min-width: 768px) {
+  @starting-style {
+    dialog.hoja[open] {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  dialog.dialogo,
+  dialog.hoja,
+  dialog::backdrop {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
